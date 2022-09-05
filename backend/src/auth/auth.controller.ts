@@ -28,11 +28,10 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: '토큰 테스트' })
+  //   @Role(['Admin'])
   @UseGuards(JwtAuthGuard)
-  //   @Role(['User'])
   @Post('test')
   test(@Req() req) {
-    // console.log(req);
-    console.log('1');
+    console.log(req.user);
   }
 }

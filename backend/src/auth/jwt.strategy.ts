@@ -12,7 +12,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly user: Repository<User>,
   ) {
     super({
-      //   privateKey: process.env.PRIVATE_KEY,
       secretOrKey: process.env.PRIVATE_KEY,
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     });
@@ -21,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(palyload) {
     const { id } = palyload;
 
-    const user = await this.user.findOne({ where: id });
+    let user = await this.user.findOne({ where: id });
 
     return user;
   }
