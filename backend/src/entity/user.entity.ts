@@ -31,11 +31,11 @@ export class User extends CoreEntity {
 
   @ApiProperty({ example: '이메일', description: '1234@1234.com' })
   @Column()
-  @IsEmail()
+  @IsEmail({ unique: true })
   email: string;
 
   @ApiProperty({ example: '이름', description: '홍길동' })
-  @Column()
+  @Column({ unique: true })
   @IsString()
   @MaxLength(10)
   @MinLength(2)
