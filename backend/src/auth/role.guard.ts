@@ -31,9 +31,11 @@ export class RoleGuard implements CanActivate {
     const token = BearerTokenList[1];
 
     if (token) {
+      // 토큰 복호화 설정
       const decoded = this.jwtService.verify(token.toString(), {
         secret: process.env.PRIVATE_KEY,
       });
+      // 토큰 복호화하여 id 값 가져오기
       if (typeof decoded === 'object' && decoded.hasOwnProperty('id')) {
         const user = await this.user.findOne({
           where: { id: decoded['id'] },

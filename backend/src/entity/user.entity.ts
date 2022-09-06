@@ -1,5 +1,12 @@
 import { InternalServerErrorException } from '@nestjs/common';
-import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
+import {
+  IsEmail,
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
 import { CoreEntity } from 'src/common/entity/core.entity';
 import { BeforeInsert, BeforeUpdate, Column, Entity } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -30,11 +37,14 @@ export class User extends CoreEntity {
   @ApiProperty({ example: '이름', description: '홍길동' })
   @Column()
   @IsString()
+  @MaxLength(10)
+  @MinLength(2)
   name: string;
 
   @ApiProperty({ example: '비밀번호', description: 'password' })
   @Column({ select: false })
   @IsString()
+  @MinLength(8)
   password: string;
 
   @ApiProperty({ example: '전화번호', description: '01011112222' })

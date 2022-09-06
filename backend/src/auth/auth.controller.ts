@@ -8,7 +8,7 @@ import { User } from './get-user.decorator';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Role } from './role.decorator';
 
-@Controller('api/auth')
+@Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
