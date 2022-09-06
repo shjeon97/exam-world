@@ -7,9 +7,7 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
-import { AuthGuard } from './auth.guard';
 import { APP_GUARD } from '@nestjs/core';
-import { JwtAuthGuard } from './jwt-auth.guard';
 import { RoleGuard } from './role.guard';
 
 @Module({

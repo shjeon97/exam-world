@@ -4,6 +4,7 @@ import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateUserInput, CreateUserOutput } from 'src/dto/create-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { AuthService } from './auth.service';
+import { User } from './get-user.decorator';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Role } from './role.decorator';
 
@@ -31,7 +32,7 @@ export class AuthController {
   //   @Role(['Admin'])
   @UseGuards(JwtAuthGuard)
   @Post('test')
-  test(@Req() req) {
-    console.log(req.user);
+  test(@User() user) {
+    console.log(user);
   }
 }
