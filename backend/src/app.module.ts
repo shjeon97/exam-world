@@ -13,10 +13,15 @@ import { User } from './entity/user.entity';
       // 전역에서 사용가능하도록 정의
       isGlobal: true,
       //사용할 env 파일 이름
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.prod',
+      envFilePath:
+        process.env.NODE_ENV === 'dev'
+          ? '.env.dev'
+          : 'test'
+          ? '.env.test'
+          : '.env.prod',
       // 스키마 유효성 검사
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'prod').required(),
+        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),

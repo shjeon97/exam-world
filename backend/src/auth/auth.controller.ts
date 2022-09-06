@@ -29,7 +29,7 @@ export class AuthController {
   }
 
   @ApiOperation({ summary: '토큰 테스트' })
-  //   @Role(['Admin'])
+  @Role(['User'])
   @UseGuards(JwtAuthGuard)
   @Post('test')
   test(@User() user) {
