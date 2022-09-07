@@ -35,7 +35,7 @@ export class User extends CoreEntity {
   email: string;
 
   @ApiProperty({ example: '이름', description: '홍길동' })
-  @Column({ unique: true })
+  @Column()
   @IsString()
   @MaxLength(10)
   @MinLength(2)
@@ -44,11 +44,11 @@ export class User extends CoreEntity {
   @ApiProperty({ example: '비밀번호', description: 'password' })
   @Column({ select: false })
   @IsString()
-  @MinLength(8)
+  @MinLength(4)
   password: string;
 
   @ApiProperty({ example: '전화번호', description: '01011112222' })
-  @Column({ nullable: true })
+  @Column({ nullable: true, unique: true })
   @IsString()
   phone?: string;
 
