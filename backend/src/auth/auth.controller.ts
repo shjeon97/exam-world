@@ -1,10 +1,18 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateUserInput, CreateUserOutput } from 'src/dto/create-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { AuthService } from './auth.service';
-import { User } from './get-user.decorator';
+import { GetUser } from './get-user.decorator';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { Role } from './role.decorator';
 
@@ -21,6 +29,7 @@ export class AuthController {
     return this.authService.createUser(createUserInput);
   }
 
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '로그인' })
   @ApiResponse({ type: LoginOutput })
   @Post('/login')
@@ -32,7 +41,7 @@ export class AuthController {
   @Role(['User'])
   @UseGuards(JwtAuthGuard)
   @Post('test')
-  test(@User() user) {
+  test(@GetUser() user) {
     console.log(user);
   }
 }
