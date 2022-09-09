@@ -3,12 +3,12 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { FormError } from "../components/form-error";
 import classnames from "classnames";
-
-type FormInput = {
-  email: string;
-  name: string;
-  password: string;
-};
+import { useMutation } from "react-query";
+import { ICoreOutput, ISignupUserInput } from "../common/type";
+import { apiSignupUser } from "../common/api/axios";
+import Swal from "sweetalert2";
+import { Toast } from "../lib/sweetalert2/toast";
+import { title } from "process";
 
 const Signup = () => {
   const {
@@ -16,10 +16,30 @@ const Signup = () => {
     getValues,
     formState: { errors },
     handleSubmit,
-  } = useForm<FormInput>({ mode: "onChange" });
+  } = useForm<ISignupUserInput>({ mode: "onChange" });
 
-  const onSubmit = (data: FormInput) => {
-    alert(JSON.stringify(data));
+  const signupUserMutation = useMutation(apiSignupUser, {
+    onSuccess: (data: ICoreOutput) => {
+      if (data.ok) {
+        Toast.fire({
+          icon: "success",
+          title: "회원가입 완료되었습니다.",
+          position: "top-end",
+        });
+      } else if (!data.ok && data.error) {
+        Toast.fire({
+          icon: "error",
+          title: data.error,
+        });
+      }
+    },
+  });
+
+  const onSubmit = () => {
+    if (!signupUserMutation.isLoading) {
+      const signupUser = getValues();
+      signupUserMutation.mutate(signupUser);
+    }
   };
 
   const registerOption = {
@@ -52,6 +72,7 @@ const Signup = () => {
           <div>
             <form onSubmit={handleSubmit(onSubmit)}>
               <input
+                type={"email"}
                 className={classnames(
                   `w-full p-2 my-1 duration-200 border border-gray-400 rounded bg-gray-50 focus:bg-white hover:bg-white`,
                   { "border-red-500 focus:border-red-500": errors.email }
@@ -70,6 +91,7 @@ const Signup = () => {
               />
 
               <input
+                type={"password"}
                 className={classnames(
                   `w-full p-2 my-1 duration-200 border border-gray-400 rounded bg-gray-50 focus:bg-white hover:bg-white`,
                   { "border-red-500 focus:border-red-500": errors.password }

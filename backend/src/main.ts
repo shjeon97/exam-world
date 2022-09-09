@@ -9,6 +9,18 @@ async function bootstrap() {
   // 유효성검사 파이프 전역 설정
   app.useGlobalPipes(new ValidationPipe());
 
+  if (process.env.NODE_ENV === 'prod') {
+    app.enableCors({
+      origin: ['https://exam-world.shjeon.kro.kr'],
+      credentials: true,
+    });
+  } else {
+    app.enableCors({
+      origin: true,
+      credentials: true,
+    });
+  }
+
   // 전역 Route에 사용할 문자 정의
   app.setGlobalPrefix('api');
 

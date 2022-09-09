@@ -30,8 +30,8 @@ export class User extends CoreEntity {
   role: UserRole;
 
   @ApiProperty({ example: '이메일', description: '1234@1234.com' })
-  @Column()
-  @IsEmail({ unique: true })
+  @Column({ unique: true })
+  @IsEmail()
   email: string;
 
   @ApiProperty({ example: '이름', description: '홍길동' })
