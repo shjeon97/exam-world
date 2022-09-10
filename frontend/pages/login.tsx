@@ -1,9 +1,10 @@
 import classNames from "classnames";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "react-query";
-import { apiLogin } from "../common/api/axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { apiLogin, apiMe } from "../common/api/axios";
 import { ILoginInput, ILoginOutput } from "../common/type";
 import { FormButton } from "../components/form-button";
 import { FormError } from "../components/form-error";
@@ -17,17 +18,26 @@ const Login = () => {
     formState: { errors, isValid },
     handleSubmit,
   } = useForm<ILoginInput>({ mode: "onChange" });
+  let router = useRouter();
+  const queryClient = useQueryClient();
+  useQuery("me", apiMe, {
+    onSuccess: (data) => {
+      if (data) {
+        Toast.fire({
+          icon: "success",
+          title: `${data.name}님 방문을 환영합니다.`,
+          position: "top-end",
+        });
+        router.push("/");
+      }
+    },
+  });
 
   const loginMutation = useMutation(apiLogin, {
     onSuccess: (data: ILoginOutput) => {
-      if (data.ok) {
+      if (data.ok && data.token) {
         localStorage.setItem(LOCALSTORAGE_TOKEN, data.token);
-
-        Toast.fire({
-          icon: "success",
-          title: data.token,
-          position: "top-end",
-        });
+        queryClient.invalidateQueries("me");
       }
     },
   });

@@ -28,7 +28,6 @@ export class RoleGuard implements CanActivate {
       ['headers'].authorization.split('Bearer ');
 
     const token = BearerTokenList[1];
-    console.log(context.switchToHttp().getRequest()['headers'].authorization);
 
     if (token) {
       // 토큰 복호화 설정
@@ -40,6 +39,7 @@ export class RoleGuard implements CanActivate {
         const user = await this.user.findOne({
           where: { id: decoded['id'] },
         });
+
         if (user) {
           if (role.includes('Any')) {
             return true;
