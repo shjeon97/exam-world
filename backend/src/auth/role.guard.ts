@@ -20,7 +20,6 @@ export class RoleGuard implements CanActivate {
     if (!role) {
       return true;
     }
-    console.log(role);
 
     // Bearer 부분 제거한 토큰값 구하기
     const BearerTokenList = context
@@ -29,6 +28,7 @@ export class RoleGuard implements CanActivate {
       ['headers'].authorization.split('Bearer ');
 
     const token = BearerTokenList[1];
+    console.log(context.switchToHttp().getRequest()['headers'].authorization);
 
     if (token) {
       // 토큰 복호화 설정

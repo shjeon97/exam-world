@@ -2,10 +2,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { DataSource, getConnection } from 'typeorm';
+import { DataSource, getConnection, Repository } from 'typeorm';
+import { User } from 'src/entity/user.entity';
+import { getRepositoryToken } from '@nestjs/typeorm';
+
+const testUser = {
+  email: 'test@test.com',
+  name: 'test',
+  password: '1234',
+};
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication;
+  let userRepository: Repository<User>;
+  let jwtToken: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -13,6 +23,9 @@ describe('AuthController (e2e)', () => {
     }).compile();
     app = moduleFixture.createNestApplication();
     app.setGlobalPrefix('api');
+    userRepository = moduleFixture.get<Repository<User>>(
+      getRepositoryToken(User),
+    );
     await app.init();
   });
 
@@ -38,9 +51,9 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_SIGNUP)
         .send({
-          email: 'test@test.com',
-          name: 'test',
-          password: '12345678',
+          email: testUser.email,
+          name: testUser.name,
+          password: testUser.password,
         })
         .expect(HttpStatus.CREATED)
         .expect({ ok: true });
@@ -50,9 +63,9 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_SIGNUP)
         .send({
-          email: 'test2@test.com',
-          name: 'test',
-          password: '12345678',
+          email: testUser.email + '!',
+          name: testUser.name,
+          password: testUser.password,
         })
         .expect(HttpStatus.CREATED)
         .expect({ ok: false, error: '이미 존재하는 닉네임입니다.' });
@@ -62,9 +75,9 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_SIGNUP)
         .send({
-          email: 'test@test.com',
-          name: 'test2',
-          password: '12345678',
+          email: testUser.email,
+          name: testUser.name + '!',
+          password: testUser.password,
         })
         .expect(HttpStatus.CREATED)
         .expect({ ok: false, error: '이미 존재하는 이메일입니다.' });
@@ -78,13 +91,14 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_LOGIN)
         .send({
-          email: 'test@test.com',
-          password: '12345678',
+          email: testUser.email,
+          password: testUser.password,
         })
         .expect(HttpStatus.OK)
         .expect((res) => {
           expect(res.body.ok).toBe(true);
           expect(res.body.token).toEqual(expect.any(String));
+          jwtToken = res.body.token;
         });
     });
 
@@ -92,8 +106,8 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_LOGIN)
         .send({
-          email: 'test2@test.com',
-          password: '12345678',
+          email: testUser.email + '!',
+          password: testUser.password,
         })
         .expect(HttpStatus.OK)
         .expect({
@@ -106,14 +120,24 @@ describe('AuthController (e2e)', () => {
       return request(app.getHttpServer())
         .post(API_AUTH_LOGIN)
         .send({
-          email: 'test@test.com',
-          password: '123456789',
+          email: testUser.email,
+          password: testUser.password + '!',
         })
         .expect(HttpStatus.OK)
         .expect({
           ok: false,
           error: '비밀번호가 일치하지 않습니다.',
         });
+    });
+  });
+
+  describe('me', () => {
+    const API_AUTH_ME = '/api/auth/me';
+    it('내 정보 가져오기', () => {
+      return request(app.getHttpServer())
+        .get(API_AUTH_ME)
+        .set('authorization', `Bearer ${jwtToken}`)
+        .expect(HttpStatus.OK);
     });
   });
 });

@@ -1,8 +1,10 @@
 import axios from "axios";
+import { JwtToken } from "../../constant";
 import { ILoginInput, ISignupUserInput } from "../type";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_SEVER_BASE_URL + "/api";
 axios.defaults.withCredentials = true; // withCredentials 전역 설정
+axios.defaults.headers["Authorization"] = JwtToken();
 
 export const apiSignupUser = async ({
   email,

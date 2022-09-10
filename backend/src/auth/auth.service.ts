@@ -65,8 +65,6 @@ export class AuthService {
         where: { email },
         select: ['id', 'password'],
       });
-      console.log(user);
-
       if (!user) {
         return {
           ok: false,

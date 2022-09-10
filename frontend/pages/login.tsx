@@ -7,6 +7,7 @@ import { apiLogin } from "../common/api/axios";
 import { ILoginInput, ILoginOutput } from "../common/type";
 import { FormButton } from "../components/form-button";
 import { FormError } from "../components/form-error";
+import { LOCALSTORAGE_TOKEN } from "../constant";
 import { Toast } from "../lib/sweetalert2/toast";
 
 const Login = () => {
@@ -20,6 +21,8 @@ const Login = () => {
   const loginMutation = useMutation(apiLogin, {
     onSuccess: (data: ILoginOutput) => {
       if (data.ok) {
+        localStorage.setItem(LOCALSTORAGE_TOKEN, data.token);
+
         Toast.fire({
           icon: "success",
           title: data.token,

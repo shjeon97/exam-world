@@ -1,13 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CreateUserInput, CreateUserOutput } from 'src/dto/create-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
@@ -37,11 +36,12 @@ export class AuthController {
     return this.authService.login(loginInput);
   }
 
-  @ApiOperation({ summary: '토큰 테스트' })
-  @Role(['User'])
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '내 정보' })
+  @Role(['Any'])
   @UseGuards(JwtAuthGuard)
-  @Post('test')
-  test(@GetUser() user) {
-    console.log(user);
+  @Get('me')
+  me(@GetUser() user) {
+    return user;
   }
 }
