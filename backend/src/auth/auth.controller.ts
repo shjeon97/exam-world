@@ -35,13 +35,4 @@ export class AuthController {
   async login(@Body() loginInput: LoginInput): Promise<LoginOutput> {
     return this.authService.login(loginInput);
   }
-
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '내 정보' })
-  @Role(['Any'])
-  @UseGuards(JwtAuthGuard)
-  @Get('me')
-  me(@GetUser() user) {
-    return user;
-  }
 }

@@ -3,14 +3,27 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { FormError } from "../components/form-error";
 import classnames from "classnames";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { ICoreOutput, ISignupUserInput } from "../common/type";
-import { apiSignupUser } from "../common/api/axios";
+import { apiMe, apiSignupUser } from "../common/api/axios";
 import { Toast } from "../lib/sweetalert2/toast";
 import { FormButton } from "../components/form-button";
 import { useRouter } from "next/router";
 
 const Signup = () => {
+  useQuery("me", apiMe, {
+    onSuccess: (data) => {
+      if (data) {
+        Toast.fire({
+          icon: "success",
+          title: `${data.name}님 방문을 환영합니다.`,
+          position: "top-end",
+          timer: 1200,
+        });
+        router.push("/");
+      }
+    },
+  });
   const {
     register,
     getValues,

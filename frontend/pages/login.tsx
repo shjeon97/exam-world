@@ -27,6 +27,7 @@ const Login = () => {
           icon: "success",
           title: `${data.name}님 방문을 환영합니다.`,
           position: "top-end",
+          timer: 1200,
         });
         router.push("/");
       }

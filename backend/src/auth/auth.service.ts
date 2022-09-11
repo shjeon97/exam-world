@@ -65,6 +65,7 @@ export class AuthService {
         where: { email },
         select: ['id', 'password'],
       });
+
       if (!user) {
         return {
           ok: false,
