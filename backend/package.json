@@ -18,8 +18,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --forceExit --detectOpenHandles",
-    "test:e2e:watch": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --forceExit --detectOpenHandles --watch "
+    "test:e2e:clear-cache": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --forceExit --detectOpenHandles --clearCache",
+    "test:e2e:watch": "cross-env NODE_ENV=test jest --config ./test/jest-e2e.json --forceExit --detectOpenHandles  --watch  "
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

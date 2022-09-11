@@ -1,83 +1,159 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import exam from "../public/image/exam.png";
 import logout from "../public/image/logout.png";
 import Link from "next/link";
-import { Menu } from "@headlessui/react";
 import { useQuery } from "react-query";
 import { apiMe } from "../common/api/axios";
 import { Button } from "./buttom";
+import { Transition } from "@headlessui/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faBars,
+  faRightToBracket,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 export const Header: React.FC = () => {
   const { isLoading: meIsLoading, data: meData } = useQuery("me", apiMe);
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <>
-      <header className="text-gray-600 body-font">
-        <div className="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <Link href="/">
-            <div className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0 hover:cursor-pointer">
-              <Image src={exam} width={40} height={40} />
-              <span className="ml-3 text-xl">Exam World!</span>
-            </div>
-          </Link>
-          <nav className="md:mr-auto md:ml-4 md:py-1 md:pl-4 md:border-l md:border-gray-400	flex flex-wrap items-center text-base justify-center">
-            <a className="mr-5 hover:text-gray-900">First Link</a>
-            <a className="mr-5 hover:text-gray-900">Second Link</a>
-            <a className="mr-5 hover:text-gray-900">Third Link</a>
-            <a className="mr-5 hover:text-gray-900">Fourth Link</a>
-            {meData ? (
-              <>
-                <Menu as="div" className="relative inline-block text-left">
-                  <div>
-                    <Menu.Button>
-                      <div className="button"> {meData.name}님 </div>
-                    </Menu.Button>
+      <header className="text-gray-600 body-font ">
+        <nav className=" shadow-sm fixed w-full z-10">
+          <div className="w-full">
+            <div className="flex items-center h-20 w-full">
+              <div className="flex items-center  mx-20  justify-between w-full">
+                <div className="flex justify-center items-center flex-shrink-0 ">
+                  <h1 className=" font-bold text-3xl cursor-pointer">
+                    Exam World!
+                  </h1>
+                </div>
+                <div className="hidden lg:block">
+                  <div className="ml-10 flex items-baseline space-x-4">
+                    <Link href="/about">
+                      <div className="button">시험목록</div>
+                    </Link>
+                    <Link href="/about">
+                      <div className="button">Services</div>
+                    </Link>
+                    <Link href="/work">
+                      <div className="button">Services</div>
+                    </Link>
+
+                    {!meIsLoading && meData ? (
+                      <>
+                        <div className="button "> 내 정보 </div>
+                        <div className="button ">
+                          <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Link href="/login">
+                          <button className="inline-flex items-center bg-gray-100 border-0 py-1.5 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
+                            <FontAwesomeIcon icon={faRightToBracket} />
+                            <div className="button"> 로그인</div>
+                          </button>
+                        </Link>
+                      </>
+                    )}
                   </div>
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="px-1 py-1 ">
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={`${
-                              active
-                                ? "bg-violet-500 text-white"
-                                : "text-gray-900"
-                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                          >
-                            내 정보
-                          </button>
-                        )}
-                      </Menu.Item>
-                      <Menu.Item>
-                        {({ active }) => (
-                          <button
-                            className={`${
-                              active ? "bg-gray-100 " : "text-gray-900"
-                            } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                          >
-                            <Image src={logout} width={20} height={20} />
-                            <div className="ml-2">로그아웃</div>
-                          </button>
-                        )}
-                      </Menu.Item>
+                </div>
+              </div>
+              <div className="mr-10 flex lg:hidden ">
+                <button
+                  onClick={() => setIsOpen(!isOpen)}
+                  type="button"
+                  className=" inline-flex items-center justify-center rounded text-white "
+                  aria-controls="mobile-menu"
+                  aria-expanded="false"
+                >
+                  <span className="sr-only">Open main menu</span>
+                  {!isOpen ? (
+                    <div className="button">
+                      <FontAwesomeIcon
+                        className="w-8 h-8 text-xl"
+                        icon={faBars}
+                      />
                     </div>
-                  </Menu.Items>
-                </Menu>
-              </>
-            ) : (
-              <>
-                {" "}
-                <Link href="/login">
-                  <button className="inline-flex items-center bg-gray-100 border-0 py-1.5 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0">
-                    <Image src={logout} width={20} height={20} />
-                    <Button className="ml-2" name="로그인" />
-                  </button>
-                </Link>
-              </>
+                  ) : (
+                    <div className="button">
+                      <FontAwesomeIcon
+                        className="w-8 h-8 text-xl"
+                        icon={faXmark}
+                      />
+                    </div>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <Transition
+            show={isOpen}
+            enter="transition ease-out duration-100 transform"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="transition ease-in duration-75 transform"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            {(ref) => (
+              <div
+                className="lg:hidden border-2 border-gray-900 mx-1"
+                id="mobile-menu"
+              >
+                <div
+                  ref={ref}
+                  className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3"
+                >
+                  <Link href="/home">
+                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                      Home
+                    </div>
+                  </Link>
+                  <Link href="/home">
+                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                      Home
+                    </div>
+                  </Link>
+
+                  <Link href="/home">
+                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                      Home
+                    </div>
+                  </Link>
+
+                  {meData ? (
+                    <>
+                      <Link href="/home">
+                        <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                          내 정보
+                        </div>
+                      </Link>
+                      <Link href="/home">
+                        <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                          <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
+                        </div>
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/home">
+                        <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                          <FontAwesomeIcon icon={faRightToBracket} />
+                          <div className="button"> 로그아웃</div>
+                        </div>
+                      </Link>
+                    </>
+                  )}
+                </div>
+              </div>
             )}
-          </nav>
-        </div>
+          </Transition>
+        </nav>
       </header>
     </>
   );
