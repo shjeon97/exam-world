@@ -6,7 +6,7 @@ import { DataSource, getConnection, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-const testUser = {
+let testUser = {
   email: 'test@test.com',
   name: 'test',
   password: '1234',
@@ -45,7 +45,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
   describe('AuthController (e2e)', () => {
-    describe('createUser', () => {
+    describe('signupUser', () => {
       const API_AUTH_SIGNUP = '/api/auth/signup';
       it('계정이 생성되는지 확인', () => {
         return request(app.getHttpServer())
@@ -133,8 +133,8 @@ describe('AppController (e2e)', () => {
   });
 
   describe('UserController (e2e)', () => {
-    describe('me', () => {
-      const API_USER_ME = '/api/user/me';
+    const API_USER_ME = '/api/user/me';
+    describe('getMe', () => {
       it('내 정보 가져오기', () => {
         return request(app.getHttpServer())
           .get(API_USER_ME)
@@ -156,6 +156,37 @@ describe('AppController (e2e)', () => {
           .set('authorization', `Bearer ${jwtToken}!`)
           .expect(HttpStatus.INTERNAL_SERVER_ERROR);
       });
+    });
+
+    describe('editMe', () => {
+      it('잘못된 비밀번호일시', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: '!' + testUser.email,
+            name: testUser.name,
+            password: testUser.password + '!',
+          })
+          .set('authorization', `Bearer ${jwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '비밀번호가 일치하지 않습니다.',
+          });
+      });
+
+      it('내 이메일정보 수정', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: '!' + testUser.email,
+            name: testUser.name,
+            password: testUser.password,
+          })
+          .set('authorization', `Bearer ${jwtToken}`)
+          .expect(HttpStatus.OK);
+      });
+      testUser.email = '!' + testUser.email;
     });
   });
 });
