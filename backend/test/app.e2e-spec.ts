@@ -6,16 +6,30 @@ import { DataSource, getConnection, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-let testUser = {
+let testUser1 = {
   email: 'test@test.com',
   name: 'test',
+  password: '1234',
+};
+
+let testUser2 = {
+  email: 'test2@test.com',
+  name: 'test2',
+  password: '1234',
+};
+
+let testUser3 = {
+  email: 'test3@test.com',
+  name: 'test3',
   password: '1234',
 };
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let userRepository: Repository<User>;
-  let jwtToken: string;
+  let jwtToken1: string;
+  let jwtToken2: string;
+  let jwtToken3: string;
 
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -51,9 +65,33 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
-            email: testUser.email,
-            name: testUser.name,
-            password: testUser.password,
+            email: testUser1.email,
+            name: testUser1.name,
+            password: testUser1.password,
+          })
+          .expect(HttpStatus.CREATED)
+          .expect({ ok: true });
+      });
+
+      it('계정이 생성되는지 확인 2', () => {
+        return request(app.getHttpServer())
+          .post(API_AUTH_SIGNUP)
+          .send({
+            email: testUser2.email,
+            name: testUser2.name,
+            password: testUser2.password,
+          })
+          .expect(HttpStatus.CREATED)
+          .expect({ ok: true });
+      });
+
+      it('계정이 생성되는지 확인 3', () => {
+        return request(app.getHttpServer())
+          .post(API_AUTH_SIGNUP)
+          .send({
+            email: testUser3.email,
+            name: testUser3.name,
+            password: testUser3.password,
           })
           .expect(HttpStatus.CREATED)
           .expect({ ok: true });
@@ -63,9 +101,9 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
-            email: testUser.email + '!',
-            name: testUser.name,
-            password: testUser.password,
+            email: testUser1.email + '!',
+            name: testUser1.name,
+            password: testUser1.password,
           })
           .expect(HttpStatus.CREATED)
           .expect({ ok: false, error: '이미 존재하는 닉네임입니다.' });
@@ -75,9 +113,9 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
-            email: testUser.email,
-            name: testUser.name + '!',
-            password: testUser.password,
+            email: testUser1.email,
+            name: testUser1.name + '!',
+            password: testUser1.password,
           })
           .expect(HttpStatus.CREATED)
           .expect({ ok: false, error: '이미 존재하는 이메일입니다.' });
@@ -87,18 +125,48 @@ describe('AppController (e2e)', () => {
     describe('login', () => {
       const API_AUTH_LOGIN = '/api/auth/login';
 
-      it('로그인 성공시', () => {
+      it('로그인 성공시 1', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_LOGIN)
           .send({
-            email: testUser.email,
-            password: testUser.password,
+            email: testUser1.email,
+            password: testUser1.password,
           })
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.ok).toBe(true);
             expect(res.body.token).toEqual(expect.any(String));
-            jwtToken = res.body.token;
+            jwtToken1 = res.body.token;
+          });
+      });
+
+      it('로그인 성공시 2', () => {
+        return request(app.getHttpServer())
+          .post(API_AUTH_LOGIN)
+          .send({
+            email: testUser2.email,
+            password: testUser2.password,
+          })
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.token).toEqual(expect.any(String));
+            jwtToken2 = res.body.token;
+          });
+      });
+
+      it('로그인 성공시 3', () => {
+        return request(app.getHttpServer())
+          .post(API_AUTH_LOGIN)
+          .send({
+            email: testUser3.email,
+            password: testUser3.password,
+          })
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.token).toEqual(expect.any(String));
+            jwtToken3 = res.body.token;
           });
       });
 
@@ -106,8 +174,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_LOGIN)
           .send({
-            email: testUser.email + '!',
-            password: testUser.password,
+            email: testUser1.email + '!',
+            password: testUser1.password,
           })
           .expect(HttpStatus.OK)
           .expect({
@@ -120,8 +188,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_LOGIN)
           .send({
-            email: testUser.email,
-            password: testUser.password + '!',
+            email: testUser1.email,
+            password: testUser1.password + '!',
           })
           .expect(HttpStatus.OK)
           .expect({
@@ -138,10 +206,10 @@ describe('AppController (e2e)', () => {
       it('내 정보 가져오기', () => {
         return request(app.getHttpServer())
           .get(API_USER_ME)
-          .set('authorization', `Bearer ${jwtToken}`)
+          .set('authorization', `Bearer ${jwtToken1}`)
           .expect(HttpStatus.OK)
           .expect((res) => {
-            expect(res.body.email).toBe(testUser.email);
+            expect(res.body.email).toBe(testUser1.email);
           });
       });
 
@@ -153,7 +221,7 @@ describe('AppController (e2e)', () => {
       it('잘못된 JWT토큰일시', () => {
         return request(app.getHttpServer())
           .get(API_USER_ME)
-          .set('authorization', `Bearer ${jwtToken}!`)
+          .set('authorization', `Bearer ${jwtToken1}!`)
           .expect(HttpStatus.INTERNAL_SERVER_ERROR);
       });
     });
@@ -163,11 +231,11 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .patch(API_USER_ME)
           .send({
-            email: '!' + testUser.email,
-            name: testUser.name,
-            password: testUser.password + '!',
+            email: '!' + testUser1.email,
+            name: testUser1.name,
+            password: testUser1.password + '!',
           })
-          .set('authorization', `Bearer ${jwtToken}`)
+          .set('authorization', `Bearer ${jwtToken1}`)
           .expect(HttpStatus.OK)
           .expect({
             ok: false,
@@ -179,14 +247,115 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .patch(API_USER_ME)
           .send({
-            email: '!' + testUser.email,
-            name: testUser.name,
-            password: testUser.password,
+            email: '!' + testUser1.email,
+            name: testUser1.name,
+            password: testUser1.password,
           })
-          .set('authorization', `Bearer ${jwtToken}`)
-          .expect(HttpStatus.OK);
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          })
+          .expect(() => {
+            testUser1.email = '!' + testUser1.email;
+          });
       });
-      testUser.email = '!' + testUser.email;
+
+      it('내 닉네임정보 수정', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: testUser1.email,
+            name: '!' + testUser1.name,
+            password: testUser1.password,
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          })
+          .expect(() => {
+            testUser1.name = '!' + testUser1.name;
+          });
+      });
+
+      it('내 비밀번호정보 수정', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: testUser1.email,
+            name: testUser1.name,
+            password: testUser1.password,
+            editPassword: '!' + testUser1.password,
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          })
+          .expect(() => {
+            testUser1.password = '!' + testUser1.password;
+          });
+      });
+
+      it('변경할려는 이메일 이미 존재시', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: testUser2.email,
+            name: testUser1.name,
+            password: testUser1.password,
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '이미 존재하는 이메일입니다.',
+          });
+      });
+
+      it('변경할려는 닉네임 이미 존재시', () => {
+        return request(app.getHttpServer())
+          .patch(API_USER_ME)
+          .send({
+            email: testUser1.email,
+            name: testUser2.name,
+            password: testUser1.password,
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '이미 존재하는 닉네임입니다.',
+          });
+      });
+    });
+    describe('deleteMe', () => {
+      it('잘못된 비밀번호일시 ', () => {
+        return request(app.getHttpServer())
+          .delete(API_USER_ME)
+          .send({
+            password: testUser1.password + '!',
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '비밀번호가 일치하지 않습니다.',
+          });
+      });
+      it('계정삭제 1', () => {
+        return request(app.getHttpServer())
+          .delete(API_USER_ME)
+          .send({
+            password: testUser1.password,
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
     });
   });
 });
