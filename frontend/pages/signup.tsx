@@ -5,13 +5,15 @@ import { FormError } from "../components/form-error";
 import classnames from "classnames";
 import { useMutation, useQuery } from "react-query";
 import { ICoreOutput, ISignupUserInput } from "../common/type";
-import { apiMe, apiSignupUser } from "../common/api/axios";
+import { apiGetMe, apiSignupUser } from "../common/api/axios";
 import { Toast } from "../lib/sweetalert2/toast";
 import { FormButton } from "../components/form-button";
 import { useRouter } from "next/router";
+import { WEB_TITLE } from "../constant";
+import Head from "next/head";
 
 const Signup = () => {
-  useQuery("me", apiMe, {
+  useQuery("me", apiGetMe, {
     onSuccess: (data) => {
       if (data) {
         Toast.fire({
@@ -74,70 +76,75 @@ const Signup = () => {
   };
 
   return (
-    <div className=" bg-white">
-      <div className="flex flex-col items-center justify-center h-screen p-6">
-        <div className=" w-10/12 mx-auto md:w-96">
-          <h1 className="mb-2 font-medium text-2xl">회원가입</h1>
-          <div>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <input
-                type={"email"}
-                className={classnames(`form-input`, {
-                  "border-red-500 focus:border-red-500 focus:outline-red-500":
-                    errors.email,
-                })}
-                {...register("email", registerOption.email)}
-                placeholder="이메일"
-              />
+    <>
+      <Head>
+        <title className=" text-gray-800">회원가입 {WEB_TITLE}</title>
+      </Head>
+      <div className=" bg-white">
+        <div className="flex flex-col items-center justify-center h-screen p-6">
+          <div className=" w-10/12 mx-auto md:w-96">
+            <h1 className="mb-2 font-medium text-2xl">회원가입</h1>
+            <div>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <input
+                  type={"email"}
+                  className={classnames(`form-input`, {
+                    "border-red-500 focus:border-red-500 focus:outline-red-500":
+                      errors.email,
+                  })}
+                  {...register("email", registerOption.email)}
+                  placeholder="이메일"
+                />
 
-              <input
-                className={classnames(`form-input`, {
-                  "border-red-500 focus:border-red-500 focus:outline-red-500":
-                    errors.name,
-                })}
-                {...register("name", registerOption.name)}
-                placeholder="닉네임"
-              />
+                <input
+                  className={classnames(`form-input`, {
+                    "border-red-500 focus:border-red-500 focus:outline-red-500":
+                      errors.name,
+                  })}
+                  {...register("name", registerOption.name)}
+                  placeholder="닉네임"
+                />
 
-              <input
-                type={"password"}
-                className={classnames(`form-input`, {
-                  "border-red-500 focus:border-red-500 focus:outline-red-500":
-                    errors.password,
-                })}
-                {...register("password", registerOption.password)}
-                placeholder="비밀번호"
-              />
+                <input
+                  type={"password"}
+                  className={classnames(`form-input`, {
+                    "border-red-500 focus:border-red-500 focus:outline-red-500":
+                      errors.password,
+                  })}
+                  {...register("password", registerOption.password)}
+                  placeholder="비밀번호"
+                />
 
-              {Object.values(errors).length > 0 &&
-                Object.values(errors).map((error, key) => {
-                  return (
-                    <div key={`form_error_${key}`}>
-                      <FormError errorMessage={error.message} />
-                      <br />
-                    </div>
-                  );
-                })}
-              <FormButton
-                canClick={isValid}
-                loading={signupUserMutation.isLoading}
-                actionText={"회원가입"}
-              />
-              {signupUserMutation?.data?.error && (
-                <FormError errorMessage={signupUserMutation.data.error} />
-              )}
-            </form>
+                {Object.values(errors).length > 0 &&
+                  Object.values(errors).map((error, key) => {
+                    return (
+                      <div key={`form_error_${key}`}>
+                        <FormError errorMessage={error.message} />
+                        <br />
+                      </div>
+                    );
+                  })}
+                <FormButton
+                  canClick={isValid}
+                  loading={signupUserMutation.isLoading}
+                  actionText={"회원가입"}
+                />
+                {signupUserMutation?.data?.error && (
+                  <FormError errorMessage={signupUserMutation.data.error} />
+                )}
+              </form>
 
-            <small>
-              이미 가입하셨나요?
-              <Link href="/login">
-                <a className="ml-1 text-blue-500 uppercase ">로그인</a>
-              </Link>
-            </small>
+              <small>
+                이미 가입하셨나요?
+                <Link href="/login">
+                  <a className="ml-1 text-blue-500 uppercase ">로그인</a>
+                </Link>
+              </small>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,30 +1,20 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Post,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { CreateUserInput, CreateUserOutput } from 'src/dto/create-user.dto';
+import { CoreOutput } from 'src/common/dto/output.dto';
+import { SignupUserInput } from 'src/dto/signup-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { AuthService } from './auth.service';
-import { GetUser } from './get-user.decorator';
-import { JwtAuthGuard } from './jwt-auth.guard';
-import { Role } from './role.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: '유저 생성' })
-  @ApiResponse({ type: CreateUserOutput })
+  @ApiResponse({ type: CoreOutput })
   @Post('/signup')
   async createUser(
-    @Body() createUserInput: CreateUserInput,
-  ): Promise<CreateUserOutput> {
+    @Body() createUserInput: SignupUserInput,
+  ): Promise<CoreOutput> {
     return this.authService.createUser(createUserInput);
   }
 

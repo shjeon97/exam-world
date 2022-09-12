@@ -15,7 +15,7 @@ export const FormButton: React.FC<IFormButtonProp> = ({
     className={`w-full select-none font-medium focus:outline-none text-white py-2  transition-colors rounded ${
       canClick
         ? "bg-gray-800 hover:bg-gray-700 "
-        : "bg-gray-300 pointer-events-none "
+        : "bg-gray-400 pointer-events-none "
     }`}
   >
     {loading ? "Loading..." : actionText}

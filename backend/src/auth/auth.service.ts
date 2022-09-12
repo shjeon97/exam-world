@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateUserInput, CreateUserOutput } from 'src/dto/create-user.dto';
+import { CoreOutput } from 'src/common/dto/output.dto';
+import { SignupUserInput } from 'src/dto/signup-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -18,7 +19,7 @@ export class AuthService {
     name,
     password,
     email,
-  }: CreateUserInput): Promise<CreateUserOutput> {
+  }: SignupUserInput): Promise<CoreOutput> {
     try {
       name = name.trim().replace('/', '-');
       password = password.trim();

@@ -1,6 +1,11 @@
 import axios from "axios";
 import { JwtToken } from "../../constant";
-import { ILoginInput, ISignupUserInput } from "../type";
+import {
+  IDeleteMeInput,
+  IEditMeInput,
+  ILoginInput,
+  ISignupUserInput,
+} from "../type";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_SEVER_BASE_URL + "/api";
 axios.defaults.withCredentials = true;
@@ -43,7 +48,43 @@ export const apiLogin = async ({ email, password }: ILoginInput) => {
     });
 };
 
-export const apiMe = async () => {
+export const apiEditMe = async ({
+  email,
+  password,
+  name,
+  editPassword,
+}: IEditMeInput) => {
+  return axios
+    .patch("/user/me", {
+      email,
+      password,
+      name,
+      editPassword,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
+  return axios
+    .delete("/user/me", {
+      data: {
+        password,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiGetMe = async () => {
   return axios
     .get("user/me")
     .then((res) => {
