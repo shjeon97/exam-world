@@ -45,6 +45,7 @@ export class UserController {
 
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '내 계정 삭제' })
+  @ApiResponse({ type: CoreOutput })
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Delete('/me')
