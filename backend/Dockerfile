@@ -10,11 +10,6 @@ RUN yarn
 # 5
 RUN yarn build
 
-RUN npm i cross-env -g
-
-RUN npm i -g @nestjs/cli
-
-
 # STEP 2
 #6
 FROM node:16-alpine
