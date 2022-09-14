@@ -16,7 +16,7 @@ import { User } from './entity/user.entity';
       envFilePath:
         process.env.NODE_ENV === 'dev'
           ? '.env.dev'
-          : 'test'
+          : process.env.NODE_ENV === 'test'
           ? '.env.test'
           : '.env.prod',
       // 스키마 유효성 검사

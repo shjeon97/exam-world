@@ -1,13 +1,37 @@
 version: "3"
 services:
-  db:
-    image: postgres:latest
-    container_name: postgres
-    restart: always
+  # db:
+  #   image: postgres:latest
+  #   container_name: postgres
+  #   restart: always
+  #   ports:
+  #     - "5431:5432"
+  #   environment:
+  #     POSTGRES_USER: "${DB_USERNAME}"
+  #     POSTGRES_PASSWORD: "${DB_PASSWORD}"
+  #   volumes:
+  #     - ./data:/var/lib/postgresql/data
+
+  # frontend:
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./frontend
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./frontend:/app
+
+  nginx:
+    restart: "always"
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
     ports:
-      - "5431:5432"
-    environment:
-      POSTGRES_USER: "${DB_USERNAME}"
-      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      - "3000:80"
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
     volumes:
-      - ./data:/var/lib/postgresql/data
+      - /app/node_modules
+      - ./backend:/app
