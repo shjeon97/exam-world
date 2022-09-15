@@ -40,8 +40,8 @@ const Info = () => {
   });
 
   const deleteMeMutation = useMutation(apiDeleteMe, {
-    onSuccess: async (data: ICoreOutput) => {
-      if (data.ok) {
+    onError: async (data: ICoreOutput) => {
+      if (data) {
         await Toast.fire({
           icon: "success",
           title: `탈퇴가 완료되었습니다.`,
@@ -101,7 +101,6 @@ const Info = () => {
       editMeMutation.mutate(editUser);
     }
   };
-  <br />;
 
   const handleDeletUser = () => {
     Swal.fire({
@@ -119,7 +118,6 @@ const Info = () => {
       }
     });
   };
-
   return (
     <Layout>
       <Head>
@@ -222,6 +220,9 @@ const Info = () => {
                   </div>
                   {editMeMutation?.data?.error && (
                     <FormError errorMessage={editMeMutation.data.error} />
+                  )}
+                  {deleteMeMutation?.data?.error && (
+                    <FormError errorMessage={deleteMeMutation.data.error} />
                   )}
                 </form>
               </div>

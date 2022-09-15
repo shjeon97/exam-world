@@ -35,7 +35,9 @@ async function bootstrap() {
 
   try {
     await app.listen(process.env.PORT, () =>
-      console.log(`Running on Port ${process.env.PORT}`),
+      console.log(
+        `Running on Port ${process.env.PORT} ${process.env.NODE_ENV}`,
+      ),
     );
   } catch (error) {
     console.log(error);
