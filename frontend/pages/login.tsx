@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { apiLogin, apiGetMe } from "../common/api/axios";
+import { apiLogin, apiGetMe } from "../api/axios";
 import { ILoginInput, ILoginOutput } from "../common/type";
 import { FormButton } from "../components/form-button";
 import { FormError } from "../components/form-error";

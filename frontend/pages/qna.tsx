@@ -1,9 +1,70 @@
+import classNames from "classnames";
 import Head from "next/head";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useMutation, useQuery } from "react-query";
+import { apiGetMe, apiSendQuestion } from "../api/axios";
+import { ICoreOutput, ISendQuestionInput, IUserInput } from "../common/type";
+import { FormButton } from "../components/form-button";
+import { FormError } from "../components/form-error";
 import { Layout } from "../components/layout";
+import Tiptap from "../components/tiptap";
 import { WEB_TITLE } from "../constant";
+import { Toast } from "../lib/sweetalert2/toast";
 
 const Qna = () => {
+  const {
+    register,
+    getValues,
+    formState: { errors, isValid },
+    handleSubmit,
+  } = useForm<ISendQuestionInput>({ mode: "onChange" });
+  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
+    "me",
+    apiGetMe
+  );
+  const [tiptapValue, setTiptapValue] = useState("");
+
+  const tiptapEditor = (editor: any) => {
+    if (editor) {
+      setTiptapValue(editor.getHTML());
+    }
+  };
+  let router = useRouter();
+
+  const sendQuestionMutation = useMutation(apiSendQuestion, {
+    onSuccess: (data: ICoreOutput) => {
+      if (data.ok) {
+        Toast.fire({
+          icon: "success",
+          title: `문의사항이 접수 되었습니다.`,
+          position: "top-end",
+          timer: 3000,
+        });
+        router.push("/");
+      }
+    },
+  });
+
+  const registerOption = {
+    email: { required: "사용할 이메일 입력해 주세요." },
+    question: { required: "문의 내용을 입력해 주세요." },
+  };
+
+  const onSubmit = () => {
+    if (!sendQuestionMutation.isLoading) {
+      if (tiptapValue.length < 10) {
+        alert("문의 내용을 입력해 주세요.");
+      } else {
+        const sendQuestion = getValues();
+        sendQuestion.question = tiptapValue;
+
+        sendQuestionMutation.mutate(sendQuestion);
+      }
+    }
+  };
+
   return (
     <>
       <Head>
@@ -14,49 +75,45 @@ const Qna = () => {
         <div className="p-10  m-5">
           <div className="flex flex-col items-center">
             <h1 className="mb-2 font-medium text-2xl ">문의사항</h1>
-            <div>
-              <form className=" max-w-sm">
-                <label className="text-sm font-medium">이메일</label>
-                <input
-                  type={"email"}
-                  // className={classnames(`form-input`, {
-                  //   "border-red-500 focus:border-red-500 focus:outline-red-500":
-                  //     errors.email,
-                  // })}
-                  // {...register("email", registerOption.email)}
-                  placeholder="이메일"
-                  // defaultValue={meData.email}
-                />
-                <label className="text-sm font-medium">닉네임</label>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <label className="text-lg font-medium">이메일</label>
+              <div className=" text-xs  text-gray-500">
+                문의사항에 관한 답변받을 이메일 정보를 입력하세요.
+              </div>
+              <input
+                type={"email"}
+                className={classNames(`form-input`, {
+                  "border-red-500 focus:border-red-500 focus:outline-red-500":
+                    errors.email,
+                })}
+                {...register("email", registerOption.email)}
+                placeholder="이메일"
+              />
 
-                <input
-                  // className={classnames(`form-input`, {
-                  //   "border-red-500 focus:border-red-500 focus:outline-red-500":
-                  //     errors.name,
-                  // })}
-                  // {...register("name", registerOption.name)}
-                  placeholder="닉네임"
-                  // defaultValue={meData.name}
+              <div>
+                <label className="text-lg font-medium">내용</label>
+                <Tiptap editor={tiptapEditor} />
+              </div>
+              {Object.values(errors).length > 0 &&
+                Object.values(errors).map((error, key) => {
+                  return (
+                    <div key={`form_error_${key}`}>
+                      <FormError errorMessage={`${error.message}`} />
+                      <br />
+                    </div>
+                  );
+                })}
+              <div className="mt-2">
+                <FormButton
+                  canClick={isValid}
+                  loading={false}
+                  actionText={"전송"}
                 />
-
-                {/* {Object.values(errors).length > 0 &&
-                    Object.values(errors).map((error, key) => {
-                      return (
-                        <div key={`form_error_${key}`}>
-                          <FormError errorMessage={error.message} />
-                          <br />
-                        </div>
-                      );
-                    })} */}
-                <div className=" grid grid-cols-2 gap-4">
-                  {/* <FormButton
-                      canClick={isValid}
-                      loading={false}
-                      actionText={"정보 수정"}
-                    /> */}
-                </div>
-              </form>
-            </div>
+              </div>
+              {sendQuestionMutation?.data?.error && (
+                <FormError errorMessage={sendQuestionMutation.data.error} />
+              )}
+            </form>
           </div>
         </div>
       </Layout>

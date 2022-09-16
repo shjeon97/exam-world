@@ -357,5 +357,20 @@ describe('AppController (e2e)', () => {
           });
       });
     });
+    describe('QnaController (e2e)', () => {
+      const APT_QNA_QUESTION = '/api/qna/question';
+      it('문의사항 질문 전송', () => {
+        return request(app.getHttpServer())
+          .post(APT_QNA_QUESTION)
+          .send({
+            email: testUser1.email,
+            question: '<p>문의사항 TEST 입니다.</p>',
+          })
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+    });
   });
 });

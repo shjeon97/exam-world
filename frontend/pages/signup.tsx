@@ -5,7 +5,7 @@ import { FormError } from "../components/form-error";
 import classnames from "classnames";
 import { useMutation, useQuery } from "react-query";
 import { ICoreOutput, ISignupUserInput } from "../common/type";
-import { apiGetMe, apiSignupUser } from "../common/api/axios";
+import { apiGetMe, apiSignupUser } from "../api/axios";
 import { Toast } from "../lib/sweetalert2/toast";
 import { FormButton } from "../components/form-button";
 import { useRouter } from "next/router";

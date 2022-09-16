@@ -1,11 +1,13 @@
 import axios from "axios";
-import { JwtToken } from "../../constant";
+import { JwtToken } from "../constant";
 import {
   IDeleteMeInput,
   IEditMeInput,
   ILoginInput,
+  ISendQuestionInput,
   ISignupUserInput,
-} from "../type";
+  IUploadImageInput,
+} from "../common/type";
 
 axios.defaults.baseURL = process.env.NEXT_PUBLIC_SEVER_BASE_URL + "/api";
 axios.defaults.withCredentials = true;
@@ -87,6 +89,37 @@ export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
 export const apiGetMe = async () => {
   return axios
     .get("user/me")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiUploadImage = async ({ file }: IUploadImageInput) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  return axios
+    .post(`/image`, formData)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiSendQuestion = async ({
+  email,
+  question,
+}: ISendQuestionInput) => {
+  return axios
+    .post("/qna/question", {
+      email,
+      question,
+    })
     .then((res) => {
       return res.data;
     })

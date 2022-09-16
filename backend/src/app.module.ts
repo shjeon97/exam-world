@@ -5,6 +5,9 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import * as Joi from 'joi';
 import { User } from './entity/user.entity';
+import { ImageModule } from './image/image.module';
+import { QnaModule } from './qna/qna.module';
+import { Qna } from './entity/qna.entity';
 
 @Module({
   imports: [
@@ -49,10 +52,12 @@ import { User } from './entity/user.entity';
       // hot load 사용시 선언
       keepConnectionAlive: true,
       // 사용할 entity들 선언
-      entities: [User],
+      entities: [User, Qna],
     }),
     AuthModule,
     UserModule,
+    ImageModule,
+    QnaModule,
   ],
   controllers: [],
   providers: [],

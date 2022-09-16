@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '유저 생성' })
   @ApiResponse({ type: CoreOutput })
   @Post('/signup')

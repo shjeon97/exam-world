@@ -27,3 +27,16 @@ export interface ILoginOutput extends ICoreOutput {
 export interface IDeleteMeInput {
   password: string;
 }
+
+export interface IUploadImageInput {
+  file: any;
+}
+
+export interface IUploadImageOutput extends ICoreOutput {
+  fileURL?: any;
+}
+
+export interface ISendQuestionInput {
+  email: string;
+  question: any;
+}

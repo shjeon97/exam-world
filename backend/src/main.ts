@@ -2,10 +2,13 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bodyParser: true,
+  });
   // 유효성검사 파이프 전역 설정
   app.useGlobalPipes(new ValidationPipe());
 
@@ -20,6 +23,15 @@ async function bootstrap() {
       credentials: true,
     });
   }
+
+  app.useStaticAssets(
+    process.env.NODE_ENV === 'prod'
+      ? join(__dirname, '..', '..', 'public')
+      : join(__dirname, '..', 'public'),
+    {
+      prefix: '/public',
+    },
+  );
 
   // 전역 Route에 사용할 문자 정의
   app.setGlobalPrefix('api');

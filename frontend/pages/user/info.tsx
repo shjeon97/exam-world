@@ -6,7 +6,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
-import { apiDeleteMe, apiEditMe, apiGetMe } from "../../common/api/axios";
+import { apiDeleteMe, apiEditMe, apiGetMe } from "../../api/axios";
 import { ICoreOutput, IEditMeInput, IUserInput } from "../../common/type";
 import { FormButton } from "../../components/form-button";
 import { FormError } from "../../components/form-error";
@@ -40,7 +40,7 @@ const Info = () => {
   });
 
   const deleteMeMutation = useMutation(apiDeleteMe, {
-    onError: async (data: ICoreOutput) => {
+    onSuccess: async (data: ICoreOutput) => {
       if (data) {
         await Toast.fire({
           icon: "success",
