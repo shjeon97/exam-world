@@ -38,6 +38,10 @@ export class MultipleChoice {
   @Column()
   text: string;
 
+  @ApiProperty({ description: '정답' })
+  @Column({ default: false })
+  correctAnswer: boolean;
+
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
   createdAt: Date;
