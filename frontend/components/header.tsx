@@ -14,9 +14,11 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { LOCALSTORAGE_TOKEN } from "../constant";
+import { useRouter } from "next/router";
 
 export const Header: React.FC = () => {
   const queryClient = useQueryClient();
+  let router = useRouter();
 
   const { isLoading: meIsLoading, data: meData } = useQuery("me", apiGetMe);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,6 +26,14 @@ export const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem(LOCALSTORAGE_TOKEN);
     queryClient.invalidateQueries("me");
+  };
+
+  const clickCreateExamButton = () => {
+    if (!meIsLoading && !meData) {
+      alert("해당기능은 로그인이 필요합니다.");
+    } else {
+      router.push("/exam");
+    }
   };
 
   return (
@@ -43,9 +53,9 @@ export const Header: React.FC = () => {
                     <Link href="/">
                       <div className="button">시험목록</div>
                     </Link>
-                    <Link href="/">
-                      <div className="button">시험 만들기</div>
-                    </Link>
+                    <div onClick={() => clickCreateExamButton()}>
+                      <div className="button">내가 만든 시험</div>
+                    </div>
                     <Link href="/qna">
                       <div className="button">문의</div>
                     </Link>
@@ -132,11 +142,11 @@ export const Header: React.FC = () => {
                       시험목록
                     </div>
                   </Link>
-                  <Link href="/">
+                  <div onClick={() => clickCreateExamButton()}>
                     <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
-                      시험 만들기
+                      내가 만든 시험
                     </div>
-                  </Link>
+                  </div>
 
                   <Link href="/qna">
                     <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
