@@ -8,6 +8,12 @@ import { User } from './entity/user.entity';
 import { ImageModule } from './image/image.module';
 import { QnaModule } from './qna/qna.module';
 import { Qna } from './entity/qna.entity';
+import { ExamModule } from './exam/exam.module';
+import { QuestionModule } from './question/question.module';
+import { MultipleChoiceModule } from './multiple-choice/multiple-choice.module';
+import { Exam } from './entity/exam.entity';
+import { Question } from './entity/question.entity';
+import { MultipleChoice } from './entity/multiple-choice.entity';
 
 @Module({
   imports: [
@@ -52,12 +58,15 @@ import { Qna } from './entity/qna.entity';
       // hot load 사용시 선언
       keepConnectionAlive: true,
       // 사용할 entity들 선언
-      entities: [User, Qna],
+      entities: [User, Qna, Exam, Question, MultipleChoice],
     }),
     AuthModule,
     UserModule,
     ImageModule,
     QnaModule,
+    ExamModule,
+    QuestionModule,
+    MultipleChoiceModule,
   ],
   controllers: [],
   providers: [],
