@@ -44,6 +44,22 @@ export class ExamService {
     }
   }
 
+  async findExamById(id: number) {
+    try {
+      const exam = await this.exam.findOne({
+        where: { id },
+        relations: ['user'],
+      });
+      return {
+        ok: true,
+        exam,
+      };
+    } catch (error) {
+      console.log(error);
+      return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
+    }
+  }
+
   async findExamListByme(user: any) {
     try {
       const examList = await this.exam.find({

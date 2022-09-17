@@ -47,6 +47,14 @@ export class ExamController {
     return this.examService.findExamListByme(user);
   }
 
+  @ApiOperation({ summary: '자기가 만든 시험 정보 가져오기' })
+  @ApiResponse({ type: FindExamListBymeOutput })
+  @Role(['Any'])
+  @Get(':id')
+  async findExamById(id: number) {
+    return this.examService.findExamById(id);
+  }
+
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
   @ApiResponse({ type: FindQuestionListByExamIdOutput })
   @Role(['Any'])

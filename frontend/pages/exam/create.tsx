@@ -1,20 +1,12 @@
 import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
+import { apiCreateExam, apiGetMe } from "../../api/axios";
 import {
-  apiCreateExam,
-  apiFindQuestionListByExamId,
-  apiGetMe,
-} from "../../api/axios";
-import {
-  ICoreOutput,
   ICreateExamInput,
   ICreateExamOutput,
-  IFindQuestionListByExamIdInput,
-  IFindQuestionListByExamIdOutput,
   IUserInput,
 } from "../../common/type";
 import { FormButton } from "../../components/form-button";
@@ -24,9 +16,6 @@ import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
 export default function CreateExam() {
-  const [isExam, setisExam] = useState<boolean>(false);
-  const [tiptapValue, setTiptapValue] = useState("");
-  const [questionList, setQuestionList] = useState([]);
   const {
     register: createExamRegister,
     getValues: createExamGetValues,
@@ -53,22 +42,10 @@ export default function CreateExam() {
     title: { required: "사용할 설명 입력해 주세요." },
   };
 
-  const findQuestionListByExamIdMutation = useMutation(
-    apiFindQuestionListByExamId,
-    {
-      onSuccess: async (data: IFindQuestionListByExamIdOutput) => {
-        if (data.ok) {
-          setQuestionList(data.questionList);
-        }
-      },
-    }
-  );
-
   const createExamMutation = useMutation(apiCreateExam, {
     onSuccess: async (data: ICreateExamOutput) => {
       if (data.ok) {
-        setisExam(true);
-        findQuestionListByExamIdMutation.mutate(data.examId);
+        router.push(`/exam/${data.examId}/info`);
       }
     },
   });
@@ -76,12 +53,6 @@ export default function CreateExam() {
   const createExamOnSubmit = () => {
     const createExamVlaues = createExamGetValues();
     createExamMutation.mutate(createExamVlaues);
-  };
-
-  const tiptapEditor = (editor: any) => {
-    if (editor) {
-      setTiptapValue(editor.getHTML());
-    }
   };
 
   return (
@@ -101,7 +72,6 @@ export default function CreateExam() {
               className={classNames(`form-input`, {
                 "border-red-500 focus:border-red-500 focus:outline-red-500":
                   createExamErrors.name,
-                "pointer-events-none": isExam,
               })}
               {...createExamRegister("name", createExamRegisterOption.name)}
               placeholder="제목"
@@ -114,7 +84,6 @@ export default function CreateExam() {
               className={classNames(`form-input`, {
                 "border-red-500 focus:border-red-500 focus:outline-red-500":
                   createExamErrors.title,
-                "pointer-events-none": isExam,
               })}
               {...createExamRegister("title", createExamRegisterOption.title)}
               placeholder="설명"
@@ -128,28 +97,14 @@ export default function CreateExam() {
                   </div>
                 );
               })}
-            <div
-              className={classNames(`mt-2`, { "pointer-events-none": isExam })}
-            >
+            <div className="mt-2">
               <FormButton
                 canClick={createExamIsValid}
                 loading={false}
-                actionText={isExam ? "완료" : "전송"}
+                actionText={"생성"}
               />
             </div>
           </form>
-          {isExam && (
-            <>
-              <form>
-                <div>
-                  <label className="text-lg font-medium">
-                    문제 - {questionList.length + 1}번
-                  </label>
-                  <Tiptap editor={tiptapEditor} />
-                </div>
-              </form>
-            </>
-          )}
         </div>
       </div>
     </div>
