@@ -120,6 +120,17 @@ export const apiFindQuestionListByExamId = async (examId: number) => {
     });
 };
 
+export const apiFindExamById = async (id: number) => {
+  return axios
+    .get(`exam/${id}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiUploadImage = async ({ file }: IUploadImageInput) => {
   const formData = new FormData();
   formData.append("file", file);

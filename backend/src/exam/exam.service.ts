@@ -48,7 +48,6 @@ export class ExamService {
     try {
       const exam = await this.exam.findOne({
         where: { id },
-        relations: ['user'],
       });
       return {
         ok: true,

@@ -14,6 +14,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
+import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
 import { FindExamListBymeOutput as FindExamListBymeOutput } from 'src/dto/find-examList-by-me.dto';
 import {
   FindQuestionListByExamIdInput,
@@ -47,14 +48,13 @@ export class ExamController {
     return this.examService.findExamListByme(user);
   }
 
-  @ApiOperation({ summary: '자기가 만든 시험 정보 가져오기' })
+  @ApiOperation({ summary: 'id로 시험 정보 가져오기' })
   @ApiResponse({ type: FindExamListBymeOutput })
   @Role(['Any'])
   @Get(':id')
-  async findExamById(id: number) {
+  async findExamById(@Param() { id }: FindExamByIdInput) {
     return this.examService.findExamById(id);
   }
-
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
   @ApiResponse({ type: FindQuestionListByExamIdOutput })
   @Role(['Any'])
