@@ -1,13 +1,15 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { apiFindExamListByMe, apiGetMe } from "../../api/axios";
-import { IFindExamListByMe, IUserInput } from "../../common/type";
+import { IFindExamListByMeOutput, IUserInput } from "../../common/type";
 import { ExamCard } from "../../components/exam-card";
 import { LinkButton } from "../../components/link-button";
 import { WEB_TITLE } from "../../constant";
+import { Toast } from "../../lib/sweetalert2/toast";
 
 export default function Index() {
-  const { isLoading, data } = useQuery<IFindExamListByMe>(
+  const { isLoading, data } = useQuery<IFindExamListByMeOutput>(
     "exam_list_by_me",
     apiFindExamListByMe
   );
@@ -15,6 +17,16 @@ export default function Index() {
     "me",
     apiGetMe
   );
+  let router = useRouter();
+  if (!meIsLoading && !meData) {
+    Toast.fire({
+      icon: "error",
+      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
+      position: "top-end",
+      timer: 3000,
+    });
+    router.push("/login");
+  }
 
   return (
     <div>

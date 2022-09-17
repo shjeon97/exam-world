@@ -25,6 +25,10 @@ export interface ILoginOutput extends ICoreOutput {
   token?: string;
 }
 
+export interface ICreateExamOutput extends ICoreOutput {
+  examId?: number;
+}
+
 export interface IDeleteMeInput {
   password: string;
 }
@@ -47,6 +51,14 @@ export interface ICreateExamInput {
   title: string;
 }
 
-export interface IFindExamListByMe extends ICoreOutput {
+export interface IFindExamListByMeOutput extends ICoreOutput {
   examList?: any[];
+}
+
+export interface IFindQuestionListByExamIdInput {
+  examId: number;
+}
+
+export interface IFindQuestionListByExamIdOutput extends ICoreOutput {
+  questionList?: any[];
 }

@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateExamInput } from 'src/dto/create-exam';
+import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
+import { FindQuestionListByExamIdOutput } from 'src/dto/find-questionList-by-examId.dto';
 import { Exam } from 'src/entity/exam.entity';
+import { Question } from 'src/entity/question.entity';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 
@@ -11,17 +13,19 @@ export class ExamService {
   constructor(
     @InjectRepository(Exam)
     private readonly exam: Repository<Exam>,
+    @InjectRepository(Question)
+    private readonly question: Repository<Question>,
   ) {}
 
   async createExam(
     { name, title }: CreateExamInput,
     user: User,
-  ): Promise<CoreOutput> {
+  ): Promise<CreateExamOutput> {
     try {
       name = name.trim().replace('/', '-');
       title = title.trim().replace('/', '-');
 
-      await this.exam.save(
+      const { id } = await this.exam.save(
         this.exam.create({
           name,
           title,
@@ -31,6 +35,7 @@ export class ExamService {
 
       return {
         ok: true,
+        examId: id,
       };
     } catch (error) {
       console.log(error);
@@ -52,6 +57,26 @@ export class ExamService {
     } catch (error) {
       console.log(error);
       return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
+    }
+  }
+
+  async findQuestionListByExamId(
+    examId: number,
+  ): Promise<FindQuestionListByExamIdOutput> {
+    try {
+      const questionList = await this.question.find({
+        where: { exam: { id: examId } },
+      });
+      return {
+        ok: true,
+        questionList,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ok: false,
+        error: 'examId에 일치하는 question list 가져오기 실패',
+      };
     }
   }
 }

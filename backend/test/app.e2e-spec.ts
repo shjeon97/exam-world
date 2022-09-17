@@ -7,8 +7,8 @@ import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 let testUser1 = {
-  email: 'test@test.com',
-  name: 'test',
+  email: 'test1@test.com',
+  name: 'test1',
   password: '1234',
 };
 
@@ -344,21 +344,23 @@ describe('AppController (e2e)', () => {
             error: '비밀번호가 일치하지 않습니다.',
           });
       });
-      it('계정삭제 1', () => {
+      it('계정삭제 3', () => {
         return request(app.getHttpServer())
           .delete(API_USER_ME)
           .send({
-            password: testUser1.password,
+            password: testUser3.password,
           })
-          .set('authorization', `Bearer ${jwtToken1}`)
+          .set('authorization', `Bearer ${jwtToken3}`)
           .expect(HttpStatus.OK)
           .expect({
             ok: true,
           });
       });
     });
-    describe('QnaController (e2e)', () => {
-      const APT_QNA_QUESTION = '/api/qna/question';
+  });
+  describe('QnaController (e2e)', () => {
+    const APT_QNA_QUESTION = '/api/qna/question';
+    describe('sendQuestion', () => {
       it('문의사항 질문 전송', () => {
         return request(app.getHttpServer())
           .post(APT_QNA_QUESTION)
@@ -369,6 +371,55 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.CREATED)
           .expect({
             ok: true,
+          });
+      });
+    });
+  });
+
+  describe('QnaController (e2e)', () => {
+    const APT_QNA_QUESTION = '/api/qna/question';
+    describe('sendQuestion', () => {
+      it('문의사항 질문 전송', () => {
+        return request(app.getHttpServer())
+          .post(APT_QNA_QUESTION)
+          .send({
+            email: testUser1.email,
+            question: '<p>문의사항 TEST 입니다.</p>',
+          })
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+  });
+
+  describe('ExamController (e2e)', () => {
+    const APT_EXAM = '/api/exam';
+    describe('createExam', () => {
+      it('시험 생성', () => {
+        return request(app.getHttpServer())
+          .post(APT_EXAM)
+          .send({
+            name: 'TEST name',
+            title: 'TEST title',
+          })
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+    describe('findExamListByme', () => {
+      it('자기가 만든 시험 정보 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(APT_EXAM + '/me')
+          .set('authorization', `Bearer ${jwtToken1}`)
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.examList).toEqual(expect.any(Array));
           });
       });
     });

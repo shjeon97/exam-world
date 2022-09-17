@@ -109,6 +109,17 @@ export const apiFindExamListByMe = async () => {
     });
 };
 
+export const apiFindQuestionListByExamId = async (examId: number) => {
+  return axios
+    .get(`exam/${examId}/question`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiUploadImage = async ({ file }: IUploadImageInput) => {
   const formData = new FormData();
   formData.append("file", file);

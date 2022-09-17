@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -12,8 +13,12 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateExamInput } from 'src/dto/create-exam';
+import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { FindExamListBymeOutput as FindExamListBymeOutput } from 'src/dto/find-examList-by-me.dto';
+import {
+  FindQuestionListByExamIdInput,
+  FindQuestionListByExamIdOutput,
+} from 'src/dto/find-questionList-by-examId.dto';
 import { ExamService } from './exam.service';
 
 @Controller('exam')
@@ -26,10 +31,10 @@ export class ExamController {
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createUser(
+  async createExam(
     @GetUser() user,
     @Body() createExamInput: CreateExamInput,
-  ): Promise<CoreOutput> {
+  ): Promise<CreateExamOutput> {
     return this.examService.createExam(createExamInput, user);
   }
 
@@ -40,5 +45,15 @@ export class ExamController {
   @Get('/me')
   async findExamListByme(@GetUser() user): Promise<FindExamListBymeOutput> {
     return this.examService.findExamListByme(user);
+  }
+
+  @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
+  @ApiResponse({ type: FindQuestionListByExamIdOutput })
+  @Role(['Any'])
+  @Get(':examId/question')
+  async findQuestionListByExamId(
+    @Param() { examId }: FindQuestionListByExamIdInput,
+  ): Promise<FindQuestionListByExamIdOutput> {
+    return this.examService.findQuestionListByExamId(examId);
   }
 }
