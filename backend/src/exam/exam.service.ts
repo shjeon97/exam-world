@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
+import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindQuestionListByExamIdOutput } from 'src/dto/find-questionList-by-examId.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { Question } from 'src/entity/question.entity';
@@ -56,6 +57,27 @@ export class ExamService {
     } catch (error) {
       console.log(error);
       return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
+    }
+  }
+
+  async editExam({ id, name, title }: EditExamInput) {
+    try {
+      const exam = await this.exam.findOne({ where: { id } });
+      exam.name = name;
+      exam.title = title;
+
+      await this.exam.save(exam);
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.log(error);
+
+      return {
+        ok: false,
+        error: '시험 정보 수정 실패',
+      };
     }
   }
 

@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
+import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
 import { FindExamListBymeOutput as FindExamListBymeOutput } from 'src/dto/find-examList-by-me.dto';
 import {
@@ -55,6 +57,15 @@ export class ExamController {
   async findExamById(@Param() { id }: FindExamByIdInput) {
     return this.examService.findExamById(id);
   }
+
+  @ApiOperation({ summary: 'id로 시험 정보 수정' })
+  @ApiResponse({ type: CoreOutput })
+  @Role(['Any'])
+  @Patch()
+  async editExam(@Body() editExamInput: EditExamInput): Promise<CoreOutput> {
+    return this.examService.editExam(editExamInput);
+  }
+
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
   @ApiResponse({ type: FindQuestionListByExamIdOutput })
   @Role(['Any'])

@@ -3,6 +3,7 @@ import { JwtToken } from "../constant";
 import {
   ICreateExamInput,
   IDeleteMeInput,
+  IEditExamInput,
   IEditMeInput,
   ILoginInput,
   ISendQuestionInput,
@@ -63,6 +64,21 @@ export const apiEditMe = async ({
       password,
       name,
       editPassword,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiEditExam = async ({ id, name, title }: IEditExamInput) => {
+  return axios
+    .patch("/exam", {
+      id,
+      name,
+      title,
     })
     .then((res) => {
       return res.data;
