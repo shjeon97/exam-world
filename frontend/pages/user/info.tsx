@@ -1,5 +1,4 @@
 import classnames from "classnames";
-import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
@@ -10,7 +9,6 @@ import { apiDeleteMe, apiEditMe, apiGetMe } from "../../api/axios";
 import { ICoreOutput, IEditMeInput, IUserInput } from "../../common/type";
 import { FormButton } from "../../components/form-button";
 import { FormError } from "../../components/form-error";
-import { Layout } from "../../components/layout";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
@@ -119,11 +117,10 @@ const Info = () => {
     });
   };
   return (
-    <Layout>
+    <>
       <Head>
         <title className=" text-gray-600">내 정보 {WEB_TITLE}</title>
       </Head>
-      <div className="h-16" />
       {!meIsLoading && meData && (
         <>
           <div className="p-10  m-5">
@@ -230,7 +227,7 @@ const Info = () => {
           </div>
         </>
       )}
-    </Layout>
+    </>
   );
 };
 

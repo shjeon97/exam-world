@@ -1,6 +1,7 @@
 import axios from "axios";
 import { JwtToken } from "../constant";
 import {
+  ICreateExamInput,
   IDeleteMeInput,
   IEditMeInput,
   ILoginInput,
@@ -97,6 +98,17 @@ export const apiGetMe = async () => {
     });
 };
 
+export const apiFindExamListByMe = async () => {
+  return axios
+    .get("exam/me")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiUploadImage = async ({ file }: IUploadImageInput) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -119,6 +131,20 @@ export const apiSendQuestion = async ({
     .post("/qna/question", {
       email,
       question,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiCreateExam = async ({ name, title }: ICreateExamInput) => {
+  return axios
+    .post("/exam", {
+      name,
+      title,
     })
     .then((res) => {
       return res.data;

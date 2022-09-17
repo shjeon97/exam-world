@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import Image from "next/image";
-import exam from "../public/image/exam.png";
-import logout from "../public/image/logout.png";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "react-query";
 import { apiGetMe } from "../api/axios";
-import { Button } from "./buttom";
 import { Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,7 +12,7 @@ import {
 import { LOCALSTORAGE_TOKEN } from "../constant";
 import { useRouter } from "next/router";
 
-export const Header: React.FC = () => {
+export const NavBar: React.FC = () => {
   const queryClient = useQueryClient();
   let router = useRouter();
 

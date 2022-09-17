@@ -1,4 +1,5 @@
 export interface IUserInput {
+  id: number;
   email: string;
   name: string;
   password: string;
@@ -39,4 +40,13 @@ export interface IUploadImageOutput extends ICoreOutput {
 export interface ISendQuestionInput {
   email: string;
   question: any;
+}
+
+export interface ICreateExamInput {
+  name: string;
+  title: string;
+}
+
+export interface IFindExamListByMe extends ICoreOutput {
+  examList?: any[];
 }

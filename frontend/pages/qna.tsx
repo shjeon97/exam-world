@@ -8,7 +8,6 @@ import { apiGetMe, apiSendQuestion } from "../api/axios";
 import { ICoreOutput, ISendQuestionInput, IUserInput } from "../common/type";
 import { FormButton } from "../components/form-button";
 import { FormError } from "../components/form-error";
-import { Layout } from "../components/layout";
 import Tiptap from "../components/tiptap";
 import { WEB_TITLE } from "../constant";
 import { Toast } from "../lib/sweetalert2/toast";
@@ -70,53 +69,50 @@ const Qna = () => {
       <Head>
         <title className=" text-gray-800">문의사항 {WEB_TITLE}</title>
       </Head>
-      <Layout>
-        <div className="h-16" />
-        <div className="p-10  m-5">
-          <div className="flex flex-col items-center">
-            <h1 className="mb-2 font-medium text-2xl ">문의사항</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <label className="text-lg font-medium">이메일</label>
-              <div className=" text-xs  text-gray-500">
-                문의사항에 관한 답변받을 이메일 정보를 입력하세요.
-              </div>
-              <input
-                type={"email"}
-                className={classNames(`form-input`, {
-                  "border-red-500 focus:border-red-500 focus:outline-red-500":
-                    errors.email,
-                })}
-                {...register("email", registerOption.email)}
-                placeholder="이메일"
-              />
+      <div className="p-10  m-5">
+        <div className="flex flex-col items-center">
+          <h1 className="mb-2 font-medium text-2xl ">문의사항</h1>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <label className="text-lg font-medium">이메일</label>
+            <div className=" text-xs  text-gray-500">
+              문의사항에 관한 답변받을 이메일 정보를 입력하세요.
+            </div>
+            <input
+              type={"email"}
+              className={classNames(`form-input`, {
+                "border-red-500 focus:border-red-500 focus:outline-red-500":
+                  errors.email,
+              })}
+              {...register("email", registerOption.email)}
+              placeholder="이메일"
+            />
 
-              <div>
-                <label className="text-lg font-medium">내용</label>
-                <Tiptap editor={tiptapEditor} />
-              </div>
-              {Object.values(errors).length > 0 &&
-                Object.values(errors).map((error, key) => {
-                  return (
-                    <div key={`form_error_${key}`}>
-                      <FormError errorMessage={`${error.message}`} />
-                      <br />
-                    </div>
-                  );
-                })}
-              <div className="mt-2">
-                <FormButton
-                  canClick={isValid}
-                  loading={false}
-                  actionText={"전송"}
-                />
-              </div>
-              {sendQuestionMutation?.data?.error && (
-                <FormError errorMessage={sendQuestionMutation.data.error} />
-              )}
-            </form>
-          </div>
+            <div>
+              <label className="text-lg font-medium">내용</label>
+              <Tiptap editor={tiptapEditor} />
+            </div>
+            {Object.values(errors).length > 0 &&
+              Object.values(errors).map((error, key) => {
+                return (
+                  <div key={`form_error_${key}`}>
+                    <FormError errorMessage={`${error.message}`} />
+                    <br />
+                  </div>
+                );
+              })}
+            <div className="mt-2">
+              <FormButton
+                canClick={isValid}
+                loading={false}
+                actionText={"전송"}
+              />
+            </div>
+            {sendQuestionMutation?.data?.error && (
+              <FormError errorMessage={sendQuestionMutation.data.error} />
+            )}
+          </form>
         </div>
-      </Layout>
+      </div>
     </>
   );
 };
