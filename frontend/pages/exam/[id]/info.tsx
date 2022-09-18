@@ -15,7 +15,9 @@ import Tiptap from "../../../components/tiptap";
 
 export default function ExamInfo() {
   const [tiptapValue, setTiptapValue] = useState("");
-  const [optionNumber, setOptionNumber] = useState(0);
+  const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<number[]>(
+    []
+  );
 
   const router = useRouter();
   const { id } = router.query;
@@ -59,9 +61,51 @@ export default function ExamInfo() {
     editExamMutation.mutate({ id, ...editExamVlaues });
   };
 
+  const {
+    register: createQuestionAndMulitpleChoiceRegister,
+    getValues: createQuestionAndMulitpleChoiceGetValues,
+    formState: {
+      errors: createQuestionAndMulitpleChoiceErrors,
+      isValid: createQuestionAndMulitpleChoiceIsValid,
+    },
+    setValue: createQuestionAndMulitpleChoiceSetValue,
+    handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
+  } = useForm<any>({ mode: "onChange" });
+
   const onAddOptionClick = () => {
-    setOptionNumber((e) => e + 1);
-    console.log(optionNumber);
+    setmulitpleChoiceNumber((e) => [Date.now(), ...e]);
+  };
+
+  const createQuestionAndMulitPleChoiceOnSubmit = () => {
+    const { ...rest } = createQuestionAndMulitpleChoiceGetValues();
+    const mulitpleChoice = mulitpleChoiceNumber.map((theId) => ({
+      mulitpleChoice: rest[`mulitpleChoice-${theId}`],
+      isCorrectAnswer: rest[`score-${theId}`],
+    }));
+
+    console.log(mulitpleChoice);
+
+    let isMulitpleChoiceNull = false;
+
+    mulitpleChoice.map((e) => {
+      if (e.mulitpleChoice.trim() == "") {
+        isMulitpleChoiceNull = true;
+      }
+    });
+
+    if (isMulitpleChoiceNull) {
+      return Toast.fire({
+        icon: "error",
+        text: "보기를 입력하세요.",
+        position: "bottom-end",
+      });
+    }
+  };
+
+  const onDeleteClick = (idToDelete: number) => {
+    setmulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
+    createQuestionAndMulitpleChoiceSetValue(`mulitpleChoice-${idToDelete}`, "");
+    createQuestionAndMulitpleChoiceSetValue(`score-${idToDelete}`, "");
   };
 
   return (
@@ -101,6 +145,7 @@ export default function ExamInfo() {
                   placeholder="설명"
                   defaultValue={findExamByIdData.exam.title}
                 />
+
                 {Object.values(editExamErrors).length > 0 &&
                   Object.values(editExamErrors).map((error, key) => {
                     return (
@@ -118,30 +163,74 @@ export default function ExamInfo() {
                   />
                 </div>
               </form>
-              <div className="  items-start">
-                <div>
-                  <label className="text-lg font-medium">문제</label>
-                  <Tiptap editor={tiptapEditor} />
-                </div>
-                <div>
-                  <label className="text-lg font-medium">보기</label>
-
-                  <div
-                    onClick={() => onAddOptionClick()}
-                    className="button w-32"
-                  >
-                    보기 추가
+              <form
+                onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
+                  createQuestionAndMulitPleChoiceOnSubmit
+                )}
+              >
+                <div className="  items-start">
+                  <div>
+                    <label className="text-lg font-medium">문제 - {}번</label>
+                    <Tiptap editor={tiptapEditor} />
                   </div>
-                  {optionNumber > 0 &&
-                    Array.from(new Array(optionNumber)).map((_, key) => {
-                      return (
-                        <div key={key}>
-                          <div>test</div>
-                        </div>
-                      );
-                    })}
+                  <div>
+                    <label className="text-lg font-medium">보기</label>
+
+                    <div
+                      onClick={() => onAddOptionClick()}
+                      className="button w-32"
+                    >
+                      보기 추가
+                    </div>
+                    {mulitpleChoiceNumber.length > 0 && (
+                      <>
+                        {mulitpleChoiceNumber.map((id, index) => {
+                          return (
+                            <div
+                              className="flex items-center"
+                              key={`mulitpleChoice-${id}`}
+                            >
+                              <div className="flex items-center justify-center mb-2 px-2">
+                                <div className="block items-center justify-center">
+                                  <label className="inline-flex  text-sm">
+                                    보기 {index + 1}번
+                                  </label>
+                                  <input
+                                    className="form-input "
+                                    {...createQuestionAndMulitpleChoiceRegister(
+                                      `mulitpleChoice-${id}`
+                                    )}
+                                  />
+                                  <div className="mt-2">
+                                    <label className="inline-flex  text-sm">
+                                      점수
+                                    </label>
+                                    <input
+                                      {...createQuestionAndMulitpleChoiceRegister(
+                                        `score-${id}`
+                                      )}
+                                      type="number"
+                                      className="form-input  "
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                              <span
+                                onClick={() => onDeleteClick(id)}
+                                className="text-xl hover:cursor-pointer hover:bg-red-400"
+                              >
+                                🗑️
+                              </span>
+                            </div>
+                          );
+                        })}
+
+                        <button className="button">저장</button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+              </form>
             </div>
           </div>
         </>
