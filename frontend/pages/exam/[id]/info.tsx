@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import {
+  apiCreateQuestion,
   apiEditExam,
   apiFindExamById,
   apiFindQuestionListByExamId,
@@ -23,6 +24,8 @@ export default function ExamInfo() {
   const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<number[]>(
     []
   );
+
+  const [questionPage, setQuestionPage] = useState(1);
 
   const router = useRouter();
   const { id } = router.query;
@@ -51,6 +54,14 @@ export default function ExamInfo() {
       }
     },
   });
+
+  const createQuestionMutation = useMutation(apiCreateQuestion, {
+    onSuccess: async (data: ICoreOutput) => {
+      if (data.ok) {
+      }
+    },
+  });
+
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
     useQuery<any>([`find-exam-by-id-${id}`], () => apiFindExamById(+id), {
       enabled: !!id,
@@ -123,6 +134,12 @@ export default function ExamInfo() {
         position: "bottom-end",
       });
     }
+
+    createQuestionMutation.mutate({
+      question: questionvalue,
+      page: questionPage,
+      examId: +id,
+    });
   };
 
   const onDeleteClick = (idToDelete: number) => {
@@ -186,22 +203,18 @@ export default function ExamInfo() {
                   />
                 </div>
               </form>
+              <div className="mt-4">
+                <label className="text-lg font-medium ">
+                  문제 -{questionPage}번
+                </label>
+                <Tiptap editor={tiptapEditor} />
+              </div>
               <form
                 onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
                   createQuestionAndMulitPleChoiceOnSubmit
                 )}
               >
-                <div className="  items-start  my-3">
-                  <div>
-                    <label className="text-lg font-medium">
-                      문제 -
-                      {findQuestionListByIdData &&
-                        findQuestionListByIdData.questionList &&
-                        findQuestionListByIdData.questionList.length + 1}
-                      번
-                    </label>
-                    <Tiptap editor={tiptapEditor} />
-                  </div>
+                <div className="  items-start  ">
                   <div>
                     <div className="mt-4"></div>
                     <div

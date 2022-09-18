@@ -68,3 +68,9 @@ export interface IEditExamInput {
   name: string;
   title: string;
 }
+
+export interface ICreateQuestionInput {
+  examId: number;
+  page: number;
+  question: string;
+}

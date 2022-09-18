@@ -2,6 +2,7 @@ import axios from "axios";
 import { JwtToken } from "../constant";
 import {
   ICreateExamInput,
+  ICreateQuestionInput,
   IDeleteMeInput,
   IEditExamInput,
   IEditMeInput,
@@ -43,6 +44,25 @@ export const apiLogin = async ({ email, password }: ILoginInput) => {
     .post("/auth/login", {
       email,
       password,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiCreateQuestion = async ({
+  examId,
+  page,
+  question,
+}: ICreateQuestionInput) => {
+  return axios
+    .post("/question", {
+      examId,
+      page,
+      question,
     })
     .then((res) => {
       return res.data;
