@@ -50,6 +50,16 @@ export class ExamController {
     return this.examService.findExamListByme(user);
   }
 
+  @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
+  @ApiResponse({ type: FindQuestionListByExamIdOutput })
+  @Role(['Any'])
+  @Get(':examId/question')
+  async findQuestionListByExamId(
+    @Param() { examId }: FindQuestionListByExamIdInput,
+  ): Promise<FindQuestionListByExamIdOutput> {
+    return this.examService.findQuestionListByExamId(examId);
+  }
+
   @ApiOperation({ summary: 'id로 시험 정보 가져오기' })
   @ApiResponse({ type: FindExamListBymeOutput })
   @Role(['Any'])
@@ -64,15 +74,5 @@ export class ExamController {
   @Patch()
   async editExam(@Body() editExamInput: EditExamInput): Promise<CoreOutput> {
     return this.examService.editExam(editExamInput);
-  }
-
-  @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
-  @ApiResponse({ type: FindQuestionListByExamIdOutput })
-  @Role(['Any'])
-  @Get(':examId/question')
-  async findQuestionListByExamId(
-    @Param() { examId }: FindQuestionListByExamIdInput,
-  ): Promise<FindQuestionListByExamIdOutput> {
-    return this.examService.findQuestionListByExamId(examId);
   }
 }

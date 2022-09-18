@@ -30,17 +30,17 @@ export class MultipleChoice {
   @PrimaryGeneratedColumn()
   questionId: number;
 
-  @ApiProperty({ description: '시험 페이지 번호' })
+  @ApiProperty({ description: '보기 번호' })
   @PrimaryGeneratedColumn()
   no: number;
 
-  @ApiProperty({ description: '시험 페이지 번호' })
+  @ApiProperty({ description: '보기 내용' })
   @Column()
   text: string;
 
-  @ApiProperty({ description: '정답' })
-  @Column({ default: false })
-  correctAnswer: boolean;
+  @ApiProperty({ description: '점수' })
+  @PrimaryGeneratedColumn()
+  score: number;
 
   @ApiProperty({ description: '생성일' })
   @CreateDateColumn()
