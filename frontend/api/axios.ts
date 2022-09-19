@@ -2,6 +2,7 @@ import axios from "axios";
 import { JwtToken } from "../constant";
 import {
   ICreateExamInput,
+  ICreateMultipleChoiceInput,
   ICreateQuestionInput,
   IDeleteMeInput,
   IEditExamInput,
@@ -63,6 +64,31 @@ export const apiCreateQuestion = async ({
       examId,
       page,
       question,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiCreateMultipleChoice = async ({
+  examId,
+  no,
+  text,
+  score,
+  page,
+}: ICreateMultipleChoiceInput) => {
+  console.log(examId, no, text, score, page);
+
+  return axios
+    .post("/multiple-choice", {
+      examId,
+      no,
+      text,
+      score,
+      page,
     })
     .then((res) => {
       return res.data;

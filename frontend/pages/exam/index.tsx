@@ -36,7 +36,7 @@ export default function Index() {
       <div className="flex flex-row m-4 ">
         <LinkButton name="➕" link="/exam/create" />
       </div>
-      <div className="flex flex-row m-4 ">
+      <div className="flex flex-wrap m-4 gap-2 ">
         {!isLoading &&
           !meIsLoading &&
           meData &&
@@ -49,6 +49,7 @@ export default function Index() {
                   userId={exam.user.id}
                   name={exam.name}
                   title={exam.title}
+                  id={exam.id}
                 />
               </div>
             );

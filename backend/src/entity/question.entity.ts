@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { CoreEntity } from 'src/common/entity/core.entity';
 import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
   RelationId,
   UpdateDateColumn,
@@ -18,26 +20,14 @@ export class Question {
 
   @ApiProperty({ description: '시험 id' })
   @RelationId((question: Question) => question.exam)
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   examId: number;
 
   @ApiProperty({ description: '시험 페이지 번호' })
-  @PrimaryGeneratedColumn()
+  @PrimaryColumn()
   page: number;
 
   @ApiProperty({ description: '시험 문제' })
   @Column()
   question: string;
-
-  @ApiProperty({ description: '생성일' })
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @ApiProperty({ description: '마지막 수정일' })
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @ApiProperty({ description: '삭제일' })
-  @DeleteDateColumn()
-  deletedAt: Date;
 }

@@ -74,3 +74,11 @@ export interface ICreateQuestionInput {
   page: number;
   question: string;
 }
+
+export interface ICreateMultipleChoiceInput {
+  examId: number;
+  no: number;
+  text: string;
+  score: number;
+  page: number;
+}

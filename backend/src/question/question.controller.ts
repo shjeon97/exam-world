@@ -2,7 +2,10 @@ import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateQuestionInput } from 'src/dto/create-question';
+import {
+  CreateQuestionInput,
+  CreateQuestionOutput,
+} from 'src/dto/create-question';
 import { QuestionService } from './question.service';
 
 @Controller('question')
@@ -13,9 +16,9 @@ export class QuestionController {
   @ApiResponse({ type: CoreOutput })
   @Role(['Any'])
   @Post()
-  async createExam(
+  async createQuestion(
     @Body() createQuestionInput: CreateQuestionInput,
-  ): Promise<CoreOutput> {
+  ): Promise<CreateQuestionOutput> {
     return this.questionService.createQuestion(createQuestionInput);
   }
 }

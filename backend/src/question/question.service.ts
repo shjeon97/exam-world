@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateQuestionInput } from 'src/dto/create-question';
+import {
+  CreateQuestionInput,
+  CreateQuestionOutput,
+} from 'src/dto/create-question';
 import { Exam } from 'src/entity/exam.entity';
 import { Question } from 'src/entity/question.entity';
 import { Repository } from 'typeorm';
@@ -19,7 +21,7 @@ export class QuestionService {
     question,
     examId,
     page,
-  }: CreateQuestionInput): Promise<CoreOutput> {
+  }: CreateQuestionInput): Promise<CreateQuestionOutput> {
     try {
       const exam = await this.exam.findOne({ where: { id: examId } });
 
@@ -30,13 +32,17 @@ export class QuestionService {
         };
       }
 
-      await this.question.save(
-        await this.question.create({
+      const questions = await this.question.save(
+        this.question.create({
           exam,
           question,
           page,
         }),
       );
+
+      return {
+        ok: true,
+      };
     } catch (error) {
       console.log(error);
       return {

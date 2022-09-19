@@ -4,12 +4,14 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import {
+  apiCreateMultipleChoice,
   apiCreateQuestion,
   apiEditExam,
   apiFindExamById,
   apiFindQuestionListByExamId,
+  apiGetMe,
 } from "../../../api/axios";
-import { ICoreOutput, IEditExamInput } from "../../../common/type";
+import { ICoreOutput, IEditExamInput, IUserInput } from "../../../common/type";
 import { FormButton } from "../../../components/form-button";
 import { FormError } from "../../../components/form-error";
 import { WEB_TITLE } from "../../../constant";
@@ -25,10 +27,23 @@ export default function ExamInfo() {
     []
   );
 
-  const [questionPage, setQuestionPage] = useState(1);
+  const [page, setPage] = useState(1);
 
   const router = useRouter();
   const { id } = router.query;
+  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
+    "me",
+    apiGetMe
+  );
+  if (!meIsLoading && !meData) {
+    Toast.fire({
+      icon: "error",
+      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
+      position: "top-end",
+      timer: 3000,
+    });
+    router.push("/login");
+  }
 
   const {
     register: editExamRegister,
@@ -55,12 +70,8 @@ export default function ExamInfo() {
     },
   });
 
-  const createQuestionMutation = useMutation(apiCreateQuestion, {
-    onSuccess: async (data: ICoreOutput) => {
-      if (data.ok) {
-      }
-    },
-  });
+  const createQuestionMutation = useMutation(apiCreateQuestion);
+  const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
     useQuery<any>([`find-exam-by-id-${id}`], () => apiFindExamById(+id), {
@@ -103,9 +114,9 @@ export default function ExamInfo() {
     setmulitpleChoiceNumber((e) => [Date.now(), ...e]);
   };
 
-  const createQuestionAndMulitPleChoiceOnSubmit = () => {
-    const questionvalue = tiptapValue;
-    if (questionvalue.length < 8) {
+  const createQuestionAndMulitPleChoiceOnSubmit = async () => {
+    const questionValue = tiptapValue;
+    if (questionValue.length < 8) {
       return Toast.fire({
         icon: "error",
         text: "문제를 입력하세요.",
@@ -116,7 +127,7 @@ export default function ExamInfo() {
     const { ...rest } = createQuestionAndMulitpleChoiceGetValues();
     const mulitpleChoice = mulitpleChoiceNumber.map((theId) => ({
       mulitpleChoice: rest[`mulitpleChoice-${theId}`],
-      isCorrectAnswer: rest[`score-${theId}`],
+      score: rest[`score-${theId}`],
     }));
 
     let isMulitpleChoiceNull = false;
@@ -135,10 +146,20 @@ export default function ExamInfo() {
       });
     }
 
-    createQuestionMutation.mutate({
-      question: questionvalue,
-      page: questionPage,
+    createQuestionMutation.mutateAsync({
+      question: questionValue,
+      page: page,
       examId: +id,
+    });
+
+    mulitpleChoice.map((e, index) => {
+      return createMultipleChoiceMutation.mutateAsync({
+        examId: +id,
+        text: e.mulitpleChoice,
+        score: +e.score,
+        no: index + 1,
+        page: page,
+      });
     });
   };
 
@@ -204,9 +225,7 @@ export default function ExamInfo() {
                 </div>
               </form>
               <div className="mt-4">
-                <label className="text-lg font-medium ">
-                  문제 -{questionPage}번
-                </label>
+                <label className="text-lg font-medium ">문제 -{page}번</label>
                 <Tiptap editor={tiptapEditor} />
               </div>
               <form
