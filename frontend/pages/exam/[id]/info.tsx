@@ -2,7 +2,7 @@ import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   apiCreateMultipleChoice,
   apiCreateQuestion,
@@ -28,6 +28,7 @@ export default function ExamInfo() {
   );
 
   const [page, setPage] = useState(1);
+  const queryClient = useQueryClient();
 
   const router = useRouter();
   const { id } = router.query;
@@ -70,7 +71,13 @@ export default function ExamInfo() {
     },
   });
 
-  const createQuestionMutation = useMutation(apiCreateQuestion);
+  const createQuestionMutation = useMutation(apiCreateQuestion, {
+    onSuccess(data) {
+      if (data.ok) {
+        queryClient.invalidateQueries(`find-question-list-by-exam-id-${id}`);
+      }
+    },
+  });
   const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
@@ -102,10 +109,6 @@ export default function ExamInfo() {
   const {
     register: createQuestionAndMulitpleChoiceRegister,
     getValues: createQuestionAndMulitpleChoiceGetValues,
-    formState: {
-      errors: createQuestionAndMulitpleChoiceErrors,
-      isValid: createQuestionAndMulitpleChoiceIsValid,
-    },
     setValue: createQuestionAndMulitpleChoiceSetValue,
     handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
   } = useForm<any>({ mode: "onChange" });
