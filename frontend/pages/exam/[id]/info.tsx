@@ -8,6 +8,7 @@ import {
   apiCreateQuestion,
   apiEditExam,
   apiFindExamById,
+  apiFindMultipleChoiceListByExamId,
   apiFindQuestionListByExamId,
   apiGetMe,
 } from "../../../api/axios";
@@ -71,13 +72,7 @@ export default function ExamInfo() {
     },
   });
 
-  const createQuestionMutation = useMutation(apiCreateQuestion, {
-    onSuccess(data) {
-      if (data.ok) {
-        queryClient.invalidateQueries(`find-question-list-by-exam-id-${id}`);
-      }
-    },
-  });
+  const createQuestionMutation = useMutation(apiCreateQuestion);
   const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
@@ -95,6 +90,18 @@ export default function ExamInfo() {
       enabled: !!id,
     }
   );
+
+  const {
+    isLoading: findMultipleChoiceListByIdIsLoading,
+    data: findMultipleChocieListByIdData,
+  } = useQuery<any>(
+    [`find-multiple-choice-list-by-exam-id-${id}`],
+    () => apiFindMultipleChoiceListByExamId(+id),
+    {
+      enabled: !!id,
+    }
+  );
+  console.log(findQuestionListByIdData, findMultipleChocieListByIdData);
 
   const tiptapEditor = (editor: any) => {
     if (editor) {
@@ -164,6 +171,7 @@ export default function ExamInfo() {
         page: page,
       });
     });
+    location.reload();
   };
 
   const onDeleteClick = (idToDelete: number) => {

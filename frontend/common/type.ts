@@ -63,6 +63,10 @@ export interface IFindQuestionListByExamIdOutput extends ICoreOutput {
   questionList?: any[];
 }
 
+export interface IFindMultipleChoiceListByExamIdOutput extends ICoreOutput {
+  multipleChoiceList?: any[];
+}
+
 export interface IEditExamInput {
   id: number;
   name: string;

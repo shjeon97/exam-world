@@ -19,9 +19,13 @@ import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
 import { FindExamListBymeOutput as FindExamListBymeOutput } from 'src/dto/find-examList-by-me.dto';
 import {
+  FindMultipleChoiceListByExamIdInput,
+  FindMultipleChoiceListByExamIdOutput,
+} from 'src/dto/find-multiple-choice-list-by-exam-id.dto';
+import {
   FindQuestionListByExamIdInput,
   FindQuestionListByExamIdOutput,
-} from 'src/dto/find-questionList-by-examId.dto';
+} from 'src/dto/find-question-list-by-exam-id.dto';
 import { ExamService } from './exam.service';
 
 @Controller('exam')
@@ -58,6 +62,16 @@ export class ExamController {
     @Param() { examId }: FindQuestionListByExamIdInput,
   ): Promise<FindQuestionListByExamIdOutput> {
     return this.examService.findQuestionListByExamId(examId);
+  }
+
+  @ApiOperation({ summary: 'examId 갖고있는 모든 multiple-choice 가져오기' })
+  @ApiResponse({ type: FindMultipleChoiceListByExamIdOutput })
+  @Role(['Any'])
+  @Get(':examId/multiple-choice')
+  async findMultipleChoiceListByExamId(
+    @Param() { examId }: FindMultipleChoiceListByExamIdInput,
+  ): Promise<FindMultipleChoiceListByExamIdOutput> {
+    return this.examService.findMultipleChoiceListByExamId(examId);
   }
 
   @ApiOperation({ summary: 'id로 시험 정보 가져오기' })

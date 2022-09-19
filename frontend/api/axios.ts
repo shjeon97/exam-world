@@ -182,6 +182,17 @@ export const apiFindQuestionListByExamId = async (examId: number) => {
     });
 };
 
+export const apiFindMultipleChoiceListByExamId = async (examId: number) => {
+  return axios
+    .get(`exam/${examId}/multiple-choice`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiFindExamById = async (id: number) => {
   return axios
     .get(`exam/${id}`)

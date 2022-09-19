@@ -3,8 +3,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
-import { FindQuestionListByExamIdOutput } from 'src/dto/find-questionList-by-examId.dto';
+import { FindMultipleChoiceListByExamIdOutput } from 'src/dto/find-multiple-choice-list-by-exam-id.dto';
+import { FindQuestionListByExamIdOutput } from 'src/dto/find-question-list-by-exam-id.dto';
 import { Exam } from 'src/entity/exam.entity';
+import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -16,6 +18,8 @@ export class ExamService {
     private readonly exam: Repository<Exam>,
     @InjectRepository(Question)
     private readonly question: Repository<Question>,
+    @InjectRepository(MultipleChoice)
+    private readonly multipleChoice: Repository<MultipleChoice>,
   ) {}
 
   async createExam(
@@ -113,6 +117,29 @@ export class ExamService {
       return {
         ok: false,
         error: 'examId에 일치하는 question list 가져오기 실패',
+      };
+    }
+  }
+
+  async findMultipleChoiceListByExamId(
+    examId: number,
+  ): Promise<FindMultipleChoiceListByExamIdOutput> {
+    try {
+      const multipleChoiceList = await this.multipleChoice.find({
+        where: { exam: { id: examId } },
+      });
+
+      console.log(multipleChoiceList);
+
+      return {
+        ok: true,
+        multipleChoiceList,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ok: false,
+        error: 'examId에 일치하는 multiple Choice list 가져오기 실패',
       };
     }
   }
