@@ -21,6 +21,7 @@ import React, { useState } from "react";
 import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useInterval } from "../../../hook/useInterval";
 
 export default function ExamInfo() {
   const [tiptapValue, setTiptapValue] = useState("");
@@ -160,7 +161,16 @@ export default function ExamInfo() {
         page: page,
       });
     });
-    console.log(findQuestionListByIdData);
+
+    await Toast.fire({
+      icon: "success",
+      text: "저장완료.",
+      position: "top-end",
+      timer: 1200,
+    });
+
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
   };
 
   const onDeleteClick = (idToDelete: number) => {
