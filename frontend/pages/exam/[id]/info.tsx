@@ -76,32 +76,23 @@ export default function ExamInfo() {
   const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`find-exam-by-id-${id}`], () => apiFindExamById(+id), {
+    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id), {
       enabled: !!id,
     });
 
   const {
     isLoading: findQuestionListByIdIsLoading,
     data: findQuestionListByIdData,
-  } = useQuery<any>(
-    [`find-question-list-by-exam-id-${id}`],
-    () => apiFindQuestionListByExamId(+id),
-    {
-      enabled: !!id,
-    }
+  } = useQuery<any>([`question-list-by-exam-id`, id], () =>
+    apiFindQuestionListByExamId(+id)
   );
 
   const {
     isLoading: findMultipleChoiceListByIdIsLoading,
     data: findMultipleChocieListByIdData,
-  } = useQuery<any>(
-    [`find-multiple-choice-list-by-exam-id-${id}`],
-    () => apiFindMultipleChoiceListByExamId(+id),
-    {
-      enabled: !!id,
-    }
+  } = useQuery<any>([`multiple-choice-list-by-exam-id`, id], () =>
+    apiFindMultipleChoiceListByExamId(+id)
   );
-  console.log(findQuestionListByIdData, findMultipleChocieListByIdData);
 
   const tiptapEditor = (editor: any) => {
     if (editor) {
@@ -163,7 +154,7 @@ export default function ExamInfo() {
     });
 
     mulitpleChoice.map((e, index) => {
-      return createMultipleChoiceMutation.mutateAsync({
+      createMultipleChoiceMutation.mutateAsync({
         examId: +id,
         text: e.mulitpleChoice,
         score: +e.score,
@@ -171,7 +162,14 @@ export default function ExamInfo() {
         page: page,
       });
     });
-    location.reload();
+  };
+  const onClickButton = async () => {
+    const test = await apiFindQuestionListByExamId(+id);
+    console.log(test);
+
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    // queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+    console.log(findQuestionListByIdData, findMultipleChocieListByIdData);
   };
 
   const onDeleteClick = (idToDelete: number) => {
@@ -308,6 +306,9 @@ export default function ExamInfo() {
                   </div>
                 </div>
               </form>
+              <div onClick={() => onClickButton()} className="button">
+                test
+              </div>
             </div>
           </div>
         </>
