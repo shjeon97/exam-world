@@ -76,9 +76,7 @@ export default function ExamInfo() {
   const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id), {
-      enabled: !!id,
-    });
+    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
 
   const {
     isLoading: findQuestionListByIdIsLoading,
@@ -162,14 +160,7 @@ export default function ExamInfo() {
         page: page,
       });
     });
-  };
-  const onClickButton = async () => {
-    const test = await apiFindQuestionListByExamId(+id);
-    console.log(test);
-
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    // queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-    console.log(findQuestionListByIdData, findMultipleChocieListByIdData);
+    console.log(findQuestionListByIdData);
   };
 
   const onDeleteClick = (idToDelete: number) => {
@@ -306,9 +297,6 @@ export default function ExamInfo() {
                   </div>
                 </div>
               </form>
-              <div onClick={() => onClickButton()} className="button">
-                test
-              </div>
             </div>
           </div>
         </>

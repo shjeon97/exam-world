@@ -80,8 +80,6 @@ export const apiCreateMultipleChoice = async ({
   score,
   page,
 }: ICreateMultipleChoiceInput) => {
-  console.log(examId, no, text, score, page);
-
   return axios
     .post("/multiple-choice", {
       examId,
