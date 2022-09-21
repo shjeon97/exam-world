@@ -5,7 +5,7 @@ import { Question } from 'src/entity/question.entity';
 export class CreateMultipleChoiceInput extends PickType(MultipleChoice, [
   'examId',
   'text',
-  'score',
+  'isCorrectAnswer',
   'no',
   'page',
 ] as const) {}

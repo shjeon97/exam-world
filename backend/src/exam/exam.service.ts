@@ -129,8 +129,6 @@ export class ExamService {
         where: { exam: { id: examId } },
       });
 
-      console.log(multipleChoiceList);
-
       return {
         ok: true,
         multipleChoiceList,

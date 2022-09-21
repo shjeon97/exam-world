@@ -18,9 +18,10 @@ export class QuestionService {
   ) {}
 
   async createQuestion({
-    question,
+    text,
     examId,
     page,
+    score,
   }: CreateQuestionInput): Promise<CreateQuestionOutput> {
     try {
       const exam = await this.exam.findOne({ where: { id: examId } });
@@ -32,11 +33,12 @@ export class QuestionService {
         };
       }
 
-      const questions = await this.question.save(
+      await this.question.save(
         this.question.create({
           exam,
-          question,
+          text,
           page,
+          score,
         }),
       );
 

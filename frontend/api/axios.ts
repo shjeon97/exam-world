@@ -57,13 +57,15 @@ export const apiLogin = async ({ email, password }: ILoginInput) => {
 export const apiCreateQuestion = async ({
   examId,
   page,
-  question,
+  text,
+  score,
 }: ICreateQuestionInput) => {
   return axios
     .post("/question", {
       examId,
       page,
-      question,
+      text,
+      score,
     })
     .then((res) => {
       return res.data;
@@ -77,7 +79,7 @@ export const apiCreateMultipleChoice = async ({
   examId,
   no,
   text,
-  score,
+  isCorrectAnswer,
   page,
 }: ICreateMultipleChoiceInput) => {
   return axios
@@ -85,7 +87,7 @@ export const apiCreateMultipleChoice = async ({
       examId,
       no,
       text,
-      score,
+      isCorrectAnswer,
       page,
     })
     .then((res) => {

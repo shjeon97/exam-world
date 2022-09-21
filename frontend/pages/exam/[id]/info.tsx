@@ -17,14 +17,14 @@ import { FormButton } from "../../../components/form-button";
 import { FormError } from "../../../components/form-error";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useInterval } from "../../../hook/useInterval";
 
 export default function ExamInfo() {
-  const [tiptapValue, setTiptapValue] = useState("");
+  const [tiptap, setTiptap] = useState<any>(null);
   const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<number[]>(
     []
   );
@@ -58,6 +58,10 @@ export default function ExamInfo() {
   const editExamRegisterOption = {
     name: { required: "사용할 제목 입력해 주세요." },
     title: { required: "사용할 설명 입력해 주세요." },
+  };
+
+  const createQuestionAndMulitpleChoiceRegisterOption = {
+    score: { required: "사용할 점수 입력해 주세요." },
   };
 
   const editExamMutation = useMutation(apiEditExam, {
@@ -95,9 +99,21 @@ export default function ExamInfo() {
 
   const tiptapEditor = (editor: any) => {
     if (editor) {
-      setTiptapValue(editor.getHTML());
+      setTiptap(editor);
     }
   };
+
+  useEffect(() => {
+    tiptap?.commands?.setContent(
+      findQuestionListByIdData?.questionList[0]?.text
+    );
+  }, [
+    findQuestionListByIdData &&
+      findQuestionListByIdData.questionList[0] &&
+      findQuestionListByIdData.questionList[0]?.text &&
+      tiptap,
+  ]);
+
   const editExamOnSubmit = () => {
     const editExamVlaues = editExamGetValues();
     editExamMutation.mutate({ id, ...editExamVlaues });
@@ -108,14 +124,18 @@ export default function ExamInfo() {
     getValues: createQuestionAndMulitpleChoiceGetValues,
     setValue: createQuestionAndMulitpleChoiceSetValue,
     handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
+    formState: {
+      errors: createQuestionAndMulitpleChoiceErrors,
+      isValid: createQuestionAndMulitpleChoiceIsValid,
+    },
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
     setmulitpleChoiceNumber((e) => [Date.now(), ...e]);
   };
 
-  const createQuestionAndMulitPleChoiceOnSubmit = async () => {
-    const questionValue = tiptapValue;
+  const createQuestionAndMulitpleChoiceOnSubmit = async () => {
+    const questionValue = tiptap.getHTML();
     if (questionValue.length < 8) {
       return Toast.fire({
         icon: "error",
@@ -124,10 +144,10 @@ export default function ExamInfo() {
       });
     }
 
-    const { ...rest } = createQuestionAndMulitpleChoiceGetValues();
+    const { score, ...rest } = createQuestionAndMulitpleChoiceGetValues();
     const mulitpleChoice = mulitpleChoiceNumber.map((theId) => ({
       mulitpleChoice: rest[`mulitpleChoice-${theId}`],
-      score: rest[`score-${theId}`],
+      isCorrectAnswer: rest[`is-correct-answer-${theId}`],
     }));
 
     let isMulitpleChoiceNull = false;
@@ -147,20 +167,23 @@ export default function ExamInfo() {
     }
 
     createQuestionMutation.mutateAsync({
-      question: questionValue,
+      text: questionValue,
       page: page,
       examId: +id,
+      score: score,
     });
 
     mulitpleChoice.map((e, index) => {
       createMultipleChoiceMutation.mutateAsync({
         examId: +id,
         text: e.mulitpleChoice,
-        score: +e.score,
+        isCorrectAnswer: e.isCorrectAnswer,
         no: index + 1,
         page: page,
       });
     });
+
+    setPage((page) => page + 1);
 
     await Toast.fire({
       icon: "success",
@@ -168,15 +191,20 @@ export default function ExamInfo() {
       position: "top-end",
       timer: 1200,
     });
+  };
 
+  useInterval(() => {
     queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
     queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-  };
+  }, 10000);
 
   const onDeleteClick = (idToDelete: number) => {
     setmulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
     createQuestionAndMulitpleChoiceSetValue(`mulitpleChoice-${idToDelete}`, "");
-    createQuestionAndMulitpleChoiceSetValue(`score-${idToDelete}`, "");
+    createQuestionAndMulitpleChoiceSetValue(
+      `is-correct-answer-${idToDelete}`,
+      ""
+    );
   };
 
   return (
@@ -235,14 +263,60 @@ export default function ExamInfo() {
                 </div>
               </form>
               <div className="mt-4">
+                {findQuestionListByIdData &&
+                findQuestionListByIdData.questionList.length > 0 ? (
+                  <div className="flex flex-wrap">
+                    {findQuestionListByIdData.questionList.map(
+                      (question, index) => {
+                        return (
+                          <div
+                            className="button w-12"
+                            key={`exam-${id}-info-${index}`}
+                          >
+                            {question.page}
+                          </div>
+                        );
+                      }
+                    )}
+                  </div>
+                ) : (
+                  <></>
+                )}
                 <label className="text-lg font-medium ">문제 -{page}번</label>
                 <Tiptap editor={tiptapEditor} />
               </div>
               <form
                 onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
-                  createQuestionAndMulitPleChoiceOnSubmit
+                  createQuestionAndMulitpleChoiceOnSubmit
                 )}
               >
+                <label className="text-lg font-medium">점수</label>
+                <div className=" text-xs  text-gray-500">
+                  해당 문제 맞출시 줄 점수를 입력하세요.
+                </div>
+                <input
+                  className={classNames(`form-input `, {
+                    "border-red-500 focus:border-red-500 focus:outline-red-500":
+                      createQuestionAndMulitpleChoiceErrors.title,
+                  })}
+                  {...createQuestionAndMulitpleChoiceRegister(
+                    "score",
+                    createQuestionAndMulitpleChoiceRegisterOption.score
+                  )}
+                  type="number"
+                />
+                {Object.values(createQuestionAndMulitpleChoiceErrors).length >
+                  0 &&
+                  Object.values(createQuestionAndMulitpleChoiceErrors).map(
+                    (error, key) => {
+                      return (
+                        <div key={`form_error_${key}`}>
+                          <FormError errorMessage={`${error.message}`} />
+                          <br />
+                        </div>
+                      );
+                    }
+                  )}
                 <div className="  items-start  ">
                   <div>
                     <div className="mt-4"></div>
@@ -261,7 +335,7 @@ export default function ExamInfo() {
                                 className=" grid grid-cols-12 gap-3 items-center"
                                 key={`mulitpleChoice-${id}`}
                               >
-                                <div className="col-span-8 ">
+                                <div className="col-span-9 ">
                                   <label className="text-sm">
                                     보기 {index + 1}번
                                   </label>
@@ -275,19 +349,17 @@ export default function ExamInfo() {
                                     )}
                                   />
                                 </div>
-                                <div className="col-span-3">
-                                  <label className="text-sm ">점수</label>
-                                  <p className="truncate text-xs  text-gray-500">
-                                    해당 보기를 체크시 받게될 점수을
-                                    입력해주세요
+                                <div className="col-span-2">
+                                  <label className="text-sm ">정답</label>
+                                  <p className="truncate text-xs  text-gray-500 mb-3">
+                                    정답일시 체크
                                   </p>
                                   <input
                                     {...createQuestionAndMulitpleChoiceRegister(
                                       `score-${id}`
                                     )}
-                                    type="number"
-                                    className="form-input  "
-                                    defaultValue={0}
+                                    type="checkbox"
+                                    className="w-6 h-6 "
                                   />
                                 </div>
                                 <div

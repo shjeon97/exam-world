@@ -20,7 +20,7 @@ export class MultipleChoiceService {
     examId,
     no,
     text,
-    score,
+    isCorrectAnswer,
     page,
   }: CreateMultipleChoiceInput): Promise<CoreOutput> {
     try {
@@ -38,7 +38,7 @@ export class MultipleChoiceService {
           exam,
           no,
           text,
-          score,
+          isCorrectAnswer,
           page,
         }),
       );

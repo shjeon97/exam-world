@@ -130,6 +130,7 @@ export const NavBar: React.FC = () => {
                 id="mobile-menu"
               >
                 <div
+                  onClick={() => setIsOpen(!isOpen)}
                   ref={ref}
                   className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3"
                 >

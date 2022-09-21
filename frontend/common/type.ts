@@ -76,13 +76,14 @@ export interface IEditExamInput {
 export interface ICreateQuestionInput {
   examId: number;
   page: number;
-  question: string;
+  text: string;
+  score: number;
 }
 
 export interface ICreateMultipleChoiceInput {
   examId: number;
   no: number;
   text: string;
-  score: number;
+  isCorrectAnswer: number;
   page: number;
 }

@@ -1,17 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-  RelationId,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn, RelationId } from 'typeorm';
 import { Exam } from './exam.entity';
-import { Question } from './question.entity';
 
 @Entity()
 export class MultipleChoice {
@@ -35,6 +24,6 @@ export class MultipleChoice {
   @Column()
   text: string;
 
-  @ApiProperty({ description: '점수' })
-  score: number;
+  @ApiProperty({ description: '정답' })
+  isCorrectAnswer: boolean;
 }

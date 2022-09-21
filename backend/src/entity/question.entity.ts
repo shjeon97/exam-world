@@ -1,16 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { CoreEntity } from 'src/common/entity/core.entity';
-import {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-  PrimaryGeneratedColumn,
-  RelationId,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn, RelationId } from 'typeorm';
 import { Exam } from './exam.entity';
 
 @Entity()
@@ -29,5 +18,8 @@ export class Question {
 
   @ApiProperty({ description: '시험 문제' })
   @Column()
-  question: string;
+  text: string;
+
+  @ApiProperty({ description: '점수' })
+  score: number;
 }
