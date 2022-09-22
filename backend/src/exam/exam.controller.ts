@@ -14,6 +14,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
+import { AllExamListOutput } from 'src/dto/all-exam-list.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
@@ -52,6 +53,13 @@ export class ExamController {
   @Get('/me')
   async findExamListByme(@GetUser() user): Promise<FindExamListBymeOutput> {
     return this.examService.findExamListByme(user);
+  }
+
+  @ApiOperation({ summary: '모든 시험 정보 가져오기' })
+  @ApiResponse({ type: AllExamListOutput })
+  @Get('/all')
+  async allExamList(): Promise<AllExamListOutput> {
+    return this.examService.allExamList();
   }
 
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })

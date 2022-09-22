@@ -160,6 +160,17 @@ export const apiGetMe = async () => {
     });
 };
 
+export const apiAllExamList = async () => {
+  return axios
+    .get("exam/all")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiFindExamListByMe = async () => {
   return axios
     .get("exam/me")
@@ -172,36 +183,42 @@ export const apiFindExamListByMe = async () => {
 };
 
 export const apiFindQuestionListByExamId = async (examId: number) => {
-  return axios
-    .get(`exam/${examId}/question`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (examId) {
+    return axios
+      .get(`exam/${examId}/question`)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 };
 
 export const apiFindMultipleChoiceListByExamId = async (examId: number) => {
-  return axios
-    .get(`exam/${examId}/multiple-choice`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (examId) {
+    return axios
+      .get(`exam/${examId}/multiple-choice`)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 };
 
 export const apiFindExamById = async (id: number) => {
-  return axios
-    .get(`exam/${id}`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  if (id) {
+    return axios
+      .get(`exam/${id}`)
+      .then((res) => {
+        return res.data;
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 };
 
 export const apiUploadImage = async ({ file }: IUploadImageInput) => {

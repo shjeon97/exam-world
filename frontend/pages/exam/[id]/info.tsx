@@ -114,6 +114,11 @@ export default function ExamInfo() {
       tiptap,
   ]);
 
+  useEffect(() => {
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+  }, [page]);
+
   const editExamOnSubmit = () => {
     const editExamVlaues = editExamGetValues();
     editExamMutation.mutate({ id, ...editExamVlaues });
@@ -170,15 +175,15 @@ export default function ExamInfo() {
       });
     }
 
-    createQuestionMutation.mutateAsync({
+    await createQuestionMutation.mutateAsync({
       text: questionValue,
       page: page,
       examId: +id,
       score: score,
     });
 
-    mulitpleChoice.map((e, index) => {
-      createMultipleChoiceMutation.mutateAsync({
+    mulitpleChoice.map(async (e, index) => {
+      await createMultipleChoiceMutation.mutateAsync({
         examId: +id,
         text: e.mulitpleChoice,
         isCorrectAnswer: e.isCorrectAnswer,
@@ -187,20 +192,19 @@ export default function ExamInfo() {
       });
     });
 
-    setPage((page) => page + 1);
-
     await Toast.fire({
       icon: "success",
       text: "저장완료.",
       position: "top-end",
       timer: 1200,
     });
+    setPage((page) => page + 1);
   };
 
-  useInterval(() => {
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-  }, 10000);
+  // useInterval(() => {
+  //   queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+  //   queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+  // }, 10000);
 
   const onDeleteClick = (idToDelete: number) => {
     setmulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));

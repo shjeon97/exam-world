@@ -101,6 +101,22 @@ export class ExamService {
     }
   }
 
+  async allExamList() {
+    try {
+      const examList = await this.exam.find({
+        relations: ['user'],
+        order: { createdAt: 'asc' },
+      });
+      return {
+        ok: true,
+        examList,
+      };
+    } catch (error) {
+      console.log(error);
+      return { ok: false, error: '모든 시험 정보 가져오기 실패' };
+    }
+  }
+
   async findQuestionListByExamId(
     examId: number,
   ): Promise<FindQuestionListByExamIdOutput> {

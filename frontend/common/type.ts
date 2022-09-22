@@ -55,6 +55,10 @@ export interface IFindExamListByMeOutput extends ICoreOutput {
   examList?: any[];
 }
 
+export interface IAllExamListOutput extends ICoreOutput {
+  examList?: any[];
+}
+
 export interface IFindQuestionListByExamIdInput {
   examId: number;
 }

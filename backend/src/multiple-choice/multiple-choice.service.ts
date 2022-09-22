@@ -24,7 +24,7 @@ export class MultipleChoiceService {
     page,
   }: CreateMultipleChoiceInput): Promise<CoreOutput> {
     try {
-      const exam = await this.exam.findOne({ where: { id: examId } });
+      const exam = await this.exam.findOne({ where: { id: +examId } });
 
       if (!exam) {
         return {
