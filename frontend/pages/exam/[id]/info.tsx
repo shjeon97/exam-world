@@ -110,6 +110,13 @@ export default function ExamInfo() {
     queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
   }, [page]);
 
+  // useInterval(() => {
+  //   console.log("test");
+
+  //   queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+  //   queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+  // }, 5000);
+
   const editExamOnSubmit = () => {
     const editExamVlaues = editExamGetValues();
     editExamMutation.mutate({ id, ...editExamVlaues });
@@ -169,7 +176,7 @@ export default function ExamInfo() {
       text: questionValue,
       page: page,
       examId: +id,
-      score: score,
+      score: +ref.current.value,
     });
 
     mulitpleChoice.map(async (e, index) => {
@@ -231,6 +238,9 @@ export default function ExamInfo() {
   const oncreateQuestionAndMulitpleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
+    ref.current.value = 1;
+    setFindMultipleChoiceListByPage([]);
+    setmulitpleChoiceNumber([]);
   };
 
   return (
@@ -316,7 +326,7 @@ export default function ExamInfo() {
                       </div>
                     </div>
                   )}
-                <label className="text-lg font-medium ">문제 -{page}번</label>
+                <label className="text-lg font-medium ">문제 - {page}번</label>
                 <Tiptap editor={tiptapEditor} />
               </div>
               <form
