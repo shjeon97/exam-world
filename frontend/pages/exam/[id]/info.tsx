@@ -134,6 +134,10 @@ export default function ExamInfo() {
     setmulitpleChoiceNumber((e) => [Date.now(), ...e]);
   };
 
+  useEffect(() => {
+    setPage(findQuestionListByIdData?.questionList.length + 1);
+  }, [findQuestionListByIdData && findQuestionListByIdData.questionList]);
+
   const createQuestionAndMulitpleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
     if (questionValue.length < 8) {
@@ -270,7 +274,7 @@ export default function ExamInfo() {
                       (question, index) => {
                         return (
                           <div
-                            className="button w-12"
+                            className="button "
                             key={`exam-${id}-info-${index}`}
                           >
                             {question.page}
@@ -356,7 +360,7 @@ export default function ExamInfo() {
                                   </p>
                                   <input
                                     {...createQuestionAndMulitpleChoiceRegister(
-                                      `score-${id}`
+                                      `is-correct-answer-${id}`
                                     )}
                                     type="checkbox"
                                     className="w-6 h-6 "

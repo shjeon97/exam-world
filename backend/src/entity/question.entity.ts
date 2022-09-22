@@ -21,5 +21,6 @@ export class Question {
   text: string;
 
   @ApiProperty({ description: '점수' })
+  @Column()
   score: number;
 }

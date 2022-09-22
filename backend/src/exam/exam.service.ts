@@ -107,6 +107,7 @@ export class ExamService {
     try {
       const questionList = await this.question.find({
         where: { exam: { id: examId } },
+        order: { page: 'asc' },
       });
       return {
         ok: true,

@@ -32,7 +32,6 @@ export class MultipleChoiceService {
           error: '존재하지 않는 시험 입니다.',
         };
       }
-
       await this.multipleChoice.save(
         this.multipleChoice.create({
           exam,

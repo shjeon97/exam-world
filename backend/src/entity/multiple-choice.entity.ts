@@ -25,5 +25,6 @@ export class MultipleChoice {
   text: string;
 
   @ApiProperty({ description: '정답' })
+  @Column()
   isCorrectAnswer: boolean;
 }
