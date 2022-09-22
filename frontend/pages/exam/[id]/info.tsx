@@ -17,18 +17,20 @@ import { FormButton } from "../../../components/form-button";
 import { FormError } from "../../../components/form-error";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { useInterval } from "../../../hook/useInterval";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ExamInfo() {
   const [tiptap, setTiptap] = useState<any>(null);
-  const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<number[]>(
+  const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<string[]>(
     []
   );
-
+  const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
+    useState([]);
+  const ref = useRef(null);
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
@@ -85,14 +87,14 @@ export default function ExamInfo() {
 
   const {
     isLoading: findQuestionListByIdIsLoading,
-    data: findQuestionListByIdData,
+    data: findQuestionListByExamIdData,
   } = useQuery<any>([`question-list-by-exam-id`, id], () =>
     apiFindQuestionListByExamId(+id)
   );
 
   const {
-    isLoading: findMultipleChoiceListByIdIsLoading,
-    data: findMultipleChocieListByIdData,
+    isLoading: findMultipleChoiceListByExamIdIsLoading,
+    data: findMultipleChoiceListByExamIdData,
   } = useQuery<any>([`multiple-choice-list-by-exam-id`, id], () =>
     apiFindMultipleChoiceListByExamId(+id)
   );
@@ -102,17 +104,6 @@ export default function ExamInfo() {
       setTiptap(editor);
     }
   };
-
-  useEffect(() => {
-    tiptap?.commands?.setContent(
-      findQuestionListByIdData?.questionList[0]?.text
-    );
-  }, [
-    findQuestionListByIdData &&
-      findQuestionListByIdData.questionList[0] &&
-      findQuestionListByIdData.questionList[0]?.text &&
-      tiptap,
-  ]);
 
   useEffect(() => {
     queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
@@ -129,19 +120,18 @@ export default function ExamInfo() {
     getValues: createQuestionAndMulitpleChoiceGetValues,
     setValue: createQuestionAndMulitpleChoiceSetValue,
     handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
-    formState: {
-      errors: createQuestionAndMulitpleChoiceErrors,
-      isValid: createQuestionAndMulitpleChoiceIsValid,
-    },
+    formState: { errors: createQuestionAndMulitpleChoiceErrors },
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
-    setmulitpleChoiceNumber((e) => [Date.now(), ...e]);
+    setmulitpleChoiceNumber((e) => [uuidv4(), ...e]);
   };
 
   useEffect(() => {
-    setPage(findQuestionListByIdData?.questionList.length + 1);
-  }, [findQuestionListByIdData && findQuestionListByIdData.questionList]);
+    setPage(findQuestionListByExamIdData?.questionList.length + 1);
+  }, [
+    findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
+  ]);
 
   const createQuestionAndMulitpleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
@@ -201,18 +191,46 @@ export default function ExamInfo() {
     setPage((page) => page + 1);
   };
 
-  // useInterval(() => {
-  //   queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-  //   queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-  // }, 10000);
+  const handleChagePage = (page: number) => {
+    setPage(page);
 
-  const onDeleteClick = (idToDelete: number) => {
+    const findQuesionByPage = findQuestionListByExamIdData.questionList.filter(
+      (question) => question.page === page
+    )[0];
+
+    if (findQuesionByPage) {
+      tiptap?.commands?.setContent(findQuesionByPage.text);
+    }
+
+    setmulitpleChoiceNumber([]);
+
+    setFindMultipleChoiceListByPage(
+      findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
+        (e) => e.page === page
+      )
+    );
+
+    findMultipleChoiceListByExamIdData.multipleChoiceList
+      .filter((e) => e.page === page)
+      .map(() => {
+        onAddOptionClick();
+      });
+
+    ref.current.value = findQuesionByPage.score;
+  };
+
+  const onDeleteClick = (idToDelete: string) => {
     setmulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
     createQuestionAndMulitpleChoiceSetValue(`mulitpleChoice-${idToDelete}`, "");
     createQuestionAndMulitpleChoiceSetValue(
       `is-correct-answer-${idToDelete}`,
       ""
     );
+  };
+
+  const oncreateQuestionAndMulitpleChoiceClick = () => {
+    setPage(findQuestionListByExamIdData?.questionList.length + 1);
+    tiptap?.commands?.setContent(``);
   };
 
   return (
@@ -271,25 +289,33 @@ export default function ExamInfo() {
                 </div>
               </form>
               <div className="mt-4">
-                {findQuestionListByIdData &&
-                findQuestionListByIdData.questionList.length > 0 ? (
-                  <div className="flex flex-wrap">
-                    {findQuestionListByIdData.questionList.map(
-                      (question, index) => {
-                        return (
-                          <div
-                            className="button "
-                            key={`exam-${id}-info-${index}`}
-                          >
-                            {question.page}
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                ) : (
-                  <></>
-                )}
+                {findQuestionListByExamIdData &&
+                  findQuestionListByExamIdData.questionList.length > 0 && (
+                    <div className="flex flex-wrap">
+                      {findQuestionListByExamIdData.questionList.map(
+                        (question, index) => {
+                          return (
+                            <div
+                              onClick={() => handleChagePage(question.page)}
+                              className={classNames(`button`, {
+                                "bg-gray-900 text-white":
+                                  question.page === page,
+                              })}
+                              key={`exam-${id}-info-${index}`}
+                            >
+                              {question.page}
+                            </div>
+                          );
+                        }
+                      )}
+                      <div
+                        onClick={() => oncreateQuestionAndMulitpleChoiceClick()}
+                        className="button "
+                      >
+                        ➕
+                      </div>
+                    </div>
+                  )}
                 <label className="text-lg font-medium ">문제 -{page}번</label>
                 <Tiptap editor={tiptapEditor} />
               </div>
@@ -303,28 +329,11 @@ export default function ExamInfo() {
                   해당 문제 맞출시 줄 점수를 입력하세요.
                 </div>
                 <input
-                  className={classNames(`form-input `, {
-                    "border-red-500 focus:border-red-500 focus:outline-red-500":
-                      createQuestionAndMulitpleChoiceErrors.title,
-                  })}
-                  {...createQuestionAndMulitpleChoiceRegister(
-                    "score",
-                    createQuestionAndMulitpleChoiceRegisterOption.score
-                  )}
+                  className="form-input"
                   type="number"
+                  ref={ref}
+                  defaultValue={1}
                 />
-                {Object.values(createQuestionAndMulitpleChoiceErrors).length >
-                  0 &&
-                  Object.values(createQuestionAndMulitpleChoiceErrors).map(
-                    (error, key) => {
-                      return (
-                        <div key={`form_error_${key}`}>
-                          <FormError errorMessage={`${error.message}`} />
-                          <br />
-                        </div>
-                      );
-                    }
-                  )}
                 <div className="  items-start  ">
                   <div>
                     <div className="mt-4"></div>
@@ -344,9 +353,7 @@ export default function ExamInfo() {
                                 key={`mulitpleChoice-${id}`}
                               >
                                 <div className="col-span-9 ">
-                                  <label className="text-sm">
-                                    보기 {index + 1}번
-                                  </label>
+                                  <label className="text-sm">보기</label>
                                   <div className=" text-xs  text-gray-500">
                                     보기에 입력할 문장을 자유롭게 쓰세요
                                   </div>
@@ -355,6 +362,9 @@ export default function ExamInfo() {
                                     {...createQuestionAndMulitpleChoiceRegister(
                                       `mulitpleChoice-${id}`
                                     )}
+                                    defaultValue={
+                                      findMultipleChoiceListByPage[index]?.text
+                                    }
                                   />
                                 </div>
                                 <div className="col-span-2">
@@ -368,6 +378,10 @@ export default function ExamInfo() {
                                     )}
                                     type="checkbox"
                                     className="w-6 h-6 "
+                                    defaultChecked={
+                                      findMultipleChoiceListByPage[index]
+                                        ?.isCorrectAnswer
+                                    }
                                   />
                                 </div>
                                 <div

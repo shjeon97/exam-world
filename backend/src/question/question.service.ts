@@ -33,6 +33,8 @@ export class QuestionService {
         };
       }
 
+      await this.question.delete({ exam: { id: exam.id }, page });
+
       await this.question.save(
         this.question.create({
           exam,
