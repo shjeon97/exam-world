@@ -110,13 +110,6 @@ export default function ExamInfo() {
     queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
   }, [page]);
 
-  // useInterval(() => {
-  //   console.log("test");
-
-  //   queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-  //   queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-  // }, 5000);
-
   const editExamOnSubmit = () => {
     const editExamVlaues = editExamGetValues();
     editExamMutation.mutate({ id, ...editExamVlaues });
@@ -248,173 +241,181 @@ export default function ExamInfo() {
       <Head>
         <title className=" text-gray-800">시험 정보 {WEB_TITLE}</title>
       </Head>
-      {!findExamByIdIsLoading && findExamByIdData && (
-        <>
-          <div className="p-10  m-5">
-            <div className=" items-center">
-              <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
-              <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
-                <label className="text-lg font-medium">제목</label>
-                <div className=" text-xs  text-gray-500">
-                  시험의 제목을 입력하세요. 예) 자동차 2종보통
-                </div>
-                <input
-                  className={classNames(`form-input`, {
-                    "border-red-500 focus:border-red-500 focus:outline-red-500":
-                      editExamErrors.name,
-                  })}
-                  {...editExamRegister("name", editExamRegisterOption.name)}
-                  placeholder="제목"
-                  defaultValue={findExamByIdData.exam.name}
-                />
-                <label className="text-lg font-medium">설명</label>
-                <div className=" text-xs  text-gray-500">
-                  시험에 관련된 설명을 자유롭게 쓰세요
-                </div>
-                <input
-                  className={classNames(`form-input `, {
-                    "border-red-500 focus:border-red-500 focus:outline-red-500":
-                      editExamErrors.title,
-                  })}
-                  {...editExamRegister("title", editExamRegisterOption.title)}
-                  placeholder="설명"
-                  defaultValue={findExamByIdData.exam.title}
-                />
-
-                {Object.values(editExamErrors).length > 0 &&
-                  Object.values(editExamErrors).map((error, key) => {
-                    return (
-                      <div key={`form_error_${key}`}>
-                        <FormError errorMessage={`${error.message}`} />
-                        <br />
-                      </div>
-                    );
-                  })}
-                <div className="mt-2">
-                  <FormButton
-                    canClick={editExamIsValid}
-                    loading={false}
-                    actionText={"시험제목 및 설명수정"}
-                  />
-                </div>
-              </form>
-              <div className="mt-4">
-                {findQuestionListByExamIdData &&
-                  findQuestionListByExamIdData.questionList.length > 0 && (
-                    <div className="flex flex-wrap">
-                      {findQuestionListByExamIdData.questionList.map(
-                        (question, index) => {
-                          return (
-                            <div
-                              onClick={() => handleChagePage(question.page)}
-                              className={classNames(`button`, {
-                                "bg-gray-900 text-white":
-                                  question.page === page,
-                              })}
-                              key={`exam-${id}-info-${index}`}
-                            >
-                              {question.page}
-                            </div>
-                          );
-                        }
-                      )}
-                      <div
-                        onClick={() => oncreateQuestionAndMulitpleChoiceClick()}
-                        className="button "
-                      >
-                        ➕
-                      </div>
-                    </div>
-                  )}
-                <label className="text-lg font-medium ">문제 - {page}번</label>
-                <Tiptap editor={tiptapEditor} />
-              </div>
-              <form
-                onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
-                  createQuestionAndMulitpleChoiceOnSubmit
-                )}
-              >
-                <label className="text-lg font-medium">점수</label>
-                <div className=" text-xs  text-gray-500">
-                  해당 문제 맞출시 줄 점수를 입력하세요.
-                </div>
-                <input
-                  className="form-input"
-                  type="number"
-                  ref={ref}
-                  defaultValue={1}
-                />
-                <div className="  items-start  ">
-                  <div>
-                    <div className="mt-4"></div>
-                    <div
-                      onClick={() => onAddOptionClick()}
-                      className="button w-28"
-                    >
-                      보기 추가
-                    </div>
-                    {mulitpleChoiceNumber.length > 0 && (
-                      <>
-                        {mulitpleChoiceNumber.map((id, index) => {
-                          return (
-                            <>
-                              <div
-                                className=" grid grid-cols-12 gap-3 items-center"
-                                key={`mulitpleChoice-${id}`}
-                              >
-                                <div className="col-span-9 ">
-                                  <label className="text-sm">보기</label>
-                                  <div className=" text-xs  text-gray-500">
-                                    보기에 입력할 문장을 자유롭게 쓰세요
-                                  </div>
-                                  <input
-                                    className="form-input "
-                                    {...createQuestionAndMulitpleChoiceRegister(
-                                      `mulitpleChoice-${id}`
-                                    )}
-                                    defaultValue={
-                                      findMultipleChoiceListByPage[index]?.text
-                                    }
-                                  />
-                                </div>
-                                <div className="col-span-2">
-                                  <label className="text-sm ">정답</label>
-                                  <p className="truncate text-xs  text-gray-500 mb-3">
-                                    정답일시 체크
-                                  </p>
-                                  <input
-                                    {...createQuestionAndMulitpleChoiceRegister(
-                                      `is-correct-answer-${id}`
-                                    )}
-                                    type="checkbox"
-                                    className="w-6 h-6 "
-                                    defaultChecked={
-                                      findMultipleChoiceListByPage[index]
-                                        ?.isCorrectAnswer
-                                    }
-                                  />
-                                </div>
-                                <div
-                                  onClick={() => onDeleteClick(id)}
-                                  className="col-span-1 text-3xl  mt-4  hover:cursor-pointer hover:text-red-500"
-                                >
-                                  <FontAwesomeIcon icon={faXmark} />
-                                </div>
-                              </div>
-                            </>
-                          );
-                        })}
-
-                        <button className="button">저장</button>
-                      </>
-                    )}
+      {!findExamByIdIsLoading &&
+        findExamByIdData &&
+        !findMultipleChoiceListByExamIdIsLoading &&
+        !findQuestionListByIdIsLoading && (
+          <>
+            <div className="p-10  m-5">
+              <div className=" items-center">
+                <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
+                <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
+                  <label className="text-lg font-medium">제목</label>
+                  <div className=" text-xs  text-gray-500">
+                    시험의 제목을 입력하세요. 예) 자동차 2종보통
                   </div>
+                  <input
+                    className={classNames(`form-input`, {
+                      "border-red-500 focus:border-red-500 focus:outline-red-500":
+                        editExamErrors.name,
+                    })}
+                    {...editExamRegister("name", editExamRegisterOption.name)}
+                    placeholder="제목"
+                    defaultValue={findExamByIdData.exam.name}
+                  />
+                  <label className="text-lg font-medium">설명</label>
+                  <div className=" text-xs  text-gray-500">
+                    시험에 관련된 설명을 자유롭게 쓰세요
+                  </div>
+                  <input
+                    className={classNames(`form-input `, {
+                      "border-red-500 focus:border-red-500 focus:outline-red-500":
+                        editExamErrors.title,
+                    })}
+                    {...editExamRegister("title", editExamRegisterOption.title)}
+                    placeholder="설명"
+                    defaultValue={findExamByIdData.exam.title}
+                  />
+
+                  {Object.values(editExamErrors).length > 0 &&
+                    Object.values(editExamErrors).map((error, key) => {
+                      return (
+                        <div key={`form_error_${key}`}>
+                          <FormError errorMessage={`${error.message}`} />
+                          <br />
+                        </div>
+                      );
+                    })}
+                  <div className="mt-2">
+                    <FormButton
+                      canClick={editExamIsValid}
+                      loading={false}
+                      actionText={"시험제목 및 설명수정"}
+                    />
+                  </div>
+                </form>
+                <div className="mt-4">
+                  {findQuestionListByExamIdData &&
+                    findQuestionListByExamIdData.questionList.length > 0 && (
+                      <div className="flex flex-wrap">
+                        {findQuestionListByExamIdData.questionList.map(
+                          (question, index) => {
+                            return (
+                              <div
+                                onClick={() => handleChagePage(question.page)}
+                                className={classNames(`button`, {
+                                  "bg-gray-900 text-white":
+                                    question.page === page,
+                                })}
+                                key={`exam-${id}-info-${index}`}
+                              >
+                                {question.page}
+                              </div>
+                            );
+                          }
+                        )}
+                        <div
+                          onClick={() =>
+                            oncreateQuestionAndMulitpleChoiceClick()
+                          }
+                          className="button "
+                        >
+                          ➕
+                        </div>
+                      </div>
+                    )}
+                  <label className="text-lg font-medium ">
+                    문제 - {page}번
+                  </label>
+                  <Tiptap editor={tiptapEditor} />
                 </div>
-              </form>
+                <form
+                  onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
+                    createQuestionAndMulitpleChoiceOnSubmit
+                  )}
+                >
+                  <label className="text-lg font-medium">점수</label>
+                  <div className=" text-xs  text-gray-500">
+                    해당 문제 맞출시 줄 점수를 입력하세요.
+                  </div>
+                  <input
+                    className="form-input"
+                    type="number"
+                    ref={ref}
+                    defaultValue={1}
+                  />
+                  <div className="  items-start  ">
+                    <div>
+                      <div className="mt-4"></div>
+                      <div
+                        onClick={() => onAddOptionClick()}
+                        className="button w-28"
+                      >
+                        보기 추가
+                      </div>
+                      {mulitpleChoiceNumber.length > 0 && (
+                        <>
+                          {mulitpleChoiceNumber.map((id, index) => {
+                            return (
+                              <>
+                                <div
+                                  className=" grid grid-cols-12 gap-3 items-center"
+                                  key={`mulitpleChoice-${id}`}
+                                >
+                                  <div className="col-span-9 ">
+                                    <label className="text-sm">보기</label>
+                                    <div className=" text-xs  text-gray-500">
+                                      보기에 입력할 문장을 자유롭게 쓰세요
+                                    </div>
+                                    <input
+                                      className="form-input "
+                                      {...createQuestionAndMulitpleChoiceRegister(
+                                        `mulitpleChoice-${id}`
+                                      )}
+                                      defaultValue={
+                                        findMultipleChoiceListByPage[index]
+                                          ?.text
+                                      }
+                                    />
+                                  </div>
+                                  <div className="col-span-2">
+                                    <label className="text-sm ">정답</label>
+                                    <p className="truncate text-xs  text-gray-500 mb-3">
+                                      정답일시 체크
+                                    </p>
+                                    <input
+                                      {...createQuestionAndMulitpleChoiceRegister(
+                                        `is-correct-answer-${id}`
+                                      )}
+                                      type="checkbox"
+                                      className="w-6 h-6 "
+                                      defaultChecked={
+                                        findMultipleChoiceListByPage[index]
+                                          ?.isCorrectAnswer
+                                      }
+                                    />
+                                  </div>
+                                  <div
+                                    onClick={() => onDeleteClick(id)}
+                                    className="col-span-1 text-3xl  mt-4  hover:cursor-pointer hover:text-red-500"
+                                  >
+                                    <FontAwesomeIcon icon={faXmark} />
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })}
+
+                          <button className="button">저장</button>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          </>
+        )}
     </>
   );
 }
