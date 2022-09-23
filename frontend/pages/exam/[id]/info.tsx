@@ -17,7 +17,7 @@ import { FormButton } from "../../../components/form-button";
 import { FormError } from "../../../components/form-error";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -30,7 +30,6 @@ export default function ExamInfo() {
   );
   const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
     useState([]);
-  const ref = useRef(null);
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
@@ -172,7 +171,7 @@ export default function ExamInfo() {
       text: questionValue,
       page: page,
       examId: +id,
-      score: +ref.current.value,
+      score: +score,
     });
 
     mulitpleChoice.map(async (e, index) => {
@@ -219,7 +218,7 @@ export default function ExamInfo() {
         onAddOptionClick();
       });
 
-    ref.current.value = findQuesionByPage.score;
+    createQuestionAndMulitpleChoiceSetValue("score", findQuesionByPage.score);
   };
 
   const onDeleteClick = (idToDelete: string) => {
@@ -234,7 +233,7 @@ export default function ExamInfo() {
   const oncreateQuestionAndMulitpleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
-    ref.current.value = 1;
+    createQuestionAndMulitpleChoiceSetValue("score", 1);
     setFindMultipleChoiceListByPage([]);
     setmulitpleChoiceNumber([]);
   };
@@ -351,7 +350,6 @@ export default function ExamInfo() {
                         createQuestionAndMulitpleChoiceErrors.score,
                     })}
                     type="number"
-                    ref={ref}
                     defaultValue={1}
                   />
                   {Object.values(createQuestionAndMulitpleChoiceErrors).length >
