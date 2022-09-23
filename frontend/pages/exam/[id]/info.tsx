@@ -120,7 +120,10 @@ export default function ExamInfo() {
     getValues: createQuestionAndMulitpleChoiceGetValues,
     setValue: createQuestionAndMulitpleChoiceSetValue,
     handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
-    formState: { errors: createQuestionAndMulitpleChoiceErrors },
+    formState: {
+      errors: createQuestionAndMulitpleChoiceErrors,
+      isValid: createQuestionAndMulitpleChoiceIsValid,
+    },
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
@@ -280,7 +283,7 @@ export default function ExamInfo() {
                   {Object.values(editExamErrors).length > 0 &&
                     Object.values(editExamErrors).map((error, key) => {
                       return (
-                        <div key={`form_error_${key}`}>
+                        <div key={`form-error-edit-exam-${key}`}>
                           <FormError errorMessage={`${error.message}`} />
                           <br />
                         </div>
@@ -339,11 +342,32 @@ export default function ExamInfo() {
                     해당 문제 맞출시 줄 점수를 입력하세요.
                   </div>
                   <input
-                    className="form-input"
+                    {...createQuestionAndMulitpleChoiceRegister(
+                      "score",
+                      createQuestionAndMulitpleChoiceRegisterOption.score
+                    )}
+                    className={classNames(`form-input `, {
+                      "border-red-500 focus:border-red-500 focus:outline-red-500":
+                        createQuestionAndMulitpleChoiceErrors.score,
+                    })}
                     type="number"
                     ref={ref}
                     defaultValue={1}
                   />
+                  {Object.values(createQuestionAndMulitpleChoiceErrors).length >
+                    0 &&
+                    Object.values(createQuestionAndMulitpleChoiceErrors).map(
+                      (error, key) => {
+                        return (
+                          <div
+                            key={`form-error-create-question-and-mulitple-choice-${key}`}
+                          >
+                            <FormError errorMessage={`${error.message}`} />
+                            <br />
+                          </div>
+                        );
+                      }
+                    )}
                   <div className="  items-start  ">
                     <div>
                       <div className="mt-4"></div>
