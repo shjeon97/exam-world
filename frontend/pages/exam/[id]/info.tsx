@@ -267,7 +267,7 @@ export default function ExamInfo() {
                   />
                   <label className="text-lg font-medium">설명</label>
                   <div className=" text-xs  text-gray-500">
-                    시험에 관련된 설명을 자유롭게 쓰세요
+                    시험에 관련된 설명을 자유롭게 쓰세요.
                   </div>
                   <input
                     className={classNames(`form-input `, {
@@ -377,57 +377,59 @@ export default function ExamInfo() {
                       </div>
                       {mulitpleChoiceNumber.length > 0 && (
                         <>
-                          {mulitpleChoiceNumber.map((id, index) => {
-                            return (
-                              <>
-                                <div
-                                  className=" grid grid-cols-12 gap-3 items-center"
-                                  key={`mulitpleChoice-${id}`}
-                                >
-                                  <div className="col-span-9 ">
-                                    <label className="text-sm">보기</label>
-                                    <div className=" text-xs  text-gray-500">
-                                      보기에 입력할 문장을 자유롭게 쓰세요
-                                    </div>
-                                    <input
-                                      className="form-input "
-                                      {...createQuestionAndMulitpleChoiceRegister(
-                                        `mulitpleChoice-${id}`
-                                      )}
-                                      defaultValue={
-                                        findMultipleChoiceListByPage[index]
-                                          ?.text
-                                      }
-                                    />
-                                  </div>
-                                  <div className="col-span-2">
-                                    <label className="text-sm ">정답</label>
-                                    <p className="truncate text-xs  text-gray-500 mb-3">
-                                      정답일시 체크
-                                    </p>
-                                    <input
-                                      {...createQuestionAndMulitpleChoiceRegister(
-                                        `is-correct-answer-${id}`
-                                      )}
-                                      type="checkbox"
-                                      className="w-6 h-6 "
-                                      defaultChecked={
-                                        findMultipleChoiceListByPage[index]
-                                          ?.isCorrectAnswer
-                                      }
-                                    />
-                                  </div>
+                          <div className="flex flex-col-reverse">
+                            {mulitpleChoiceNumber.map((id, index) => {
+                              return (
+                                <>
                                   <div
-                                    onClick={() => onDeleteClick(id)}
-                                    className="col-span-1 text-3xl  mt-4  hover:cursor-pointer hover:text-red-500"
+                                    className=" grid grid-cols-12 gap-3 items-center "
+                                    key={`mulitpleChoice-${id}`}
                                   >
-                                    <FontAwesomeIcon icon={faXmark} />
+                                    <div className="col-span-9 ">
+                                      <label className="text-sm">보기</label>
+                                      <div className=" text-xs  text-gray-500">
+                                        보기에 입력할 문장을 자유롭게 쓰세요,
+                                        다중정답 가능합니다.
+                                      </div>
+                                      <input
+                                        className="form-input "
+                                        {...createQuestionAndMulitpleChoiceRegister(
+                                          `mulitpleChoice-${id}`
+                                        )}
+                                        defaultValue={
+                                          findMultipleChoiceListByPage[index]
+                                            ?.text
+                                        }
+                                      />
+                                    </div>
+                                    <div className="col-span-2">
+                                      <label className="text-sm ">정답</label>
+                                      <p className="truncate text-xs  text-gray-500 mb-3">
+                                        정답일시 체크
+                                      </p>
+                                      <input
+                                        {...createQuestionAndMulitpleChoiceRegister(
+                                          `is-correct-answer-${id}`
+                                        )}
+                                        type="checkbox"
+                                        className="w-6 h-6 "
+                                        defaultChecked={
+                                          findMultipleChoiceListByPage[index]
+                                            ?.isCorrectAnswer
+                                        }
+                                      />
+                                    </div>
+                                    <div
+                                      onClick={() => onDeleteClick(id)}
+                                      className="col-span-1 text-3xl  mt-4  hover:cursor-pointer hover:text-red-500"
+                                    >
+                                      <FontAwesomeIcon icon={faXmark} />
+                                    </div>
                                   </div>
-                                </div>
-                              </>
-                            );
-                          })}
-
+                                </>
+                              );
+                            })}
+                          </div>
                           <button className="button">저장</button>
                         </>
                       )}
