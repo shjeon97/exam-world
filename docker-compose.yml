@@ -4,6 +4,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./frontend
+    container_name: exam-world-frontend
     volumes:
       - /app/node_modules
       - ./frontend:/app
@@ -14,14 +15,26 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./nginx
+    container_name: exam-world-nginx
     ports:
       - "3000:80"
+
+  certbot:
+    depends_on:
+      - nginx
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - ./certbot/etc:/etc/letsencrypt
+      - ./certbot/var:/var/lib/letsencrypt
+      - ./www:/var/www/html
+    command: certonly --webroot --webroot-path=/var/www/html --email shjeon.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d exam-world.shjeon.kro.kr -d www.exam-world.shjeon.kro.kr
 
   backend:
     build:
       dockerfile: Dockerfile
       context: ./backend
-    container_name: app_backend
+    container_name: exam-world-backend
     volumes:
       - /app/node_modules
       - ./backend:/app
