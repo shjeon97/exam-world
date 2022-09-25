@@ -19,11 +19,13 @@ import {
   faRemoveFormat,
   faStrikethrough,
   faUnderline,
+  faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import { useMutation } from "react-query";
 import { apiUploadImage } from "../api/axios";
 import { IUploadImageOutput } from "../common/type";
+import Youtube from "@tiptap/extension-youtube";
 
 const MenuBar = ({ editor }: any) => {
   if (!editor) {
@@ -38,6 +40,23 @@ const MenuBar = ({ editor }: any) => {
       }
     },
   });
+
+  const addYoutubeVideo = () => {
+    Swal.fire({
+      title: "Enter YouTube URL",
+      input: "text",
+      confirmButtonText: "업로드",
+      showCancelButton: true,
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = result.value;
+        editor.commands.setYoutubeVideo({
+          src: url,
+        });
+      }
+    });
+  };
 
   const handleDeletUser = () => {
     Swal.fire({
@@ -230,6 +249,18 @@ const MenuBar = ({ editor }: any) => {
           <FontAwesomeIcon icon={faImage} />
         </svg>
       </button>
+      <button className="p-1 hover:bg-gray-200 m-2" onClick={addYoutubeVideo}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          viewBox="0 0 24 24"
+        >
+          <title>유튜브 업로드</title>
+          <FontAwesomeIcon icon={faVideo} />
+        </svg>
+      </button>
+
       <button
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         className={
@@ -588,6 +619,7 @@ const Tiptap = (prop) => {
       CustomTableCell,
       Underline,
       CustomImage,
+      Youtube,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),

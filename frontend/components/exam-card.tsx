@@ -64,7 +64,10 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
         <p className="mt-2 text-sm text-gray-500 truncate">{title} </p>
       </div>
       {!meIsLoading && meData?.id === userId && (
-        <div className="flex gap-2">
+        <div className="flex gap-2 m-2 justify-between">
+          <div className="text-xs w-16 text-center">
+            <LinkButton name="정보" link={`/exam/${id}/info`} />
+          </div>
           <div
             onClick={() => deleteExamById()}
             className="text-xs w-16 text-center"
@@ -81,9 +84,6 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
                 </div>
               </div>
             </div>
-          </div>
-          <div className="text-xs w-16 text-center">
-            <LinkButton name="정보" link={`/exam/${id}/info`} />
           </div>
         </div>
       )}
