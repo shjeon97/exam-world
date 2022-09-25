@@ -8,7 +8,7 @@ import { FindQuestionListByExamIdOutput } from 'src/dto/find-question-list-by-ex
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
-import { User } from 'src/entity/user.entity';
+import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -114,6 +114,30 @@ export class ExamService {
     } catch (error) {
       console.log(error);
       return { ok: false, error: '모든 시험 정보 가져오기 실패' };
+    }
+  }
+
+  async deleteExamById(user: User, id: number): Promise<CoreOutput> {
+    try {
+      const exam = await this.exam.findOne({ where: { id } });
+
+      if (!exam) {
+        return { ok: false, error: '존재하지 않는 시험 정보 입니다.' };
+      }
+
+      if (user.role === UserRole.User && user.id !== exam.userId) {
+        return {
+          ok: false,
+          error: '다른 사용자가 만든 시험을 삭제하실 수 없습니다.',
+        };
+      }
+
+      await this.exam.delete({ id: exam.id });
+
+      return { ok: true };
+    } catch (error) {
+      console.log(error);
+      return { ok: false, error: '시험 삭제 실패' };
     }
   }
 

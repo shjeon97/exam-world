@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -96,5 +97,17 @@ export class ExamController {
   @Patch()
   async editExam(@Body() editExamInput: EditExamInput): Promise<CoreOutput> {
     return this.examService.editExam(editExamInput);
+  }
+
+  @ApiOperation({ summary: '시험 정보 삭제하기' })
+  @ApiResponse({ type: CoreOutput })
+  @Role(['Any'])
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async deleteExamById(
+    @GetUser() user,
+    @Param() { id }: { id: number },
+  ): Promise<CoreOutput> {
+    return this.examService.deleteExamById(user, id);
   }
 }

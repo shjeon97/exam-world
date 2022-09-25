@@ -149,6 +149,17 @@ export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
     });
 };
 
+export const apiDeleteExam = async (id: number) => {
+  return axios
+    .delete(`exam/${id}`)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 export const apiGetMe = async () => {
   return axios
     .get("user/me")
