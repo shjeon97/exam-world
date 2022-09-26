@@ -190,7 +190,7 @@ export default function ExamInfo() {
       position: "top-end",
       timer: 1200,
     });
-    setPage((page) => page + 1);
+    // setPage((page) => page + 1);
   };
 
   const handleChagePage = (page: number) => {

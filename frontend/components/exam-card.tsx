@@ -57,7 +57,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   };
 
   return (
-    <div className="p-1 shadow-xl border-2 border-gray-800 w-auto h-auto rounded">
+    <div className="p-1 border-2 border-gray-800 w-auto h-auto rounded">
       <div className="block px-14 py-16 bg-white sm:px-16 sm:py-20 rounded max-w-xs">
         <h5 className="text-xl font-bold text-gray-900 truncate">{name}</h5>
 
