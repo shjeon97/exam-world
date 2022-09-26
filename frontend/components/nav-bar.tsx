@@ -35,7 +35,7 @@ export const NavBar: React.FC = () => {
   return (
     <>
       <header className="text-gray-600 body-font z-50 ">
-        <nav className=" shadow-lg fixed w-full z-50 bg-white">
+        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white">
           <div className="w-full">
             <div className="flex items-center h-16 py-1  w-full">
               <div className="flex items-center mx-2 mt-1 justify-between w-full">

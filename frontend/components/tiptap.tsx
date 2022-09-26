@@ -58,7 +58,7 @@ const MenuBar = ({ editor }: any) => {
     });
   };
 
-  const handleDeletUser = () => {
+  const handleUploadImage = () => {
     Swal.fire({
       title: "Select image",
       input: "file",
@@ -237,7 +237,7 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className="p-1 hover:bg-gray-200 m-2"
-        onClick={() => handleDeletUser()}
+        onClick={() => handleUploadImage()}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -511,7 +511,7 @@ const MenuBar = ({ editor }: any) => {
       </button>
 
       <button
-        className={`p-1    m-1 ${
+        className={`p-1 m-1 ${
           editor.can().toggleHeaderCell() ? `hover:bg-gray-200 ` : ` hidden `
         }`}
         onClick={() => editor.chain().focus().toggleHeaderCell().run()}
