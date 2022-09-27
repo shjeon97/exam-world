@@ -56,19 +56,22 @@ const Test = ({ id }) => {
         !findMultipleChoiceListByExamIdIsLoading &&
         findMultipleChoiceListByExamIdData.ok && (
           <>
-            <div className="flex flex-wrap m-10">
+            <div className="flex justify-end mx-5  my-10">
+              <div className="button">시험종료</div>
+            </div>
+            <div className="flex flex-wrap  mx-5  my-10">
               {findQuestionListByExamIdData.questionList.map(
                 (question, index) => {
                   return (
                     <div
                       key={index}
-                      className=" w-auto h-min m-3 max-w-3xl  border-2 p-10 rounded"
+                      className=" w-auto h-min m-3 max-w-3xl  border-2 border-gray-600 p-5 rounded"
                     >
-                      <div>{question.page}번 문제</div>
+                      <div className=" text-lg">{question.page}번 문제</div>
                       <br />
 
                       <div
-                        className=" border p-2 rounded"
+                        className=" border border-gray-400 p-5  font-bold rounded"
                         dangerouslySetInnerHTML={{ __html: question.text }}
                       />
                       <br />
@@ -78,7 +81,7 @@ const Test = ({ id }) => {
                           return (
                             <div
                               key={index}
-                              className="p-1 hover:cursor-pointer hover:text-blue-500"
+                              className="p-1 hover:cursor-pointer hover:underline   hover:text-blue-500"
                             >
                               {index + 1}번 {multipleChoice.text}
                             </div>
