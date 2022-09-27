@@ -22,10 +22,21 @@ import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
+import { GetServerSideProps } from "next";
 
-export default function ExamInfo() {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const { query } = context;
+  const { id } = query;
+  return {
+    props: {
+      id,
+    },
+  };
+};
+
+export default function ExamInfo({ id }) {
   const [tiptap, setTiptap] = useState<any>(null);
-  const [mulitpleChoiceNumber, setmulitpleChoiceNumber] = useState<string[]>(
+  const [multipleChoiceNumber, setMulitpleChoiceNumber] = useState<string[]>(
     []
   );
   const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
@@ -34,7 +45,6 @@ export default function ExamInfo() {
   const queryClient = useQueryClient();
 
   const router = useRouter();
-  const { id } = router.query;
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
     apiGetMe
@@ -57,8 +67,8 @@ export default function ExamInfo() {
   } = useForm<IEditExamInput>({ mode: "onChange" });
 
   const editExamRegisterOption = {
-    name: { required: "사용할 제목 입력해 주세요." },
-    title: { required: "사용할 설명 입력해 주세요." },
+    name: { required: "사용할 제목 입력해 주세요.", maxLength: 30 },
+    title: { maxLength: 30 },
   };
 
   const createQuestionAndMulitpleChoiceRegisterOption = {
@@ -104,11 +114,6 @@ export default function ExamInfo() {
     }
   };
 
-  useEffect(() => {
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-  }, [page]);
-
   const editExamOnSubmit = () => {
     const editExamVlaues = editExamGetValues();
     editExamMutation.mutate({ id, ...editExamVlaues });
@@ -126,11 +131,15 @@ export default function ExamInfo() {
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
-    setmulitpleChoiceNumber((e) => [uuidv4(), ...e]);
+    setMulitpleChoiceNumber((e) => [uuidv4(), ...e]);
   };
 
   useEffect(() => {
-    setPage(findQuestionListByExamIdData?.questionList.length + 1);
+    try {
+      setPage(findQuestionListByExamIdData?.questionList.length + 1);
+    } catch (error) {
+      console.log(error);
+    }
   }, [
     findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
   ]);
@@ -146,15 +155,15 @@ export default function ExamInfo() {
     }
 
     const { score, ...rest } = createQuestionAndMulitpleChoiceGetValues();
-    const mulitpleChoice = mulitpleChoiceNumber.map((theId) => ({
-      mulitpleChoice: rest[`mulitpleChoice-${theId}`],
+    const multipleChoice = multipleChoiceNumber.map((theId) => ({
+      multipleChoice: rest[`multipleChoice-${theId}`],
       isCorrectAnswer: rest[`is-correct-answer-${theId}`],
     }));
 
     let isMulitpleChoiceNull = false;
 
-    mulitpleChoice.map((e) => {
-      if (e.mulitpleChoice.trim() == "") {
+    multipleChoice.map((e) => {
+      if (e.multipleChoice.trim() == "") {
         isMulitpleChoiceNull = true;
       }
     });
@@ -174,10 +183,10 @@ export default function ExamInfo() {
       score: +score,
     });
 
-    mulitpleChoice.map(async (e, index) => {
+    multipleChoice.map(async (e, index) => {
       await createMultipleChoiceMutation.mutateAsync({
         examId: +id,
-        text: e.mulitpleChoice,
+        text: e.multipleChoice,
         isCorrectAnswer: e.isCorrectAnswer,
         no: index + 1,
         page: page,
@@ -190,10 +199,14 @@ export default function ExamInfo() {
       position: "top-end",
       timer: 1200,
     });
-    // setPage((page) => page + 1);
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+    if (page === findQuestionListByExamIdData?.questionList.length) {
+      setPage((page) => page + 1);
+    }
   };
 
-  const handleChagePage = (page: number) => {
+  const handleChangePage = (page: number) => {
     setPage(page);
 
     const findQuesionByPage = findQuestionListByExamIdData.questionList.filter(
@@ -204,7 +217,7 @@ export default function ExamInfo() {
       tiptap?.commands?.setContent(findQuesionByPage.text);
     }
 
-    setmulitpleChoiceNumber([]);
+    setMulitpleChoiceNumber([]);
 
     setFindMultipleChoiceListByPage(
       findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
@@ -222,20 +235,20 @@ export default function ExamInfo() {
   };
 
   const onDeleteClick = (idToDelete: string) => {
-    setmulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
-    createQuestionAndMulitpleChoiceSetValue(`mulitpleChoice-${idToDelete}`, "");
+    setMulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
+    createQuestionAndMulitpleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
     createQuestionAndMulitpleChoiceSetValue(
       `is-correct-answer-${idToDelete}`,
       ""
     );
   };
 
-  const oncreateQuestionAndMulitpleChoiceClick = () => {
+  const onCreateQuestionAndMulitpleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
     createQuestionAndMulitpleChoiceSetValue("score", 1);
     setFindMultipleChoiceListByPage([]);
-    setmulitpleChoiceNumber([]);
+    setMulitpleChoiceNumber([]);
   };
 
   return (
@@ -248,8 +261,8 @@ export default function ExamInfo() {
         !findMultipleChoiceListByExamIdIsLoading &&
         !findQuestionListByIdIsLoading && (
           <>
-            <div className="p-10  m-5">
-              <div className=" items-center">
+            <div className="p-10  m-5 flex flex-col items-center justify-center h-screen">
+              <div className="  max-w-4xl">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
                   <label className="text-lg font-medium">제목</label>
@@ -267,7 +280,7 @@ export default function ExamInfo() {
                   />
                   <label className="text-lg font-medium">설명</label>
                   <div className=" text-xs  text-gray-500">
-                    시험에 관련된 설명을 자유롭게 쓰세요.
+                    시험에 관련된 설명을 자유롭게 쓰세요. (30자 이내)
                   </div>
                   <input
                     className={classNames(`form-input `, {
@@ -304,7 +317,7 @@ export default function ExamInfo() {
                           (question, index) => {
                             return (
                               <div
-                                onClick={() => handleChagePage(question.page)}
+                                onClick={() => handleChangePage(question.page)}
                                 className={classNames(`button`, {
                                   "bg-gray-900 text-white":
                                     question.page === page,
@@ -318,7 +331,7 @@ export default function ExamInfo() {
                         )}
                         <div
                           onClick={() =>
-                            oncreateQuestionAndMulitpleChoiceClick()
+                            onCreateQuestionAndMulitpleChoiceClick()
                           }
                           className="button "
                         >
@@ -358,7 +371,7 @@ export default function ExamInfo() {
                       (error, key) => {
                         return (
                           <div
-                            key={`form-error-create-question-and-mulitple-choice-${key}`}
+                            key={`form-error-create-question-and-multiple-choice-${key}`}
                           >
                             <FormError errorMessage={`${error.message}`} />
                             <br />
@@ -375,15 +388,15 @@ export default function ExamInfo() {
                       >
                         보기 추가
                       </div>
-                      {mulitpleChoiceNumber.length > 0 && (
+                      {multipleChoiceNumber.length > 0 && (
                         <>
                           <div className="flex flex-col-reverse">
-                            {mulitpleChoiceNumber.map((id, index) => {
+                            {multipleChoiceNumber.map((id, index) => {
                               return (
                                 <>
                                   <div
                                     className=" grid grid-cols-12 gap-3 items-center "
-                                    key={`mulitpleChoice-${id}`}
+                                    key={`multipleChoice-${id}`}
                                   >
                                     <div className="col-span-9 ">
                                       <label className="text-sm">보기</label>
@@ -394,7 +407,7 @@ export default function ExamInfo() {
                                       <input
                                         className="form-input "
                                         {...createQuestionAndMulitpleChoiceRegister(
-                                          `mulitpleChoice-${id}`
+                                          `multipleChoice-${id}`
                                         )}
                                         defaultValue={
                                           findMultipleChoiceListByPage[index]

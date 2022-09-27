@@ -53,6 +53,7 @@ const MenuBar = ({ editor }: any) => {
         const url = result.value;
         editor.commands.setYoutubeVideo({
           src: url,
+          width: "100%",
         });
       }
     });

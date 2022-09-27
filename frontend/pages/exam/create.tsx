@@ -11,7 +11,6 @@ import {
 } from "../../common/type";
 import { FormButton } from "../../components/form-button";
 import { FormError } from "../../components/form-error";
-import Tiptap from "../../components/tiptap";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
@@ -38,8 +37,8 @@ export default function CreateExam() {
     router.push("/login");
   }
   const createExamRegisterOption = {
-    name: { required: "사용할 제목 입력해 주세요." },
-    title: { required: "사용할 설명 입력해 주세요." },
+    name: { required: "사용할 제목 입력해 주세요.", maxLength: 30 },
+    title: { maxLength: 30 },
   };
 
   const createExamMutation = useMutation(apiCreateExam, {
@@ -78,7 +77,7 @@ export default function CreateExam() {
             />
             <label className="text-lg font-medium">설명</label>
             <div className=" text-xs  text-gray-500">
-              시험에 관련된 설명을 자유롭게 쓰세요
+              시험에 관련된 설명을 자유롭게 쓰세요 (30자 이내)
             </div>
             <input
               className={classNames(`form-input`, {

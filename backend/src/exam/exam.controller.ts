@@ -19,7 +19,7 @@ import { AllExamListOutput } from 'src/dto/all-exam-list.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
-import { FindExamListBymeOutput as FindExamListBymeOutput } from 'src/dto/find-examList-by-me.dto';
+import { FindExamListByMeOutput as FindExamListByMeOutput } from 'src/dto/find-examList-by-me.dto';
 import {
   FindMultipleChoiceListByExamIdInput,
   FindMultipleChoiceListByExamIdOutput,
@@ -48,11 +48,11 @@ export class ExamController {
   }
 
   @ApiOperation({ summary: '자기가 만든 시험 정보 가져오기' })
-  @ApiResponse({ type: FindExamListBymeOutput })
+  @ApiResponse({ type: FindExamListByMeOutput })
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Get('/me')
-  async findExamListByme(@GetUser() user): Promise<FindExamListBymeOutput> {
+  async findExamListByme(@GetUser() user): Promise<FindExamListByMeOutput> {
     return this.examService.findExamListByme(user);
   }
 
@@ -65,7 +65,6 @@ export class ExamController {
 
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
   @ApiResponse({ type: FindQuestionListByExamIdOutput })
-  @Role(['Any'])
   @Get(':examId/question')
   async findQuestionListByExamId(
     @Param() { examId }: FindQuestionListByExamIdInput,
@@ -75,7 +74,6 @@ export class ExamController {
 
   @ApiOperation({ summary: 'examId 갖고있는 모든 multiple-choice 가져오기' })
   @ApiResponse({ type: FindMultipleChoiceListByExamIdOutput })
-  @Role(['Any'])
   @Get(':examId/multiple-choice')
   async findMultipleChoiceListByExamId(
     @Param() { examId }: FindMultipleChoiceListByExamIdInput,
@@ -84,8 +82,7 @@ export class ExamController {
   }
 
   @ApiOperation({ summary: 'id로 시험 정보 가져오기' })
-  @ApiResponse({ type: FindExamListBymeOutput })
-  @Role(['Any'])
+  @ApiResponse({ type: FindExamListByMeOutput })
   @Get(':id')
   async findExamById(@Param() { id }: FindExamByIdInput) {
     return this.examService.findExamById(id);

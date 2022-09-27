@@ -61,32 +61,30 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
       <div className="block px-14 py-16 bg-white sm:px-16 sm:py-20 rounded max-w-xs">
         <h5 className="text-xl font-bold text-gray-900 truncate">{name}</h5>
 
-        <p className="mt-2 text-sm text-gray-500 truncate">{title} </p>
+        <p className="mt-2 text-sm text-gray-500 ">{title} </p>
       </div>
-      {!meIsLoading && meData?.id === userId && (
-        <div className="flex gap-2 m-2 justify-between">
-          <div className="text-xs w-16 text-center">
-            <LinkButton name="정보" link={`/exam/${id}/info`} />
-          </div>
-          <div
-            onClick={() => deleteExamById()}
-            className="text-xs w-16 text-center"
-          >
-            <div className="block h-auto group w-auto  hover:cursor-pointer ">
-              <div className="relative  inset-0  transition bg-white border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
-                <div className="lg:group-hover:opacity-0 lg:group-hover:absolute">
-                  <span className=" text-gray-900  content-center justify-center font-semibold ">
-                    삭제
-                  </span>
-                </div>
-                <div className="absolute opacity-0 lg:group-hover:opacity-100 lg:group-hover:relative">
+      <div className="flex gap-2 m-2 justify-start">
+        <div className="text-xs w-16 text-center">
+          <LinkButton name="시험시작" link={`/exam/${id}/test`} />
+        </div>
+        {!meIsLoading && meData?.id === userId && (
+          <>
+            <div className="text-xs w-12 text-center">
+              <LinkButton name="정보" link={`/exam/${id}/info`} />
+            </div>
+            <div
+              onClick={() => deleteExamById()}
+              className="text-xs w-12 text-center"
+            >
+              <div className="block h-auto group w-auto  hover:cursor-pointer ">
+                <div className="relative  inset-0  transition bg-white border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
                   <span className="text-gray-900  font-semibold"> 삭제</span>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
