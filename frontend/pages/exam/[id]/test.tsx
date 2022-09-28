@@ -54,12 +54,6 @@ const Test = ({ id }) => {
   );
 
   const onClickMultipleChoice = (page, no) => {
-    console.log(
-      multipleChoiceIsCheckedList.find(
-        (e) => e.privateKey === `page-${page}-no-${no}`
-      )
-    );
-
     if (
       multipleChoiceIsCheckedList.find(
         (e) => e.privateKey === `page-${page}-no-${no}`
