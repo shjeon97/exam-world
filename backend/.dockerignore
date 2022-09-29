@@ -4,3 +4,5 @@ Dockerfile.dev
 .dockerignore
 .git
 .gitignore
+npm-debug.log
+dist
