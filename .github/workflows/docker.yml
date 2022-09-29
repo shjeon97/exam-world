@@ -20,10 +20,10 @@ jobs:
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: docker build frontend 
       run: |
-        docker build ./frontend --t shjeon97/exam-world-frontend:1.0.0
+        docker build ./frontend -t shjeon97/exam-world-frontend:1.0.0
     - name: docker build backend 
       run: |
-        docker build ./backend --t shjeon97/exam-world-backend:1.0.0
+        docker build ./backend -t shjeon97/exam-world-backend:1.0.0
     - name: docker build nginx 
       run: |
-        docker build ./nginx --t shjeon97/exam-world-nginx:1.0.0
+        docker build ./nginx -t shjeon97/exam-world-nginx:1.0.0
