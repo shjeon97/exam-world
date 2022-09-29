@@ -408,6 +408,7 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.CREATED)
           .expect({
             ok: true,
+            examId: 1,
           });
       });
     });
