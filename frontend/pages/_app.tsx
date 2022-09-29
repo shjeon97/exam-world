@@ -1,8 +1,29 @@
-import type { AppProps } from 'next/app'
-import '../styles/globals.css'
+import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider } from "react-query";
+import "../styles/globals.css";
+import { ReactQueryDevtools } from "react-query/devtools";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { useRouter } from "next/router";
+import { NavBar } from "../components/nav-bar";
+config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  const queryClient = new QueryClient();
+
+  const { pathname } = useRouter();
+  const authRoutes = ["/login", "/signup"];
+  const authRoute = authRoutes.includes(pathname);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      {!authRoute && <NavBar />}
+      <div className={authRoute ? "" : "pt-16"}>
+        <Component {...pageProps} />
+      </div>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
+  );
 }
 
-export default MyApp
+export default MyApp;

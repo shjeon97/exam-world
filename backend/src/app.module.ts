@@ -1,9 +1,19 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
+import { UserModule } from './user/user.module';
 import * as Joi from 'joi';
+import { User } from './entity/user.entity';
+import { ImageModule } from './image/image.module';
+import { QnaModule } from './qna/qna.module';
+import { Qna } from './entity/qna.entity';
+import { ExamModule } from './exam/exam.module';
+import { QuestionModule } from './question/question.module';
+import { MultipleChoiceModule } from './multiple-choice/multiple-choice.module';
+import { Exam } from './entity/exam.entity';
+import { Question } from './entity/question.entity';
+import { MultipleChoice } from './entity/multiple-choice.entity';
 
 @Module({
   imports: [
@@ -12,10 +22,15 @@ import * as Joi from 'joi';
       // 전역에서 사용가능하도록 정의
       isGlobal: true,
       //사용할 env 파일 이름
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.prod',
+      envFilePath:
+        process.env.NODE_ENV === 'dev'
+          ? '.env.dev'
+          : process.env.NODE_ENV === 'test'
+          ? '.env.test'
+          : '.env.prod',
       // 스키마 유효성 검사
       validationSchema: Joi.object({
-        NODE_ENV: Joi.string().valid('dev', 'prod').required(),
+        NODE_ENV: Joi.string().valid('dev', 'prod', 'test').required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
@@ -39,14 +54,21 @@ import * as Joi from 'joi';
       // 마이그레이션
       synchronize: process.env.NODE_ENV !== 'prod',
       // DB로그
-      logging: process.env.NODE_ENV !== 'prod',
+      logging: false,
       // hot load 사용시 선언
       keepConnectionAlive: true,
       // 사용할 entity들 선언
-      entities: [],
+      entities: [User, Qna, Exam, Question, MultipleChoice],
     }),
+    AuthModule,
+    UserModule,
+    ImageModule,
+    QnaModule,
+    ExamModule,
+    QuestionModule,
+    MultipleChoiceModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
