@@ -6,6 +6,8 @@ services:
       context: ./frontend
     image: shjeon97/exam-world-frontend:1.0.0
     container_name: exam-world-frontend
+    env_file:
+      - ./frontend/.env
 
   backend:
     build:
@@ -13,6 +15,8 @@ services:
       context: ./backend
     image: shjeon97/exam-world-backend:1.0.0
     container_name: exam-world-backend
+    env_file:
+      - ./backend/.env.prod
 
   nginx:
     restart: always
