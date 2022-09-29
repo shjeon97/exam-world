@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
+import Swal from "sweetalert2";
 import {
   apiFindExamById,
   apiFindMultipleChoiceListByExamId,
@@ -70,6 +71,59 @@ const Test = ({ id }) => {
     }
   };
 
+  const endTest = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      html: "정말 시험종료를 원하십니까?",
+      icon: "warning",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "종료하기",
+      showCancelButton: true,
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let score = 0;
+        findQuestionListByExamIdData.questionList.map((question) => {
+          const findMultipleChoiceListByPage =
+            findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
+              (e) => e.isCorrectAnswer === true && e.page === question.page
+            );
+
+          if (
+            findMultipleChoiceListByPage.length ===
+            multipleChoiceIsCheckedList.filter((e) => e.page === question.page)
+              .length
+          ) {
+            let isCorrectAnswer = true;
+
+            findMultipleChoiceListByPage.map((multipleChoice) => {
+              multipleChoiceIsCheckedList.find(
+                (e) => e.no === multipleChoice.no
+              );
+              if (
+                !multipleChoiceIsCheckedList.find(
+                  (e) => e.no === multipleChoice.no
+                )
+              ) {
+                isCorrectAnswer = false;
+              }
+            });
+            if (isCorrectAnswer) {
+              score = score + question.score;
+            }
+          }
+        });
+        Swal.fire({
+          title: `${score}점`,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "확인",
+        });
+      }
+    });
+  };
+
   return (
     <>
       <Head>
@@ -115,7 +169,7 @@ const Test = ({ id }) => {
                               className={classNames(
                                 `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
                                 {
-                                  "text-blue-700":
+                                  "text-blue-700 text-lg hover:text-blue-700  hover:no-underline":
                                     multipleChoiceIsCheckedList.find(
                                       (e) =>
                                         e.privateKey ===
@@ -123,7 +177,6 @@ const Test = ({ id }) => {
                                     ),
                                 }
                               )}
-                              // className="p-1 hover:cursor-pointer hover:underline   hover:text-blue-500"
                             >
                               {index + 1}번 {multipleChoice.text}
                             </div>
@@ -134,11 +187,12 @@ const Test = ({ id }) => {
                 }
               )}
             </div>
-            <div className="button">시험종료</div>
+            <div onClick={() => endTest()} className="button">
+              시험종료
+            </div>
           </>
         )}
     </>
   );
 };
-
 export default Test;
