@@ -1,0 +1,29 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: self-hosted
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: docker login
+      env:
+        DOCKER_USER: ${{ secrets.DOCKER_USER }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+    - name: docker build frontend 
+      run: |
+        docker build ./frontend --t shjeon97/exam-world-frontend:1.0.0
+    - name: docker build backend 
+      run: |
+        docker build ./backend --t shjeon97/exam-world-backend:1.0.0
+    - name: docker build nginx 
+      run: |
+        docker build ./nginx --t shjeon97/exam-world-nginx:1.0.0
