@@ -4,37 +4,33 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./frontend
+    image: shjeon97/exam-world-frontend:1.0.0
     container_name: exam-world-frontend
-    volumes:
-      - /app/node_modules
-      - ./frontend:/app
-    stdin_open: true
+
+  backend:
+    build:
+      dockerfile: Dockerfile
+      context: ./backend
+    image: shjeon97/exam-world-backend:1.0.0
+    container_name: exam-world-backend
 
   nginx:
     restart: always
     build:
       dockerfile: Dockerfile
       context: ./nginx
+    image: shjeon97/exam-world-nginx:1.0.0
     container_name: exam-world-nginx
     ports:
       - "3000:80"
 
-  certbot:
-    depends_on:
-      - nginx
-    image: certbot/certbot
-    container_name: certbot
-    volumes:
-      - ./certbot/etc:/etc/letsencrypt
-      - ./certbot/var:/var/lib/letsencrypt
-      - ./www:/var/www/html
-    command: certonly --webroot --webroot-path=/var/www/html --email shjeon.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d exam-world.shjeon.kro.kr -d www.exam-world.shjeon.kro.kr
-
-  backend:
-    build:
-      dockerfile: Dockerfile
-      context: ./backend
-    container_name: exam-world-backend
-    volumes:
-      - /app/node_modules
-      - ./backend:/app
+  # certbot:
+  #   depends_on:
+  #     - nginx
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes:
+  #     - ./certbot/etc:/etc/letsencrypt
+  #     - ./certbot/var:/var/lib/letsencrypt
+  #     - ./www:/var/www/html
+  #   command: certonly --webroot --webroot-path=/var/www/html --email shjeon.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d exam-world.shjeon.kro.kr -d www.exam-world.shjeon.kro.kr
