@@ -28,13 +28,4 @@ services:
     ports:
       - "3000:80"
 
-  # certbot:
-  #   depends_on:
-  #     - nginx
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - ./certbot/etc:/etc/letsencrypt
-  #     - ./certbot/var:/var/lib/letsencrypt
-  #     - ./www:/var/www/html
-  #   command: certonly --webroot --webroot-path=/var/www/html --email shjeon.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d exam-world.shjeon.kro.kr -d www.exam-world.shjeon.kro.kr
+ 
