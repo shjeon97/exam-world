@@ -26,6 +26,6 @@ services:
     image: shjeon97/exam-world-nginx:1.0.0
     container_name: exam-world-nginx
     ports:
-      - "3000:80"
+      - "80:80"
 
  
