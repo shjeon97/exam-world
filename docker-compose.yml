@@ -7,7 +7,7 @@ services:
     image: shjeon97/exam-world-frontend:1.0.0
     container_name: exam-world-frontend
     env_file:
-      - ./frontend/.env
+      - ./frontend/.env.prod
 
   backend:
     build:
@@ -26,7 +26,7 @@ services:
     image: shjeon97/exam-world-nginx:1.0.0
     container_name: exam-world-nginx
     ports:
-      - "3000:80"
+      - "80:80"
 
   # certbot:
   #   depends_on:

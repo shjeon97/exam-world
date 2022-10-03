@@ -13,7 +13,7 @@ import {
   IUploadImageInput,
 } from "../common/type";
 
-axios.defaults.baseURL = process.env.NEXT_PUBLIC_SEVER_BASE_URL + "/api";
+axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_SEVER_BASE_URL}/api`;
 axios.defaults.withCredentials = true;
 axios.interceptors.request.use(function (config) {
   config.headers.Authorization = JwtToken() ? `Bearer ${JwtToken()}` : "";

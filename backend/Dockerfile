@@ -2,7 +2,6 @@ FROM node:16 AS builder
 WORKDIR /app
 COPY ./ ./
 RUN yarn
-RUN yarn test:e2e
 RUN yarn build
 
 FROM node:16-alpine
