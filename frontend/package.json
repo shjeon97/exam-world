@@ -3,7 +3,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:prod": "env-cmd -f .env.prod  next build",
     "start": "next start",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",

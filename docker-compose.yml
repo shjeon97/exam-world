@@ -1,15 +1,19 @@
 version: "3"
 services:
   frontend:
+    restart: always
     build:
       dockerfile: Dockerfile
       context: ./frontend
     image: shjeon97/exam-world-frontend:1.0.0
     container_name: exam-world-frontend
     env_file:
-      - ./frontend/.env.prod
+      - ./frontend/.env
+    ports:
+      - "3000:3000"
 
   backend:
+    restart: always
     build:
       dockerfile: Dockerfile
       context: ./backend
@@ -17,24 +21,16 @@ services:
     container_name: exam-world-backend
     env_file:
       - ./backend/.env.prod
-
-  nginx:
-    restart: always
-    build:
-      dockerfile: Dockerfile
-      context: ./nginx
-    image: shjeon97/exam-world-nginx:1.0.0
-    container_name: exam-world-nginx
     ports:
-      - "80:80"
+      - "4000:4000"
 
-  # certbot:
-  #   depends_on:
-  #     - nginx
-  #   image: certbot/certbot
-  #   container_name: certbot
-  #   volumes:
-  #     - ./certbot/etc:/etc/letsencrypt
-  #     - ./certbot/var:/var/lib/letsencrypt
-  #     - ./www:/var/www/html
-  #   command: certonly --webroot --webroot-path=/var/www/html --email shjeon.dev@gmail.com --agree-tos --no-eff-email --force-renewal -d exam-world.shjeon.kro.kr -d www.exam-world.shjeon.kro.kr
+  # nginx:
+  #   restart: always
+  #   build:
+  #     dockerfile: Dockerfile
+  #     context: ./nginx
+  #   image: shjeon97/exam-world-nginx:1.0.0
+  #   container_name: exam-world-nginx
+  #   ports:
+  #     - "3000:80"
+

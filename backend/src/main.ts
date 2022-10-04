@@ -14,7 +14,7 @@ async function bootstrap() {
 
   if (process.env.NODE_ENV === 'prod') {
     app.enableCors({
-      origin: ['https://exam-world.shjeon.kro.kr'],
+      origin: ['https://exam-world.prod.kro.kr'],
       credentials: true,
     });
   } else {
