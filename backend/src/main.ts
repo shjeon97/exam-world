@@ -25,9 +25,7 @@ async function bootstrap() {
   }
 
   app.useStaticAssets(
-    process.env.NODE_ENV === 'prod'
-      ? join(__dirname, '..', '..', 'public')
-      : join(__dirname, '..', 'public'),
+   join(__dirname, '..', 'public'),
     {
       prefix: '/public',
     },
