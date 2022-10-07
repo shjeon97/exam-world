@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function ExamInfo({ id }) {
   const [tiptap, setTiptap] = useState<any>(null);
-  const [multipleChoiceNumber, setMulitpleChoiceNumber] = useState<string[]>(
+  const [multipleChoiceNumber, setMultipleChoiceNumber] = useState<string[]>(
     []
   );
   const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
@@ -115,23 +115,23 @@ export default function ExamInfo({ id }) {
   };
 
   const editExamOnSubmit = () => {
-    const editExamVlaues = editExamGetValues();
-    editExamMutation.mutate({ id, ...editExamVlaues });
+    const editExamValues = editExamGetValues();
+    editExamMutation.mutate({ id, ...editExamValues });
   };
 
   const {
-    register: createQuestionAndMulitpleChoiceRegister,
-    getValues: createQuestionAndMulitpleChoiceGetValues,
-    setValue: createQuestionAndMulitpleChoiceSetValue,
-    handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
+    register: createQuestionAndMultipleChoiceRegister,
+    getValues: createQuestionAndMultipleChoiceGetValues,
+    setValue: createQuestionAndMultipleChoiceSetValue,
+    handleSubmit: createQuestionAndMultipleChoiceHandleSubmit,
     formState: {
-      errors: createQuestionAndMulitpleChoiceErrors,
-      isValid: createQuestionAndMulitpleChoiceIsValid,
+      errors: createQuestionAndMultipleChoiceErrors,
+      isValid: createQuestionAndMultipleChoiceIsValid,
     },
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
-    setMulitpleChoiceNumber((e) => [uuidv4(), ...e]);
+    setMultipleChoiceNumber((e) => [uuidv4(), ...e]);
   };
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export default function ExamInfo({ id }) {
     findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
   ]);
 
-  const createQuestionAndMulitpleChoiceOnSubmit = async () => {
+  const createQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
     if (questionValue.length < 8) {
       return Toast.fire({
@@ -154,7 +154,7 @@ export default function ExamInfo({ id }) {
       });
     }
 
-    const { score, ...rest } = createQuestionAndMulitpleChoiceGetValues();
+    const { score, ...rest } = createQuestionAndMultipleChoiceGetValues();
     const multipleChoice = multipleChoiceNumber.map((theId) => ({
       multipleChoice: rest[`multipleChoice-${theId}`],
       isCorrectAnswer: rest[`is-correct-answer-${theId}`],
@@ -193,31 +193,29 @@ export default function ExamInfo({ id }) {
       });
     });
 
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
     await Toast.fire({
       icon: "success",
       text: "저장완료.",
       position: "top-end",
       timer: 1200,
     });
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-    if (page === findQuestionListByExamIdData?.questionList.length) {
-      setPage((page) => page + 1);
-    }
+    onCreateQuestionAndMultipleChoiceClick();
   };
 
   const handleChangePage = (page: number) => {
     setPage(page);
 
-    const findQuesionByPage = findQuestionListByExamIdData.questionList.filter(
+    const findQuestionByPage = findQuestionListByExamIdData.questionList.filter(
       (question) => question.page === page
     )[0];
 
-    if (findQuesionByPage) {
-      tiptap?.commands?.setContent(findQuesionByPage.text);
+    if (findQuestionByPage) {
+      tiptap?.commands?.setContent(findQuestionByPage.text);
     }
 
-    setMulitpleChoiceNumber([]);
+    setMultipleChoiceNumber([]);
 
     setFindMultipleChoiceListByPage(
       findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
@@ -231,24 +229,24 @@ export default function ExamInfo({ id }) {
         onAddOptionClick();
       });
 
-    createQuestionAndMulitpleChoiceSetValue("score", findQuesionByPage.score);
+    createQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
   };
 
   const onDeleteClick = (idToDelete: string) => {
-    setMulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
-    createQuestionAndMulitpleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
-    createQuestionAndMulitpleChoiceSetValue(
+    setMultipleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
+    createQuestionAndMultipleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
+    createQuestionAndMultipleChoiceSetValue(
       `is-correct-answer-${idToDelete}`,
       ""
     );
   };
 
-  const onCreateQuestionAndMulitpleChoiceClick = () => {
+  const onCreateQuestionAndMultipleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
-    createQuestionAndMulitpleChoiceSetValue("score", 1);
+    createQuestionAndMultipleChoiceSetValue("score", 1);
     setFindMultipleChoiceListByPage([]);
-    setMulitpleChoiceNumber([]);
+    setMultipleChoiceNumber([]);
   };
 
   return (
@@ -261,7 +259,7 @@ export default function ExamInfo({ id }) {
         !findMultipleChoiceListByExamIdIsLoading &&
         !findQuestionListByIdIsLoading && (
           <>
-            <div className="p-10  m-5 flex flex-col items-center justify-center h-screen">
+            <div className="p-10  m-5 flex flex-col items-center justify-center ">
               <div className="  max-w-4xl">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
@@ -331,7 +329,7 @@ export default function ExamInfo({ id }) {
                         )}
                         <div
                           onClick={() =>
-                            onCreateQuestionAndMulitpleChoiceClick()
+                            onCreateQuestionAndMultipleChoiceClick()
                           }
                           className="button "
                         >
@@ -345,8 +343,8 @@ export default function ExamInfo({ id }) {
                   <Tiptap editor={tiptapEditor} />
                 </div>
                 <form
-                  onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
-                    createQuestionAndMulitpleChoiceOnSubmit
+                  onSubmit={createQuestionAndMultipleChoiceHandleSubmit(
+                    createQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
                   <label className="text-lg font-medium">점수</label>
@@ -354,20 +352,20 @@ export default function ExamInfo({ id }) {
                     해당 문제 맞출시 줄 점수를 입력하세요.
                   </div>
                   <input
-                    {...createQuestionAndMulitpleChoiceRegister(
+                    {...createQuestionAndMultipleChoiceRegister(
                       "score",
                       createQuestionAndMulitpleChoiceRegisterOption.score
                     )}
                     className={classNames(`form-input `, {
                       "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        createQuestionAndMulitpleChoiceErrors.score,
+                        createQuestionAndMultipleChoiceErrors.score,
                     })}
                     type="number"
                     defaultValue={1}
                   />
-                  {Object.values(createQuestionAndMulitpleChoiceErrors).length >
+                  {Object.values(createQuestionAndMultipleChoiceErrors).length >
                     0 &&
-                    Object.values(createQuestionAndMulitpleChoiceErrors).map(
+                    Object.values(createQuestionAndMultipleChoiceErrors).map(
                       (error, key) => {
                         return (
                           <div
@@ -406,7 +404,7 @@ export default function ExamInfo({ id }) {
                                       </div>
                                       <input
                                         className="form-input "
-                                        {...createQuestionAndMulitpleChoiceRegister(
+                                        {...createQuestionAndMultipleChoiceRegister(
                                           `multipleChoice-${id}`
                                         )}
                                         defaultValue={
@@ -421,7 +419,7 @@ export default function ExamInfo({ id }) {
                                         정답일시 체크
                                       </p>
                                       <input
-                                        {...createQuestionAndMulitpleChoiceRegister(
+                                        {...createQuestionAndMultipleChoiceRegister(
                                           `is-correct-answer-${id}`
                                         )}
                                         type="checkbox"
