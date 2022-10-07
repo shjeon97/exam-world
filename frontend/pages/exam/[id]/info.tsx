@@ -13,8 +13,8 @@ import {
   apiGetMe,
 } from "../../../api/axios";
 import { ICoreOutput, IEditExamInput, IUserInput } from "../../../common/type";
-import { FormButton } from "../../../components/form-button";
-import { FormError } from "../../../components/form-error";
+import { FormButton } from "../../../components/forms/form-button";
+import { FormError } from "../../../components/forms/form-error";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import React, { useState, useEffect } from "react";

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { FormError } from "../components/form-error";
+import { FormError } from "../components/forms/form-error";
 import classnames from "classnames";
 import { useMutation, useQuery } from "react-query";
 import { ICoreOutput, ISignupUserInput } from "../common/type";
 import { apiGetMe, apiSignupUser } from "../api/axios";
 import { Toast } from "../lib/sweetalert2/toast";
-import { FormButton } from "../components/form-button";
+import { FormButton } from "../components/forms/form-button";
 import { useRouter } from "next/router";
 import { WEB_TITLE } from "../constant";
 import Head from "next/head";

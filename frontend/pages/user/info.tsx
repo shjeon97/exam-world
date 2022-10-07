@@ -7,8 +7,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 import { apiDeleteMe, apiEditMe, apiGetMe } from "../../api/axios";
 import { ICoreOutput, IEditMeInput, IUserInput } from "../../common/type";
-import { FormButton } from "../../components/form-button";
-import { FormError } from "../../components/form-error";
+import { FormButton } from "../../components/forms/form-button";
+import { FormError } from "../../components/forms/form-error";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
