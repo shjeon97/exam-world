@@ -2,7 +2,6 @@ import { InternalServerErrorException } from '@nestjs/common';
 import {
   IsEmail,
   IsEnum,
-  IsOptional,
   IsString,
   MaxLength,
   MinLength,
@@ -34,12 +33,12 @@ export class User extends CoreEntity {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ example: '이름', description: '홍길동' })
+  @ApiProperty({ example: '닉네임', description: '홍길동' })
   @Column()
   @IsString()
   @MaxLength(10)
   @MinLength(2)
-  name: string;
+  nickname: string;
 
   @ApiProperty({ example: '비밀번호', description: 'password' })
   @Column({ select: false })

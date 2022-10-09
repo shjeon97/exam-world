@@ -1,14 +1,14 @@
 import { useForm } from "react-hook-form";
-import { FormButton } from "../form-button";
+import { FormButton } from "../FormButton";
 import { LoginPasswordField } from "./fields/LoginPasswordField";
-import { LoginEmaildField } from "./fields/LoginEmailField";
+import { LoginEmailField } from "./fields/LoginEmailField";
 import { useMutation, useQueryClient } from "react-query";
 import { apiLogin } from "../../../api/axios";
-import { LOCALSTORAGE_TOKEN } from "../../../constant";
+import { LOCAL_STORAGE_TOKEN } from "../../../constant";
 import { ILoginInput, ILoginOutput } from "../../../common/type";
-import { FormError } from "../form-error";
+import { FormError } from "../FormError";
 
-export const LgoinForm = () => {
+export const LoginForm = () => {
   const {
     register,
     getValues,
@@ -22,10 +22,8 @@ export const LgoinForm = () => {
 
   const loginMutation = useMutation(apiLogin, {
     onSuccess: (data: ILoginOutput) => {
-      console.log(data);
-
       if (data.ok && data.token) {
-        localStorage.setItem(LOCALSTORAGE_TOKEN, data.token);
+        localStorage.setItem(LOCAL_STORAGE_TOKEN, data.token);
         queryClient.invalidateQueries("me");
       }
     },
@@ -40,12 +38,12 @@ export const LgoinForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <LoginEmaildField register={register} error={errors.email} />
+      <LoginEmailField register={register} error={errors.email} />
       <LoginPasswordField register={register} error={errors.password} />
       <FormButton
         canClick={isValid}
         loading={loginMutation.isLoading}
-        actionText={"로그인"}
+        actionText={"login"}
       />
       {loginMutation?.data?.error && (
         <FormError errorMessage={loginMutation.data.error} />

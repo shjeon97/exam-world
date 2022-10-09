@@ -9,7 +9,7 @@ import {
   IEditMeInput,
   ILoginInput,
   ISendQuestionInput,
-  ISignupUserInput,
+  IRegisterUserInput,
   IUploadImageInput,
 } from "../common/type";
 
@@ -22,15 +22,15 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-export const apiSignupUser = async ({
+export const apiRegisterUser = async ({
   email,
-  name,
+  nickname,
   password,
-}: ISignupUserInput) => {
+}: IRegisterUserInput) => {
   return axios
-    .post(`/auth/signup`, {
+    .post(`/auth/register`, {
       email,
-      name,
+      nickname,
       password,
     })
     .then((res) => {
@@ -102,7 +102,7 @@ export const apiCreateMultipleChoice = async ({
 export const apiEditMe = async ({
   email,
   password,
-  name,
+  nickname: name,
   editPassword,
 }: IEditMeInput) => {
   return axios

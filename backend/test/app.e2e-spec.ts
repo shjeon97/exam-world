@@ -2,25 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { DataSource, getConnection, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 let testUser1 = {
   email: 'test1@test.com',
-  name: 'test1',
+  nickname: 'test1',
   password: '1234',
 };
 
 let testUser2 = {
   email: 'test2@test.com',
-  name: 'test2',
+  nickname: 'test2',
   password: '1234',
 };
 
-let testUser3 = {
+let deleteUser = {
   email: 'test3@test.com',
-  name: 'test3',
+  nickname: 'test3',
   password: '1234',
 };
 
@@ -59,14 +59,14 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
   describe('AuthController (e2e)', () => {
-    describe('signupUser', () => {
-      const API_AUTH_SIGNUP = '/api/auth/signup';
+    describe('registerUser', () => {
+      const API_AUTH_SIGNUP = '/api/auth/register';
       it('계정이 생성되는지 확인', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
             email: testUser1.email,
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password,
           })
           .expect(HttpStatus.CREATED)
@@ -78,7 +78,7 @@ describe('AppController (e2e)', () => {
           .post(API_AUTH_SIGNUP)
           .send({
             email: testUser2.email,
-            name: testUser2.name,
+            nickname: testUser2.nickname,
             password: testUser2.password,
           })
           .expect(HttpStatus.CREATED)
@@ -89,9 +89,9 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
-            email: testUser3.email,
-            name: testUser3.name,
-            password: testUser3.password,
+            email: deleteUser.email,
+            nickname: deleteUser.nickname,
+            password: deleteUser.password,
           })
           .expect(HttpStatus.CREATED)
           .expect({ ok: true });
@@ -102,7 +102,7 @@ describe('AppController (e2e)', () => {
           .post(API_AUTH_SIGNUP)
           .send({
             email: testUser1.email + '!',
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password,
           })
           .expect(HttpStatus.CREATED)
@@ -114,7 +114,7 @@ describe('AppController (e2e)', () => {
           .post(API_AUTH_SIGNUP)
           .send({
             email: testUser1.email,
-            name: testUser1.name + '!',
+            nickname: testUser1.nickname + '!',
             password: testUser1.password,
           })
           .expect(HttpStatus.CREATED)
@@ -159,8 +159,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_LOGIN)
           .send({
-            email: testUser3.email,
-            password: testUser3.password,
+            email: deleteUser.email,
+            password: deleteUser.password,
           })
           .expect(HttpStatus.OK)
           .expect((res) => {
@@ -232,7 +232,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: '!' + testUser1.email,
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password + '!',
           })
           .set('authorization', `Bearer ${jwtToken1}`)
@@ -248,7 +248,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: '!' + testUser1.email,
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password,
           })
           .set('authorization', `Bearer ${jwtToken1}`)
@@ -266,7 +266,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: testUser1.email,
-            name: '!' + testUser1.name,
+            nickname: '!' + testUser1.nickname,
             password: testUser1.password,
           })
           .set('authorization', `Bearer ${jwtToken1}`)
@@ -275,7 +275,7 @@ describe('AppController (e2e)', () => {
             ok: true,
           })
           .expect(() => {
-            testUser1.name = '!' + testUser1.name;
+            testUser1.nickname = '!' + testUser1.nickname;
           });
       });
 
@@ -284,7 +284,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: testUser1.email,
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password,
             editPassword: '!' + testUser1.password,
           })
@@ -303,7 +303,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: testUser2.email,
-            name: testUser1.name,
+            nickname: testUser1.nickname,
             password: testUser1.password,
           })
           .set('authorization', `Bearer ${jwtToken1}`)
@@ -319,7 +319,7 @@ describe('AppController (e2e)', () => {
           .patch(API_USER_ME)
           .send({
             email: testUser1.email,
-            name: testUser2.name,
+            nickname: testUser2.nickname,
             password: testUser1.password,
           })
           .set('authorization', `Bearer ${jwtToken1}`)
@@ -344,11 +344,11 @@ describe('AppController (e2e)', () => {
             error: '비밀번호가 일치하지 않습니다.',
           });
       });
-      it('계정삭제 3', () => {
+      it('계정삭제', () => {
         return request(app.getHttpServer())
           .delete(API_USER_ME)
           .send({
-            password: testUser3.password,
+            password: deleteUser.password,
           })
           .set('authorization', `Bearer ${jwtToken3}`)
           .expect(HttpStatus.OK)
@@ -412,7 +412,7 @@ describe('AppController (e2e)', () => {
           });
       });
     });
-    describe('findExamListByme', () => {
+    describe('findExamListByMe', () => {
       it('자기가 만든 시험 정보 가져오기', () => {
         return request(app.getHttpServer())
           .get(APT_EXAM + '/me')

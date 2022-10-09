@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "react-query";
-import { apiGetMe } from "../api/axios";
+import { apiGetMe } from "../../api/axios";
 import { Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,10 +9,10 @@ import {
   faRightToBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { LOCALSTORAGE_TOKEN } from "../constant";
+import { LOCAL_STORAGE_TOKEN } from "../../constant";
 import { useRouter } from "next/router";
 
-export const NavBar: React.FC = () => {
+export const NavigationBar: React.FC = () => {
   const queryClient = useQueryClient();
   let router = useRouter();
 
@@ -20,7 +20,7 @@ export const NavBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
-    localStorage.removeItem(LOCALSTORAGE_TOKEN);
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN);
     queryClient.invalidateQueries("me");
   };
 

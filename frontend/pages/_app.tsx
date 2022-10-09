@@ -5,19 +5,19 @@ import { ReactQueryDevtools } from "react-query/devtools";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { useRouter } from "next/router";
-import { NavBar } from "../components/nav-bar";
+import { NavigationBar } from "../components/layouts/NavigationBar";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   const { pathname } = useRouter();
-  const authRoutes = ["/login", "/signup"];
+  const authRoutes = ["/login", "/register"];
   const authRoute = authRoutes.includes(pathname);
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!authRoute && <NavBar />}
+      {!authRoute && <NavigationBar />}
       <div className={authRoute ? "" : "pt-16"}>
         <Component {...pageProps} />
       </div>

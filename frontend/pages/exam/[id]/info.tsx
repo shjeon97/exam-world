@@ -13,12 +13,12 @@ import {
   apiGetMe,
 } from "../../../api/axios";
 import { ICoreOutput, IEditExamInput, IUserInput } from "../../../common/type";
-import { FormButton } from "../../../components/forms/form-button";
-import { FormError } from "../../../components/forms/form-error";
+import { FormButton } from "../../../components/forms/FormButton";
+import { FormError } from "../../../components/forms/FormError";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import React, { useState, useEffect } from "react";
-import Tiptap from "../../../components/tiptap";
+import Tiptap from "../../../components/Tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";

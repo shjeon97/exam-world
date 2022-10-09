@@ -15,7 +15,7 @@ export class UserService {
 
   async editMe(
     user: User,
-    { email, name, password, editPassword }: EditMeInput,
+    { email, nickname, password, editPassword }: EditMeInput,
   ): Promise<CoreOutput> {
     try {
       const existsPassword = await this.user.findOne({
@@ -32,12 +32,14 @@ export class UserService {
         };
       }
 
-      name = name.trim().replace('/', '-');
+      nickname = nickname.trim().replace('/', '-');
       password = password.trim();
       email = email.trim();
 
-      if (name !== user.name) {
-        const existsName = await this.user.findOne({ where: { name } });
+      if (nickname !== user.nickname) {
+        const existsName = await this.user.findOne({
+          where: { nickname: nickname },
+        });
 
         if (existsName) {
           return { ok: false, error: '이미 존재하는 닉네임입니다.' };
@@ -52,7 +54,7 @@ export class UserService {
         }
       }
 
-      user.name = name;
+      user.nickname = nickname;
       user.email = email;
       if (editPassword) {
         user.password = editPassword;

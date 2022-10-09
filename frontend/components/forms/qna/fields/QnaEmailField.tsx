@@ -1,15 +1,15 @@
 import classNames from "classnames";
 import { FC } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
-import { ILoginInput } from "../../../../common/type";
+import { ILoginInput, ISendQuestionInput } from "../../../../common/type";
 import { FormError } from "../../FormError";
 
 type Props = {
-  register: UseFormRegister<ILoginInput>;
+  register: UseFormRegister<ISendQuestionInput>;
   error?: FieldError;
 };
 
-export const LoginEmailField: FC<Props> = ({ register, error }) => (
+export const QnaEmailField: FC<Props> = ({ register, error }) => (
   <div>
     <input
       type={"email"}
@@ -17,7 +17,7 @@ export const LoginEmailField: FC<Props> = ({ register, error }) => (
         "border-red-500 focus:border-red-500 focus:outline-red-500": error,
       })}
       {...register("email", {
-        required: "이메일 입력해 주세요.",
+        required: "답변받을 이메일 입력해 주세요.",
       })}
       placeholder="email"
     />

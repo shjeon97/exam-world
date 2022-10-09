@@ -7,8 +7,8 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 import { apiDeleteMe, apiEditMe, apiGetMe } from "../../api/axios";
 import { ICoreOutput, IEditMeInput, IUserInput } from "../../common/type";
-import { FormButton } from "../../components/forms/form-button";
-import { FormError } from "../../components/forms/form-error";
+import { FormButton } from "../../components/forms/FormButton";
+import { FormError } from "../../components/forms/FormError";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
@@ -100,7 +100,7 @@ const Info = () => {
     }
   };
 
-  const handleDeletUser = () => {
+  const handleDeleteUser = () => {
     Swal.fire({
       title: "Are you sure?",
       html: "정말 탈퇴하기를 원하십니까? <br> 탈퇴 후 기존 모든 정보는 복구가 불가능합니다.",
@@ -144,11 +144,11 @@ const Info = () => {
                   <input
                     className={classnames(`form-input`, {
                       "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        errors.name,
+                        errors.nickname,
                     })}
-                    {...register("name", registerOption.name)}
+                    {...register("nickname", registerOption.name)}
                     placeholder="닉네임"
-                    defaultValue={meData.name}
+                    defaultValue={meData.nickname}
                   />
                   <label className="text-sm font-medium">비밀번호</label>
                   <div className=" text-xs  text-gray-500">
@@ -210,7 +210,7 @@ const Info = () => {
                             !getValues().password,
                         }
                       )}
-                      onClick={() => handleDeletUser()}
+                      onClick={() => handleDeleteUser()}
                     >
                       탈퇴하기
                     </div>

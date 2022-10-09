@@ -1,11 +1,15 @@
 export interface IUserInput {
   id: number;
   email: string;
-  name: string;
+  nickname: string;
   password: string;
 }
 
-export interface ISignupUserInput extends IUserInput {}
+export interface IRegisterUserInput {
+  email: string;
+  nickname: string;
+  password: string;
+}
 
 export interface IEditMeInput extends IUserInput {
   editPassword?: string;

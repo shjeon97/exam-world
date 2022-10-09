@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SignupUserInput } from 'src/dto/signup-user.dto';
+import { RegisterUserInput } from 'src/dto/signup-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -16,18 +16,18 @@ export class AuthService {
   ) {}
   /** User 생성 */
   async createUser({
-    name,
+    nickname,
     password,
     email,
-  }: SignupUserInput): Promise<CoreOutput> {
+  }: RegisterUserInput): Promise<CoreOutput> {
     try {
-      name = name.trim().replace('/', '-');
+      nickname = nickname.trim().replace('/', '-');
       password = password.trim();
       email = email.trim();
 
-      const existsName = await this.user.findOne({ where: { name } });
+      const existsNickname = await this.user.findOne({ where: { nickname } });
 
-      if (existsName) {
+      if (existsNickname) {
         return { ok: false, error: '이미 존재하는 닉네임입니다.' };
       }
 
@@ -39,7 +39,7 @@ export class AuthService {
 
       await this.user.save(
         this.user.create({
-          name,
+          nickname,
           password,
           ...(email && { email }),
           role: UserRole.User,

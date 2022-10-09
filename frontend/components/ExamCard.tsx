@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { apiDeleteExam, apiGetMe } from "../api/axios";
 import { ICoreOutput, IUserInput } from "../common/type";
 import { Toast } from "../lib/sweetalert2/toast";
-import { LinkButton } from "./link-button";
+import { LinkButton } from "./buttons/LinkButton";
 
 interface ILinkCardProp {
   userId: number;
