@@ -12,7 +12,7 @@ export const FormButton: React.FC<IFormButtonProp> = ({
   actionText,
 }) => (
   <button
-    className={`w-full select-none font-medium focus:outline-none text-white py-2  transition-colors rounded ${
+    className={`w-full select-none font-medium focus:outline-none text-white py-2  transition-colors  ${
       canClick
         ? "bg-gray-800 hover:bg-gray-700 "
         : "bg-gray-400 pointer-events-none "

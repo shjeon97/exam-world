@@ -2,7 +2,7 @@ import Link from "next/link";
 import React from "react";
 
 interface ILinkCardProp {
-  name: string | any;
+  name: any;
   link: string;
 }
 

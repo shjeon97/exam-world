@@ -7,7 +7,7 @@ import { FormError } from "../FormError";
 import { useRouter } from "next/router";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import { QnaEmailField } from "./fields/QnaEmailField";
-import { useState } from "react";
+import { SetStateAction, useState } from "react";
 import Tiptap from "../../Tiptap";
 export const QnaForm = () => {
   const [tiptapValue, setTiptapValue] = useState("");
@@ -32,7 +32,7 @@ export const QnaForm = () => {
     },
   });
 
-  const tiptapEditor = (editor: any) => {
+  const tiptapEditor = (editor: { getHTML: () => SetStateAction<string> }) => {
     if (editor) {
       setTiptapValue(editor.getHTML());
     }

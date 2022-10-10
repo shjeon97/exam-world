@@ -1,13 +1,8 @@
 import Link from "next/link";
 import React from "react";
-import { useForm } from "react-hook-form";
-import { FormError } from "../components/forms/FormError";
-import classnames from "classnames";
-import { useMutation, useQuery } from "react-query";
-import { ICoreOutput, IRegisterUserInput } from "../common/type";
-import { apiGetMe, apiRegisterUser } from "../api/axios";
+import { useQuery } from "react-query";
+import { apiGetMe } from "../api/axios";
 import { Toast } from "../lib/sweetalert2/toast";
-import { FormButton } from "../components/forms/FormButton";
 import { useRouter } from "next/router";
 import { WEB_TITLE } from "../constant";
 import Head from "next/head";
@@ -37,8 +32,12 @@ const Register = () => {
       <div className=" bg-white">
         <div className="flex flex-col items-center justify-center h-screen p-6">
           <div className=" w-10/12 mx-auto md:w-96">
+            <h1 className=" font-bold text-3xl cursor-pointer text-center">
+              <Link href="/">Exam World! </Link>
+            </h1>{" "}
+            <br />
             <h1 className="mb-2 font-medium text-2xl">회원가입</h1>
-            <RegisterForm />s
+            <RegisterForm />
             <small>
               이미 가입하셨나요?
               <Link href="/login">

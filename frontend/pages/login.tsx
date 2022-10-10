@@ -32,6 +32,10 @@ const Login = () => {
       <div className=" bg-white">
         <div className="flex flex-col items-center justify-center h-screen p-6">
           <div className=" w-10/12 mx-auto md:w-96">
+            <h1 className=" font-bold text-3xl cursor-pointer text-center">
+              <Link href="/">Exam World! </Link>
+            </h1>
+            <br />
             <h1 className="mb-2 font-medium text-2xl">로그인</h1>
             <LoginForm />
             <small>

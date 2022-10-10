@@ -11,6 +11,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { LOCAL_STORAGE_TOKEN } from "../../constant";
 import { useRouter } from "next/router";
+import { Toast } from "../../lib/sweetalert2/toast";
 
 export const NavigationBar: React.FC = () => {
   const queryClient = useQueryClient();
@@ -19,14 +20,20 @@ export const NavigationBar: React.FC = () => {
   const { isLoading: meIsLoading, data: meData } = useQuery("me", apiGetMe);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem(LOCAL_STORAGE_TOKEN);
     queryClient.invalidateQueries("me");
+    window.location.reload();
   };
 
   const clickCreateExamButton = () => {
     if (!meIsLoading && !meData) {
-      alert("해당기능은 로그인이 필요합니다.");
+      Toast.fire({
+        icon: "error",
+        title: `해당기능은 로그인이 필요합니다.`,
+        position: "bottom-end",
+        timer: 3000,
+      });
     } else {
       router.push("/exam");
     }

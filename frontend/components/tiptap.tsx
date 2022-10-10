@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
@@ -607,7 +607,7 @@ const CustomImage = Image.extend({
   },
 });
 
-const Tiptap = (prop) => {
+const Tiptap = (prop: { editor: (arg0: Editor) => void }) => {
   const editor = useEditor({
     editable: true,
     extensions: [

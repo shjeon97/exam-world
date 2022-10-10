@@ -18,11 +18,11 @@ import { FormError } from "../../../components/forms/FormError";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import React, { useState, useEffect } from "react";
-import Tiptap from "../../../components/Tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import { GetServerSideProps } from "next";
+import Tiptap from "../../../components/tiptap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -160,15 +160,15 @@ export default function ExamInfo({ id }) {
       isCorrectAnswer: rest[`is-correct-answer-${theId}`],
     }));
 
-    let isMulitpleChoiceNull = false;
+    let isMultipleChoiceNull = false;
 
     multipleChoice.map((e) => {
       if (e.multipleChoice.trim() == "") {
-        isMulitpleChoiceNull = true;
+        isMultipleChoiceNull = true;
       }
     });
 
-    if (isMulitpleChoiceNull) {
+    if (isMultipleChoiceNull) {
       return Toast.fire({
         icon: "error",
         text: "보기를 입력하세요.",

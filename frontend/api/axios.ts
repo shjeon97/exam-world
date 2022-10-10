@@ -102,14 +102,14 @@ export const apiCreateMultipleChoice = async ({
 export const apiEditMe = async ({
   email,
   password,
-  nickname: name,
+  nickname,
   editPassword,
 }: IEditMeInput) => {
   return axios
     .patch("/user/me", {
       email,
       password,
-      name,
+      nickname,
       editPassword,
     })
     .then((res) => {
