@@ -12,8 +12,7 @@ import {
   apiFindQuestionListByExamId,
   apiGetMe,
 } from "../../../api/axios";
-import { ICoreOutput, IEditExamInput, IUserInput } from "../../../common/type";
-import { FormButton } from "../../../components/forms/FormButton";
+import { IUserInput } from "../../../common/type";
 import { FormError } from "../../../components/forms/FormError";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
@@ -23,13 +22,14 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import { GetServerSideProps } from "next";
 import Tiptap from "../../../components/tiptap";
+import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamForm";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const { id } = query;
   return {
     props: {
-      id,
+      id: +id,
     },
   };
 };
@@ -59,34 +59,9 @@ export default function ExamInfo({ id }) {
     router.push("/login");
   }
 
-  const {
-    register: editExamRegister,
-    getValues: editExamGetValues,
-    formState: { errors: editExamErrors, isValid: editExamIsValid },
-    handleSubmit: editExamHandleSubmit,
-  } = useForm<IEditExamInput>({ mode: "onChange" });
-
-  const editExamRegisterOption = {
-    name: { required: "사용할 제목 입력해 주세요.", maxLength: 30 },
-    title: { maxLength: 30 },
-  };
-
   const createQuestionAndMulitpleChoiceRegisterOption = {
     score: { required: "사용할 점수 입력해 주세요." },
   };
-
-  const editExamMutation = useMutation(apiEditExam, {
-    onSuccess: async (data: ICoreOutput) => {
-      if (data.ok) {
-        Toast.fire({
-          icon: "success",
-          title: "수정 완료",
-          position: "top-end",
-          timer: 1200,
-        });
-      }
-    },
-  });
 
   const createQuestionMutation = useMutation(apiCreateQuestion);
   const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
@@ -112,11 +87,6 @@ export default function ExamInfo({ id }) {
     if (editor) {
       setTiptap(editor);
     }
-  };
-
-  const editExamOnSubmit = () => {
-    const editExamValues = editExamGetValues();
-    editExamMutation.mutate({ id, ...editExamValues });
   };
 
   const {
@@ -262,51 +232,7 @@ export default function ExamInfo({ id }) {
             <div className="p-10  m-5 flex flex-col items-center justify-center ">
               <div className="  max-w-4xl">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
-                <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
-                  <label className="text-lg font-medium">제목</label>
-                  <div className=" text-xs  text-gray-500">
-                    시험의 제목을 입력하세요. 예) 자동차 2종보통
-                  </div>
-                  <input
-                    className={classNames(`form-input`, {
-                      "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        editExamErrors.name,
-                    })}
-                    {...editExamRegister("name", editExamRegisterOption.name)}
-                    placeholder="제목"
-                    defaultValue={findExamByIdData.exam.name}
-                  />
-                  <label className="text-lg font-medium">설명</label>
-                  <div className=" text-xs  text-gray-500">
-                    시험에 관련된 설명을 자유롭게 쓰세요. (30자 이내)
-                  </div>
-                  <input
-                    className={classNames(`form-input `, {
-                      "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        editExamErrors.title,
-                    })}
-                    {...editExamRegister("title", editExamRegisterOption.title)}
-                    placeholder="설명"
-                    defaultValue={findExamByIdData.exam.title}
-                  />
-
-                  {Object.values(editExamErrors).length > 0 &&
-                    Object.values(editExamErrors).map((error, key) => {
-                      return (
-                        <div key={`form-error-edit-exam-${key}`}>
-                          <FormError errorMessage={`${error.message}`} />
-                          <br />
-                        </div>
-                      );
-                    })}
-                  <div className="mt-2">
-                    <FormButton
-                      canClick={editExamIsValid}
-                      loading={false}
-                      actionText={"시험제목 및 설명수정"}
-                    />
-                  </div>
-                </form>
+                <EditExamForm id={id} />
                 <div className="mt-4">
                   {findQuestionListByExamIdData &&
                     findQuestionListByExamIdData.questionList.length > 0 && (
