@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   apiCreateMultipleChoice,
   apiCreateQuestion,
-  apiEditExam,
   apiFindExamById,
   apiFindMultipleChoiceListByExamId,
   apiFindQuestionListByExamId,
@@ -59,7 +58,7 @@ export default function ExamInfo({ id }) {
     router.push("/login");
   }
 
-  const createQuestionAndMulitpleChoiceRegisterOption = {
+  const createQuestionAndMultipleChoiceRegisterOption = {
     score: { required: "사용할 점수 입력해 주세요." },
   };
 
@@ -259,20 +258,20 @@ export default function ExamInfo({ id }) {
                           }
                           className="button "
                         >
-                          ➕
+                          ✚
                         </div>
                       </div>
                     )}
-                  <label className="text-lg font-medium ">
-                    문제 - {page}번
-                  </label>
-                  <Tiptap editor={tiptapEditor} />
                 </div>
                 <form
                   onSubmit={createQuestionAndMultipleChoiceHandleSubmit(
                     createQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
+                  <label className="text-lg font-medium ">
+                    문제 - {page}번
+                  </label>
+                  <Tiptap editor={tiptapEditor} />
                   <label className="text-lg font-medium">점수</label>
                   <div className=" text-xs  text-gray-500">
                     해당 문제 맞출시 줄 점수를 입력하세요.
@@ -280,7 +279,7 @@ export default function ExamInfo({ id }) {
                   <input
                     {...createQuestionAndMultipleChoiceRegister(
                       "score",
-                      createQuestionAndMulitpleChoiceRegisterOption.score
+                      createQuestionAndMultipleChoiceRegisterOption.score
                     )}
                     className={classNames(`form-input `, {
                       "border-red-500 focus:border-red-500 focus:outline-red-500":
