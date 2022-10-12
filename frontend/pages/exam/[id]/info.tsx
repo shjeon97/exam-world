@@ -4,8 +4,8 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
-  apiCreateMultipleChoice,
-  apiCreateQuestion,
+  apiSaveMultipleChoice,
+  apiSaveQuestion,
   apiDeleteMultipleChoiceList,
   apiFindExamById,
   apiFindMultipleChoiceListByExamId,
@@ -63,8 +63,8 @@ export default function ExamInfo({ id }) {
     score: { required: "사용할 점수 입력해 주세요." },
   };
 
-  const createQuestionMutation = useMutation(apiCreateQuestion);
-  const saveMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
+  const saveQuestionMutation = useMutation(apiSaveQuestion);
+  const saveMultipleChoiceMutation = useMutation(apiSaveMultipleChoice);
   const deleteMultipleChoiceListMutation = useMutation(
     apiDeleteMultipleChoiceList
   );
@@ -93,13 +93,13 @@ export default function ExamInfo({ id }) {
   };
 
   const {
-    register: createQuestionAndMultipleChoiceRegister,
-    getValues: createQuestionAndMultipleChoiceGetValues,
-    setValue: createQuestionAndMultipleChoiceSetValue,
-    handleSubmit: createQuestionAndMultipleChoiceHandleSubmit,
+    register: saveQuestionAndMultipleChoiceRegister,
+    getValues: saveQuestionAndMultipleChoiceGetValues,
+    setValue: saveQuestionAndMultipleChoiceSetValue,
+    handleSubmit: saveQuestionAndMultipleChoiceHandleSubmit,
     formState: {
-      errors: createQuestionAndMultipleChoiceErrors,
-      isValid: createQuestionAndMultipleChoiceIsValid,
+      errors: saveQuestionAndMultipleChoiceErrors,
+      isValid: saveQuestionAndMultipleChoiceIsValid,
     },
   } = useForm<any>({ mode: "onChange" });
 
@@ -117,7 +117,7 @@ export default function ExamInfo({ id }) {
     findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
   ]);
 
-  const createQuestionAndMultipleChoiceOnSubmit = async () => {
+  const saveQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
     if (questionValue.length < 8) {
       return Toast.fire({
@@ -127,7 +127,7 @@ export default function ExamInfo({ id }) {
       });
     }
 
-    const { score, ...rest } = createQuestionAndMultipleChoiceGetValues();
+    const { score, ...rest } = saveQuestionAndMultipleChoiceGetValues();
     const multipleChoice = multipleChoiceNumber.map((theId) => ({
       multipleChoice: rest[`multipleChoice-${theId}`],
       isCorrectAnswer: rest[`is-correct-answer-${theId}`],
@@ -149,7 +149,7 @@ export default function ExamInfo({ id }) {
       });
     }
 
-    await createQuestionMutation.mutateAsync({
+    await saveQuestionMutation.mutateAsync({
       text: questionValue,
       page: page,
       examId: +id,
@@ -206,13 +206,13 @@ export default function ExamInfo({ id }) {
         onAddOptionClick();
       });
 
-    createQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
+    saveQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
   };
 
   const onDeleteClick = (idToDelete: string) => {
     setMultipleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
-    createQuestionAndMultipleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
-    createQuestionAndMultipleChoiceSetValue(
+    saveQuestionAndMultipleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
+    saveQuestionAndMultipleChoiceSetValue(
       `is-correct-answer-${idToDelete}`,
       ""
     );
@@ -221,7 +221,7 @@ export default function ExamInfo({ id }) {
   const onCreateQuestionAndMultipleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
-    createQuestionAndMultipleChoiceSetValue("score", 1);
+    saveQuestionAndMultipleChoiceSetValue("score", 1);
     setFindMultipleChoiceListByPage([]);
     setMultipleChoiceNumber([]);
   };
@@ -272,8 +272,8 @@ export default function ExamInfo({ id }) {
                     )}
                 </div>
                 <form
-                  onSubmit={createQuestionAndMultipleChoiceHandleSubmit(
-                    createQuestionAndMultipleChoiceOnSubmit
+                  onSubmit={saveQuestionAndMultipleChoiceHandleSubmit(
+                    saveQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
                   <label className="text-lg font-medium ">
@@ -285,20 +285,20 @@ export default function ExamInfo({ id }) {
                     해당 문제 맞출시 줄 점수를 입력하세요.
                   </div>
                   <input
-                    {...createQuestionAndMultipleChoiceRegister(
+                    {...saveQuestionAndMultipleChoiceRegister(
                       "score",
                       createQuestionAndMultipleChoiceRegisterOption.score
                     )}
                     className={classNames(`form-input `, {
                       "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        createQuestionAndMultipleChoiceErrors.score,
+                        saveQuestionAndMultipleChoiceErrors.score,
                     })}
                     type="number"
                     defaultValue={1}
                   />
-                  {Object.values(createQuestionAndMultipleChoiceErrors).length >
+                  {Object.values(saveQuestionAndMultipleChoiceErrors).length >
                     0 &&
-                    Object.values(createQuestionAndMultipleChoiceErrors).map(
+                    Object.values(saveQuestionAndMultipleChoiceErrors).map(
                       (error, key) => {
                         return (
                           <div
@@ -337,7 +337,7 @@ export default function ExamInfo({ id }) {
                                       </div>
                                       <input
                                         className="form-input "
-                                        {...createQuestionAndMultipleChoiceRegister(
+                                        {...saveQuestionAndMultipleChoiceRegister(
                                           `multipleChoice-${id}`
                                         )}
                                         defaultValue={
@@ -352,7 +352,7 @@ export default function ExamInfo({ id }) {
                                         정답일시 체크
                                       </p>
                                       <input
-                                        {...createQuestionAndMultipleChoiceRegister(
+                                        {...saveQuestionAndMultipleChoiceRegister(
                                           `is-correct-answer-${id}`
                                         )}
                                         type="checkbox"

@@ -56,7 +56,7 @@ export const apiLogin = async ({ email, password }: ILoginInput) => {
     });
 };
 
-export const apiCreateQuestion = async ({
+export const apiSaveQuestion = async ({
   examId,
   page,
   text,
@@ -77,7 +77,7 @@ export const apiCreateQuestion = async ({
     });
 };
 
-export const apiCreateMultipleChoice = async ({
+export const apiSaveMultipleChoice = async ({
   examId,
   no,
   text,

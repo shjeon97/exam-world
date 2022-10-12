@@ -9,7 +9,7 @@ import {
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateMultipleChoiceInput as SaveMultipleChoiceInput } from 'src/dto/create-multiple-choice.dto';
+import { SaveMultipleChoiceInput as SaveMultipleChoiceInput } from 'src/dto/save-multiple-choice.dto';
 import { DeleteMultipleChoiceListInput } from 'src/dto/delete-multiple-choice.dto';
 import { MultipleChoiceService } from './multiple-choice.service';
 
