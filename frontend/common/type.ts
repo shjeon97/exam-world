@@ -95,3 +95,8 @@ export interface ICreateMultipleChoiceInput {
   isCorrectAnswer: number;
   page: number;
 }
+
+export interface IDeleteMultipleChoiceListInput {
+  examId: number;
+  page: number;
+}

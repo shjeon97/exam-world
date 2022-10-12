@@ -11,6 +11,7 @@ import {
   ISendQuestionInput,
   IRegisterUserInput,
   IUploadImageInput,
+  IDeleteMultipleChoiceListInput,
 } from "../common/type";
 
 axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_SEVER_BASE_URL}/api`;
@@ -140,6 +141,25 @@ export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
     .delete("/user/me", {
       data: {
         password,
+      },
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiDeleteMultipleChoiceList = async ({
+  examId,
+  page,
+}: IDeleteMultipleChoiceListInput) => {
+  return axios
+    .delete("/multiple-choice", {
+      data: {
+        examId,
+        page,
       },
     })
     .then((res) => {

@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   apiCreateMultipleChoice,
   apiCreateQuestion,
+  apiDeleteMultipleChoiceList,
   apiFindExamById,
   apiFindMultipleChoiceListByExamId,
   apiFindQuestionListByExamId,
@@ -63,7 +64,10 @@ export default function ExamInfo({ id }) {
   };
 
   const createQuestionMutation = useMutation(apiCreateQuestion);
-  const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
+  const saveMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
+  const deleteMultipleChoiceListMutation = useMutation(
+    apiDeleteMultipleChoiceList
+  );
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
     useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
@@ -152,8 +156,12 @@ export default function ExamInfo({ id }) {
       score: +score,
     });
 
+    await deleteMultipleChoiceListMutation.mutateAsync({
+      examId: +id,
+      page,
+    });
     multipleChoice.map(async (e, index) => {
-      await createMultipleChoiceMutation.mutateAsync({
+      await saveMultipleChoiceMutation.mutateAsync({
         examId: +id,
         text: e.multipleChoice,
         isCorrectAnswer: e.isCorrectAnswer,
@@ -162,8 +170,6 @@ export default function ExamInfo({ id }) {
       });
     });
 
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
     await Toast.fire({
       icon: "success",
       text: "저장완료.",
@@ -171,6 +177,8 @@ export default function ExamInfo({ id }) {
       timer: 1200,
     });
     onCreateQuestionAndMultipleChoiceClick();
+    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
   };
 
   const handleChangePage = (page: number) => {
