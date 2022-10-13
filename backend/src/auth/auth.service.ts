@@ -70,7 +70,8 @@ export class AuthService {
       if (!user) {
         return {
           ok: false,
-          error: '존재하지 않는 유저입니다.',
+          error:
+            '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
         };
       }
 
@@ -79,12 +80,13 @@ export class AuthService {
       if (!passwordCorrect) {
         return {
           ok: false,
-          error: '비밀번호가 일치하지 않습니다.',
+          error:
+            '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
         };
       }
 
-      const palyload = { id: user.id };
-      const token = this.jwtService.sign(palyload);
+      const payload = { id: user.id };
+      const token = this.jwtService.sign(payload);
 
       return {
         ok: true,
