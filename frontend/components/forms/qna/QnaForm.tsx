@@ -8,7 +8,8 @@ import { useRouter } from "next/router";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import { QnaEmailField } from "./fields/QnaEmailField";
 import { SetStateAction, useState } from "react";
-import Tiptap from "../../Tiptap";
+import Tiptap from "../../tiptap";
+
 export const QnaForm = () => {
   const [tiptapValue, setTiptapValue] = useState("");
   const {
