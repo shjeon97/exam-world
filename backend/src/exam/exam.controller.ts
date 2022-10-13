@@ -53,7 +53,7 @@ export class ExamController {
   @UseGuards(JwtAuthGuard)
   @Get('/me')
   async findExamListByme(@GetUser() user): Promise<FindExamListByMeOutput> {
-    return this.examService.findExamListByme(user);
+    return this.examService.findExamListByMe(user);
   }
 
   @ApiOperation({ summary: '모든 시험 정보 가져오기' })

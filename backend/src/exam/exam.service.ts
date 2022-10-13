@@ -85,7 +85,7 @@ export class ExamService {
     }
   }
 
-  async findExamListByme(user: any) {
+  async findExamListByMe(user: any) {
     try {
       const examList = await this.exam.find({
         where: { user: { id: user.id } },
@@ -168,6 +168,7 @@ export class ExamService {
     try {
       const multipleChoiceList = await this.multipleChoice.find({
         where: { exam: { id: examId } },
+        order: { no: 'ASC' },
       });
 
       return {

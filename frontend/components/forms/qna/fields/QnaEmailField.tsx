@@ -11,6 +11,7 @@ type Props = {
 
 export const QnaEmailField: FC<Props> = ({ register, error }) => (
   <div>
+    <label>이메일</label>
     <input
       type={"email"}
       className={classNames(`form-input`, {
@@ -19,7 +20,7 @@ export const QnaEmailField: FC<Props> = ({ register, error }) => (
       {...register("email", {
         required: "답변받을 이메일 입력해 주세요.",
       })}
-      placeholder="email"
+      placeholder="답변받을 이메일 입력해 주세요."
     />
     {error && <FormError errorMessage={error.message} />}
   </div>

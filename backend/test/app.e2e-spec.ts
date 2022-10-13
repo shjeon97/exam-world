@@ -279,7 +279,7 @@ describe('AppController (e2e)', () => {
           });
       });
 
-      it('내 비밀번호정보 수정', () => {
+      it('내 비밀번호 정보 수정', () => {
         return request(app.getHttpServer())
           .patch(API_USER_ME)
           .send({

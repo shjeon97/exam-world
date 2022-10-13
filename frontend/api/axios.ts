@@ -23,6 +23,7 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
+// 회원가입
 export const apiRegisterUser = async ({
   email,
   nickname,
@@ -42,6 +43,7 @@ export const apiRegisterUser = async ({
     });
 };
 
+// 로그인
 export const apiLogin = async ({ email, password }: ILoginInput) => {
   return axios
     .post("/auth/login", {
@@ -56,6 +58,7 @@ export const apiLogin = async ({ email, password }: ILoginInput) => {
     });
 };
 
+// 질문 저장 (생성,변경)
 export const apiSaveQuestion = async ({
   examId,
   page,
@@ -77,6 +80,7 @@ export const apiSaveQuestion = async ({
     });
 };
 
+// 보기 저장 (생성,변경)
 export const apiSaveMultipleChoice = async ({
   examId,
   no,
@@ -100,6 +104,7 @@ export const apiSaveMultipleChoice = async ({
     });
 };
 
+// 유저 정보 수정
 export const apiEditMe = async ({
   email,
   password,
@@ -121,6 +126,7 @@ export const apiEditMe = async ({
     });
 };
 
+// 시험 정보 수정
 export const apiEditExam = async ({ id, name, title }: IEditExamInput) => {
   return axios
     .patch("/exam", {
@@ -136,6 +142,7 @@ export const apiEditExam = async ({ id, name, title }: IEditExamInput) => {
     });
 };
 
+// 계정 삭제
 export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
   return axios
     .delete("/user/me", {
@@ -151,6 +158,7 @@ export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
     });
 };
 
+// 보기 리스트 삭제
 export const apiDeleteMultipleChoiceList = async ({
   examId,
   page,
@@ -170,6 +178,7 @@ export const apiDeleteMultipleChoiceList = async ({
     });
 };
 
+// 시험 삭제 (문제, 보기 포함)
 export const apiDeleteExam = async (id: number) => {
   return axios
     .delete(`exam/${id}`)
@@ -181,6 +190,7 @@ export const apiDeleteExam = async (id: number) => {
     });
 };
 
+// 내 정보
 export const apiGetMe = async () => {
   return axios
     .get("user/me")
@@ -192,6 +202,7 @@ export const apiGetMe = async () => {
     });
 };
 
+// 모든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정)
 export const apiAllExamList = async () => {
   return axios
     .get("exam/all")
@@ -203,6 +214,7 @@ export const apiAllExamList = async () => {
     });
 };
 
+// 내가 만든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정))
 export const apiFindExamListByMe = async () => {
   return axios
     .get("exam/me")
@@ -214,6 +226,7 @@ export const apiFindExamListByMe = async () => {
     });
 };
 
+// 시험과 관련된 문제 정보 가져오기
 export const apiFindQuestionListByExamId = async (examId: number) => {
   if (examId) {
     return axios
@@ -227,6 +240,7 @@ export const apiFindQuestionListByExamId = async (examId: number) => {
   }
 };
 
+// 시험과 관련된 보기 정보 가져오기
 export const apiFindMultipleChoiceListByExamId = async (examId: number) => {
   if (examId) {
     return axios
@@ -240,6 +254,7 @@ export const apiFindMultipleChoiceListByExamId = async (examId: number) => {
   }
 };
 
+// 시험 정보 가져오기
 export const apiFindExamById = async (id: number) => {
   if (id) {
     return axios
@@ -253,6 +268,7 @@ export const apiFindExamById = async (id: number) => {
   }
 };
 
+// 이미지 업로드
 export const apiUploadImage = async ({ file }: IUploadImageInput) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -267,6 +283,7 @@ export const apiUploadImage = async ({ file }: IUploadImageInput) => {
     });
 };
 
+// 문의사항 전송
 export const apiSendQuestion = async ({
   email,
   question,
@@ -284,6 +301,7 @@ export const apiSendQuestion = async ({
     });
 };
 
+// 시험 생성
 export const apiCreateExam = async ({ name, title }: ICreateExamInput) => {
   return axios
     .post("/exam", {
