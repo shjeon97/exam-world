@@ -180,7 +180,7 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.OK)
           .expect({
             ok: false,
-            error: '존재하지 않는 유저입니다.',
+            error: '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
           });
       });
 
@@ -194,7 +194,7 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.OK)
           .expect({
             ok: false,
-            error: '비밀번호가 일치하지 않습니다.',
+            error: '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
           });
       });
     });
