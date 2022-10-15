@@ -22,24 +22,12 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
-import { useMutation } from "react-query";
-import { apiUploadImage } from "../api/axios";
-import { IUploadImageOutput } from "../common/type";
 import Youtube from "@tiptap/extension-youtube";
 
 const MenuBar = ({ editor }: any) => {
   if (!editor) {
     return null;
   }
-
-  const uploadImageMeMutation = useMutation(apiUploadImage, {
-    onSuccess: async (data: IUploadImageOutput) => {
-      if (data.ok) {
-        console.log(data.fileURL);
-        editor.chain().focus().setImage({ src: data.fileURL }).run();
-      }
-    },
-  });
 
   const addYoutubeVideo = () => {
     Swal.fire({
@@ -59,6 +47,19 @@ const MenuBar = ({ editor }: any) => {
     });
   };
 
+  function getBase64(event) {
+    let file = event;
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      console.log(reader.result);
+      editor.chain().focus().setImage({ src: reader.result }).run();
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
+  }
+
   const handleUploadImage = () => {
     Swal.fire({
       title: "Select image",
@@ -72,7 +73,7 @@ const MenuBar = ({ editor }: any) => {
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
-        uploadImageMeMutation.mutate({ file: result.value });
+        getBase64(result.value);
       }
     });
   };
@@ -619,7 +620,7 @@ const Tiptap = (prop: { editor: (arg0: Editor) => void }) => {
       TableHeader,
       CustomTableCell,
       Underline,
-      CustomImage,
+      CustomImage.configure({ allowBase64: true }),
       Youtube,
       TextAlign.configure({
         types: ["heading", "paragraph"],
