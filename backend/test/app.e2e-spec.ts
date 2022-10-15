@@ -180,7 +180,12 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.OK)
           .expect({
             ok: false,
+<<<<<<< HEAD
             error: '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
+=======
+            error:
+              '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
+>>>>>>> 7b06b2ce7779b8591b9e1f2dd44ae417203fdc64
           });
       });
 
@@ -194,7 +199,12 @@ describe('AppController (e2e)', () => {
           .expect(HttpStatus.OK)
           .expect({
             ok: false,
+<<<<<<< HEAD
             error: '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
+=======
+            error:
+              '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
+>>>>>>> 7b06b2ce7779b8591b9e1f2dd44ae417203fdc64
           });
       });
     });

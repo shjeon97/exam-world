@@ -4,6 +4,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { json, urlencoded } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
@@ -11,6 +12,9 @@ async function bootstrap() {
   });
   // 유효성검사 파이프 전역 설정
   app.useGlobalPipes(new ValidationPipe());
+
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
 
   if (process.env.NODE_ENV === 'prod') {
     app.enableCors({
@@ -24,12 +28,9 @@ async function bootstrap() {
     });
   }
 
-  app.useStaticAssets(
-   join(__dirname, '..', 'public'),
-    {
-      prefix: '/public',
-    },
-  );
+  app.useStaticAssets(join(__dirname, '..', 'public'), {
+    prefix: '/public',
+  });
 
   // 전역 Route에 사용할 문자 정의
   app.setGlobalPrefix('api');

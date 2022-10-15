@@ -21,8 +21,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import { GetServerSideProps } from "next";
-import Tiptap from "../../../components/tiptap";
 import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamForm";
+import Tiptap from "../../../components/Tiptap";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -271,15 +271,13 @@ export default function ExamInfo({ id }) {
                       </div>
                     )}
                 </div>
+                <label className="text-lg font-medium ">문제 - {page}번</label>
+                <Tiptap editor={tiptapEditor} />
                 <form
                   onSubmit={saveQuestionAndMultipleChoiceHandleSubmit(
                     saveQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
-                  <label className="text-lg font-medium ">
-                    문제 - {page}번
-                  </label>
-                  <Tiptap editor={tiptapEditor} />
                   <label className="text-lg font-medium">점수</label>
                   <div className=" text-xs  text-gray-500">
                     해당 문제 맞출시 줄 점수를 입력하세요.
