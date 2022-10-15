@@ -52,7 +52,6 @@ const MenuBar = ({ editor }: any) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
     reader.onload = function () {
-      console.log(reader.result);
       editor.chain().focus().setImage({ src: reader.result }).run();
     };
     reader.onerror = function (error) {
