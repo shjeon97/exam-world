@@ -148,11 +148,18 @@ const Test = ({ id }) => {
                         {question.page}번 문제 ({question.score}점)
                       </div>
                       <br />
-
-                      <div
-                        className=" border border-gray-400 p-5  font-bold rounded"
-                        dangerouslySetInnerHTML={{ __html: question.text }}
-                      />
+                      <div className=" border border-gray-400 rounded overflow-auto  ">
+                        <div
+                          contentEditable="true"
+                          translate="no"
+                          tabIndex={0}
+                          className="ProseMirror prose prose-sm sm:prose lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
+                        >
+                          <div
+                            dangerouslySetInnerHTML={{ __html: question.text }}
+                          />
+                        </div>
+                      </div>
                       <br />
                       {findMultipleChoiceListByExamIdData.multipleChoiceList
                         .filter((e) => e.page === question.page)
@@ -169,7 +176,7 @@ const Test = ({ id }) => {
                               className={classNames(
                                 `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
                                 {
-                                  "text-blue-700 text-lg hover:text-blue-700  hover:no-underline":
+                                  "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
                                     multipleChoiceIsCheckedList.find(
                                       (e) =>
                                         e.privateKey ===

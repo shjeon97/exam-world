@@ -34,6 +34,12 @@ export default function CreateExam() {
       title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
       position: "top-end",
       timer: 3000,
+      showClass: {
+        popup: "none",
+      },
+      hideClass: {
+        popup: " animate__fadeOutUp",
+      },
     });
     router.push("/login");
   }

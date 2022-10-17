@@ -237,7 +237,7 @@ export default function ExamInfo({ id }) {
         !findQuestionListByIdIsLoading && (
           <>
             <div className="p-10  m-5 flex flex-col items-center justify-center ">
-              <div className="  max-w-4xl">
+              <div className="  max-w-3xl">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <EditExamForm id={id} />
                 <div className="mt-4">

@@ -34,6 +34,12 @@ const MenuBar = ({ editor }: any) => {
       title: "Enter YouTube URL",
       input: "text",
       confirmButtonText: "업로드",
+      showClass: {
+        popup: "none",
+      },
+      hideClass: {
+        popup: " animate__fadeOutUp",
+      },
       showCancelButton: true,
       cancelButtonText: "취소",
     }).then((result) => {
@@ -66,6 +72,12 @@ const MenuBar = ({ editor }: any) => {
       inputAttributes: {
         accept: "image/*",
         "aria-label": "Upload your profile picture",
+      },
+      showClass: {
+        popup: "none",
+      },
+      hideClass: {
+        popup: " animate__fadeOutUp",
       },
       confirmButtonText: "업로드",
       showCancelButton: true,
@@ -607,7 +619,7 @@ const CustomImage = Image.extend({
   },
 });
 
-const Tiptap = (prop: { editor: (arg0: Editor) => void }) => {
+const Tiptap = (props: { editor: (arg0: Editor) => void }) => {
   const editor = useEditor({
     editable: true,
     extensions: [
@@ -632,7 +644,7 @@ const Tiptap = (prop: { editor: (arg0: Editor) => void }) => {
       },
     },
   });
-  prop.editor(editor);
+  props.editor(editor);
 
   return (
     <>
