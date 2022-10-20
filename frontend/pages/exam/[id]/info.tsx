@@ -11,6 +11,7 @@ import {
   apiFindMultipleChoiceListByExamId,
   apiFindQuestionListByExamId,
   apiGetMe,
+  apiDeleteExamLastPage,
 } from "../../../api/axios";
 import { IUserInput } from "../../../common/type";
 import { FormError } from "../../../components/forms/FormError";
@@ -23,6 +24,7 @@ import { v4 as uuidv4 } from "uuid";
 import { GetServerSideProps } from "next";
 import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamForm";
 import Tiptap from "../../../components/Tiptap";
+import Swal from "sweetalert2";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -68,6 +70,22 @@ export default function ExamInfo({ id }) {
   const deleteMultipleChoiceListMutation = useMutation(
     apiDeleteMultipleChoiceList
   );
+
+  const deleteExamLastPageMutation = useMutation(apiDeleteExamLastPage, {
+    onSuccess: async (data) => {
+      if (data.ok) {
+        await Toast.fire({
+          icon: "success",
+          text: "삭제완료.",
+          position: "top-end",
+          timer: 1200,
+        });
+        onCreateQuestionAndMultipleChoiceClick();
+        queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+        queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+      }
+    },
+  });
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
     useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
@@ -226,6 +244,23 @@ export default function ExamInfo({ id }) {
     setMultipleChoiceNumber([]);
   };
 
+  const handleDeleteExamPage = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      html: "정말 문항 삭제 원하십니까? <br> 삭제 후 기존 모든 정보는 복구가 불가능합니다.",
+      icon: "warning",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제하기",
+      showCancelButton: true,
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteExamLastPageMutation.mutate(+id);
+      }
+    });
+  };
+
   return (
     <>
       <Head>
@@ -236,8 +271,8 @@ export default function ExamInfo({ id }) {
         !findMultipleChoiceListByExamIdIsLoading &&
         !findQuestionListByIdIsLoading && (
           <>
-            <div className="p-10  m-5 flex flex-col items-center justify-center ">
-              <div className="  max-w-3xl">
+            <div className="p-10  m-5 flex flex-col items-center justify-center">
+              <div className="sm:max-w-2xl max-w-xs  ">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <EditExamForm id={id} />
                 <div className="mt-4">
@@ -271,16 +306,30 @@ export default function ExamInfo({ id }) {
                       </div>
                     )}
                 </div>
-                <label className="text-lg font-medium ">문제 - {page}번</label>
+                <br />
+                <div className="flex flex-row justify-between items-center">
+                  <div className="text-lg font-medium">문제 {page}번</div>
+                  {page ===
+                    findQuestionListByExamIdData?.questionList.length && (
+                    <div
+                      onClick={() => handleDeleteExamPage()}
+                      className="button"
+                    >
+                      삭제
+                    </div>
+                  )}
+                </div>
                 <Tiptap editor={tiptapEditor} />
                 <form
                   onSubmit={saveQuestionAndMultipleChoiceHandleSubmit(
                     saveQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
-                  <label className="text-lg font-medium">점수</label>
-                  <div className=" text-xs  text-gray-500">
-                    해당 문제 맞출시 줄 점수를 입력하세요.
+                  <div className="flex flex-row justify-between">
+                    <label className="text-lg font-medium">점수</label>
+                    <div className=" text-xs  text-gray-500">
+                      해당 문제 맞출시 줄 점수를 입력하세요.
+                    </div>
                   </div>
                   <input
                     {...saveQuestionAndMultipleChoiceRegister(

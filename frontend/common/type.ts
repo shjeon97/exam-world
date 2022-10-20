@@ -100,3 +100,8 @@ export interface IDeleteMultipleChoiceListInput {
   examId: number;
   page: number;
 }
+
+export interface IDeleteExamPageInput {
+  examId: number;
+  page: number;
+}

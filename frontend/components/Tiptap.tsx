@@ -649,11 +649,8 @@ const Tiptap = (props: { editor: (arg0: Editor) => void }) => {
   return (
     <>
       <MenuBar editor={editor} />
-      <div
-        style={{ maxHeight: "80vh" }}
-        className="  overflow-auto  border-2 border-gray-500"
-      >
-        <EditorContent className="min-w-min" editor={editor} />
+      <div className="overflow-auto border-2 border-gray-500">
+        <EditorContent editor={editor} />
       </div>
     </>
   );

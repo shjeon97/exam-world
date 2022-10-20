@@ -107,4 +107,16 @@ export class ExamController {
   ): Promise<CoreOutput> {
     return this.examService.deleteExamById(user, id);
   }
+
+  @ApiOperation({ summary: '시험 페이지 삭제하기' })
+  @ApiResponse({ type: CoreOutput })
+  @Role(['Any'])
+  @UseGuards(JwtAuthGuard)
+  @Delete(':examId/last-page')
+  async deleteExamLastPage(
+    @GetUser() user,
+    @Param() { examId }: { examId: number },
+  ): Promise<CoreOutput> {
+    return this.examService.deleteExamLastPage(user, examId);
+  }
 }

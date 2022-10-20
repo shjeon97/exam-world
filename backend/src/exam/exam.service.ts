@@ -141,6 +141,37 @@ export class ExamService {
     }
   }
 
+  async deleteExamLastPage(user: User, examId: number): Promise<CoreOutput> {
+    try {
+      const exam = await this.exam.findOne({ where: { id: examId } });
+
+      if (!exam) {
+        return { ok: false, error: '존재하지 않는 시험 정보 입니다.' };
+      }
+
+      if (user.role === UserRole.User && user.id !== exam.userId) {
+        return {
+          ok: false,
+          error: '다른 사용자가 만든 문항을 삭제하실 수 없습니다.',
+        };
+      }
+
+      const { page } = await this.question.findOne({
+        where: { exam: { id: examId } },
+        order: { page: 'DESC' },
+      });
+
+      await this.question.delete({ exam: { id: exam.id }, page });
+
+      await this.multipleChoice.delete({ exam: { id: exam.id }, page });
+
+      return { ok: true };
+    } catch (error) {
+      console.log(error);
+      return { ok: false, error: '마지막 문항 삭제 실패' };
+    }
+  }
+
   async findQuestionListByExamId(
     examId: number,
   ): Promise<FindQuestionListByExamIdOutput> {
