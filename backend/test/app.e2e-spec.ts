@@ -59,7 +59,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
   describe('AuthController (e2e)', () => {
-    describe('registerUser', () => {
+    describe('createUser', () => {
       const API_AUTH_SIGNUP = '/api/auth/register';
       it('계정이 생성되는지 확인', () => {
         return request(app.getHttpServer())
@@ -360,24 +360,6 @@ describe('AppController (e2e)', () => {
       });
     });
   });
-  describe('QnaController (e2e)', () => {
-    const APT_QNA_QUESTION = '/api/qna/question';
-    describe('sendQuestion', () => {
-      it('문의사항 질문 전송', () => {
-        return request(app.getHttpServer())
-          .post(APT_QNA_QUESTION)
-          .send({
-            email: testUser1.email,
-            question: '<p>문의사항 TEST 입니다.</p>',
-          })
-          .expect(HttpStatus.CREATED)
-          .expect({
-            ok: true,
-          });
-      });
-    });
-  });
-
   describe('QnaController (e2e)', () => {
     const APT_QNA_QUESTION = '/api/qna/question';
     describe('sendQuestion', () => {

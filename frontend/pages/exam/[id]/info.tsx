@@ -25,6 +25,7 @@ import { GetServerSideProps } from "next";
 import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamForm";
 import Tiptap from "../../../components/Tiptap";
 import Swal from "sweetalert2";
+import { FormButton } from "../../../components/forms/FormButton";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -271,8 +272,8 @@ export default function ExamInfo({ id }) {
         !findMultipleChoiceListByExamIdIsLoading &&
         !findQuestionListByIdIsLoading && (
           <>
-            <div className="p-10  m-5 flex flex-col items-center justify-center">
-              <div className="sm:max-w-2xl max-w-xs  ">
+            <div className="p-10  m flex flex-col items-center justify-center">
+              <div className="sm:max-w-2xl  md:scale-100 scale-90  max-w-sm">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <EditExamForm id={id} />
                 <div className="mt-4">
@@ -421,7 +422,13 @@ export default function ExamInfo({ id }) {
                               );
                             })}
                           </div>
-                          <button className="button">저장</button>
+                          {/* <button className="button">저장</button> */}
+                          <br />
+                          <FormButton
+                            canClick={true}
+                            loading={saveMultipleChoiceMutation.isLoading}
+                            actionText={"저장"}
+                          />
                         </>
                       )}
                     </div>

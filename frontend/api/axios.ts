@@ -127,12 +127,18 @@ export const apiEditMe = async ({
 };
 
 // 시험 정보 수정
-export const apiEditExam = async ({ id, name, title }: IEditExamInput) => {
+export const apiEditExam = async ({
+  id,
+  name,
+  title,
+  time,
+}: IEditExamInput) => {
   return axios
     .patch("/exam", {
       id,
       name,
       title,
+      time: +time,
     })
     .then((res) => {
       return res.data;
@@ -314,11 +320,16 @@ export const apiSendQuestion = async ({
 };
 
 // 시험 생성
-export const apiCreateExam = async ({ name, title }: ICreateExamInput) => {
+export const apiCreateExam = async ({
+  name,
+  title,
+  time,
+}: ICreateExamInput) => {
   return axios
     .post("/exam", {
       name,
       title,
+      time: +time,
     })
     .then((res) => {
       return res.data;

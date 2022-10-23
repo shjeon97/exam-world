@@ -7,6 +7,7 @@ import { CreateExamNameField } from "./fields/CreateExamNameField";
 import { CreateExamTitleField } from "./fields/CreateExamTitleField";
 import { FormButton } from "../../FormButton";
 import { FormError } from "../../FormError";
+import { CreateExamTimeField } from "./fields/CreateExamTimeField";
 
 export const CreateExamForm = () => {
   const {
@@ -34,6 +35,7 @@ export const CreateExamForm = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <CreateExamNameField register={register} error={errors.name} />
       <CreateExamTitleField register={register} error={errors.title} />
+      <CreateExamTimeField register={register} error={errors.time} />
       <FormButton
         canClick={isValid}
         loading={createExamMutation.isLoading}

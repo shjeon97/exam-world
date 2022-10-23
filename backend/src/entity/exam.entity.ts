@@ -1,4 +1,4 @@
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
 import { CoreEntity } from 'src/common/entity/core.entity';
 import { Column, Entity, ManyToOne, RelationId } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
@@ -29,4 +29,12 @@ export class Exam extends CoreEntity {
   @MaxLength(50)
   @MinLength(2)
   title?: string;
+
+  @ApiProperty({
+    example: '제한시간',
+    description: '1000',
+  })
+  @Column({ default: 0 })
+  @IsNumber()
+  time: number;
 }

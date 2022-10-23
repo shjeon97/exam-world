@@ -5,6 +5,7 @@ import { Exam } from 'src/entity/exam.entity';
 export class CreateExamInput extends PickType(Exam, [
   'name',
   'title',
+  'time',
 ] as const) {}
 
 export class CreateExamOutput extends CoreOutput {

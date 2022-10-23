@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import Swal from "sweetalert2";
 import {
@@ -12,6 +12,7 @@ import {
 } from "../../../api/axios";
 import { IUserInput } from "../../../common/type";
 import { WEB_TITLE } from "../../../constant";
+import { useInterval } from "../../../hooks/useInterval";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -33,6 +34,8 @@ interface multipleChoiceIsCheckProps {
 const Test = ({ id }) => {
   const [multipleChoiceIsCheckedList, setMultipleChoiceIsCheckedList] =
     useState<multipleChoiceIsCheckProps[]>([]);
+  const [time, setTime] = useState<number>(0);
+
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
     apiGetMe
@@ -46,6 +49,12 @@ const Test = ({ id }) => {
   } = useQuery<any>([`question-list-by-exam-id`, id], () =>
     apiFindQuestionListByExamId(+id)
   );
+
+  useEffect(() => {
+    if (findExamByIdData?.exam?.time > 0) {
+      setTime(findExamByIdData.exam.time);
+    }
+  }, [findExamByIdData?.exam?.time]);
 
   const {
     isLoading: findMultipleChoiceListByExamIdIsLoading,
@@ -71,6 +80,42 @@ const Test = ({ id }) => {
     }
   };
 
+  const scoring = () => {
+    let score = 0;
+    findQuestionListByExamIdData.questionList.map((question) => {
+      const findMultipleChoiceListByPage =
+        findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
+          (e) => e.isCorrectAnswer === true && e.page === question.page
+        );
+
+      if (
+        findMultipleChoiceListByPage.length ===
+        multipleChoiceIsCheckedList.filter((e) => e.page === question.page)
+          .length
+      ) {
+        let isCorrectAnswer = true;
+
+        findMultipleChoiceListByPage.map((multipleChoice) => {
+          multipleChoiceIsCheckedList.find((e) => e.no === multipleChoice.no);
+          if (
+            !multipleChoiceIsCheckedList.find((e) => e.no === multipleChoice.no)
+          ) {
+            isCorrectAnswer = false;
+          }
+        });
+        if (isCorrectAnswer) {
+          score = score + question.score;
+        }
+      }
+    });
+    Swal.fire({
+      title: `${score}점`,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "확인",
+    });
+  };
+
   const endTest = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -83,46 +128,32 @@ const Test = ({ id }) => {
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
-        let score = 0;
-        findQuestionListByExamIdData.questionList.map((question) => {
-          const findMultipleChoiceListByPage =
-            findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
-              (e) => e.isCorrectAnswer === true && e.page === question.page
-            );
-
-          if (
-            findMultipleChoiceListByPage.length ===
-            multipleChoiceIsCheckedList.filter((e) => e.page === question.page)
-              .length
-          ) {
-            let isCorrectAnswer = true;
-
-            findMultipleChoiceListByPage.map((multipleChoice) => {
-              multipleChoiceIsCheckedList.find(
-                (e) => e.no === multipleChoice.no
-              );
-              if (
-                !multipleChoiceIsCheckedList.find(
-                  (e) => e.no === multipleChoice.no
-                )
-              ) {
-                isCorrectAnswer = false;
-              }
-            });
-            if (isCorrectAnswer) {
-              score = score + question.score;
-            }
-          }
-        });
-        Swal.fire({
-          title: `${score}점`,
-          confirmButtonColor: "#3085d6",
-          cancelButtonColor: "#d33",
-          confirmButtonText: "확인",
-        });
+        scoring();
       }
     });
   };
+
+  useInterval(() => {
+    if (time > 0) {
+      setTime(time - 1);
+      if (time === 1) {
+        Swal.fire({
+          title: "시험종료",
+          html: "남은시간 끝났습니다. ",
+          icon: "warning",
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "종료하기",
+          showCancelButton: true,
+          cancelButtonText: "계속 진행하기",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            scoring();
+          }
+        });
+      }
+    }
+  }, 1000);
 
   return (
     <>
@@ -136,6 +167,14 @@ const Test = ({ id }) => {
         !findMultipleChoiceListByExamIdIsLoading &&
         findMultipleChoiceListByExamIdData.ok && (
           <>
+            {time > 0 && (
+              <>
+                <div className=" fixed right-5 m-2 p-3 button text-lg bg-white">
+                  남은시간 {time}초
+                </div>
+                <br />
+              </>
+            )}
             <div className="flex flex-wrap  mx-5  my-10">
               {findQuestionListByExamIdData.questionList.map(
                 (question, index) => {

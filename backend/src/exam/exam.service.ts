@@ -23,7 +23,7 @@ export class ExamService {
   ) {}
 
   async createExam(
-    { name, title }: CreateExamInput,
+    { name, title, time }: CreateExamInput,
     user: User,
   ): Promise<CreateExamOutput> {
     try {
@@ -35,6 +35,7 @@ export class ExamService {
           name,
           title,
           user,
+          time,
         }),
       );
 
@@ -44,7 +45,6 @@ export class ExamService {
       };
     } catch (error) {
       console.log(error);
-
       return { ok: false, error: '유저 생성 실패' };
     }
   }
@@ -64,11 +64,12 @@ export class ExamService {
     }
   }
 
-  async editExam({ id, name, title }: EditExamInput) {
+  async editExam({ id, name, title, time }: EditExamInput) {
     try {
       const exam = await this.exam.findOne({ where: { id } });
       exam.name = name;
       exam.title = title;
+      exam.time = time;
 
       await this.exam.save(exam);
 

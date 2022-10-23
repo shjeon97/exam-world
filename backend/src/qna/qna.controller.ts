@@ -9,7 +9,7 @@ export class QnaController {
   constructor(private readonly qnaService: QnaService) {}
 
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '유저 생성' })
+  @ApiOperation({ summary: '문의사항 질문 전송' })
   @ApiResponse({ type: CoreOutput })
   @Post('/question')
   async sendQuestion(

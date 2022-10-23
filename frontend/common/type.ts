@@ -53,6 +53,7 @@ export interface ISendQuestionInput {
 export interface ICreateExamInput {
   name: string;
   title: string;
+  time: number;
 }
 
 export interface IFindExamListByMeOutput extends ICoreOutput {
@@ -79,6 +80,7 @@ export interface IEditExamInput {
   id: number;
   name: string;
   title: string;
+  time: number;
 }
 
 export interface ICreateQuestionInput {
