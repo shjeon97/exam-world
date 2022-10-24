@@ -1,23 +1,31 @@
-/* eslint-disable */
-// Disable ESLint to prevent failing linting inside the Next.js repo.
-// If you're using ESLint on your project, we recommend installing the ESLint Cypress plugin instead:
-// https://github.com/cypress-io/eslint-plugin-cypress
+const baseTitle = "Exam World!";
+const user = cy;
+describe("login", () => {
+  beforeEach(() => {
+    user.visit("/login");
+  });
+  it("로그인 페이지 이동", () => {
+    user.title().should("eq", "로그인 " + baseTitle);
+  });
 
-describe('Navigation', () => {
-  it('should navigate to the about page', () => {
-    // Start from the index page
-    cy.visit('http://localhost:3000/')
+  it("잘못된 email 또는 password로 User 로그인 시", () => {
+    user.get(":nth-child(1) > .form-input").type("bad@email.com");
+    user.get(":nth-child(2) > .form-input").type("badPassword");
+    user.get(".w-full").click();
+    user
+      .get("form > .font-bold")
+      .should(
+        "have.text",
+        "등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다."
+      );
+    user.wait(1000);
+  });
 
-    // Find a link with an href attribute containing "about" and click it
-    cy.get('a[href*="about"]').click()
+  it("User 로그인 성공", () => {
+    user.get(":nth-child(1) > .form-input").type("test@test.com");
+    user.get(":nth-child(2) > .form-input").type("test");
+    user.get(".w-full").click();
+  });
+});
 
-    // The new url should include "/about"
-    cy.url().should('include', '/about')
-
-    // The new page should contain an h1 with "About page"
-    cy.get('h1').contains('About Page')
-  })
-})
-
-// Prevent TypeScript from reading file as legacy script
-export {}
+export {};
