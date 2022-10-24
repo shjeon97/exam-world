@@ -37,4 +37,12 @@ export class Exam extends CoreEntity {
   @Column({ default: 0 })
   @IsNumber()
   time: number;
+
+  @ApiProperty({
+    example: '커트라인',
+    description: '60',
+  })
+  @Column({ default: 0 })
+  @IsNumber()
+  minimumPassScore: number;
 }

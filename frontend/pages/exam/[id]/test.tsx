@@ -81,6 +81,7 @@ const Test = ({ id }) => {
   };
 
   const scoring = () => {
+    setTime(0);
     let score = 0;
     findQuestionListByExamIdData.questionList.map((question) => {
       const findMultipleChoiceListByPage =
@@ -108,8 +109,16 @@ const Test = ({ id }) => {
         }
       }
     });
+
     Swal.fire({
-      title: `${score}점`,
+      title:
+        findExamByIdData?.exam?.minimumPassScore === 0
+          ? `${score}점`
+          : score >= findExamByIdData?.exam?.minimumPassScore
+          ? "합격"
+          : "불합격",
+      html:
+        findExamByIdData?.exam?.minimumPassScore !== 0 && `<b>${score}점 </b>`,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "확인",

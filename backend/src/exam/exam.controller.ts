@@ -52,7 +52,7 @@ export class ExamController {
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Get('/me')
-  async findExamListByme(@GetUser() user): Promise<FindExamListByMeOutput> {
+  async findExamListByMe(@GetUser() user): Promise<FindExamListByMeOutput> {
     return this.examService.findExamListByMe(user);
   }
 

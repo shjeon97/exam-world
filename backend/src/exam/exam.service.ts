@@ -23,7 +23,7 @@ export class ExamService {
   ) {}
 
   async createExam(
-    { name, title, time }: CreateExamInput,
+    { name, title, time, minimumPassScore }: CreateExamInput,
     user: User,
   ): Promise<CreateExamOutput> {
     try {
@@ -36,6 +36,7 @@ export class ExamService {
           title,
           user,
           time,
+          minimumPassScore,
         }),
       );
 
@@ -64,13 +65,13 @@ export class ExamService {
     }
   }
 
-  async editExam({ id, name, title, time }: EditExamInput) {
+  async editExam({ id, name, title, time, minimumPassScore }: EditExamInput) {
     try {
       const exam = await this.exam.findOne({ where: { id } });
       exam.name = name;
       exam.title = title;
       exam.time = time;
-
+      exam.minimumPassScore = minimumPassScore;
       await this.exam.save(exam);
 
       return {

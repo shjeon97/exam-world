@@ -387,6 +387,8 @@ describe('AppController (e2e)', () => {
           .send({
             name: 'TEST name',
             title: 'TEST title',
+            time: 60,
+            minimumPassScore: 60,
           })
           .set('authorization', `Bearer ${jwtToken1}`)
           .expect(HttpStatus.CREATED)

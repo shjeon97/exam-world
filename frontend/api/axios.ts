@@ -132,6 +132,7 @@ export const apiEditExam = async ({
   name,
   title,
   time,
+  minimumPassScore,
 }: IEditExamInput) => {
   return axios
     .patch("/exam", {
@@ -139,6 +140,7 @@ export const apiEditExam = async ({
       name,
       title,
       time: +time,
+      minimumPassScore: +minimumPassScore,
     })
     .then((res) => {
       return res.data;
@@ -324,12 +326,14 @@ export const apiCreateExam = async ({
   name,
   title,
   time,
+  minimumPassScore,
 }: ICreateExamInput) => {
   return axios
     .post("/exam", {
       name,
       title,
       time: +time,
+      minimumPassScore: +minimumPassScore,
     })
     .then((res) => {
       return res.data;

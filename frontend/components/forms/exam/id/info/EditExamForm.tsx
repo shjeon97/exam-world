@@ -8,6 +8,7 @@ import { ICoreOutput, IEditExamInput } from "../../../../../common/type";
 import { apiEditExam } from "../../../../../api/axios";
 import { Toast } from "../../../../../lib/sweetalert2/toast";
 import { EditExamTimeField } from "./fields/EditExamTimeField";
+import { EditExamMinimumPassScoreField } from "./fields/EditExamMinimumPassScoreield";
 
 export const EditExamForm = (id) => {
   const {
@@ -41,6 +42,11 @@ export const EditExamForm = (id) => {
       <EditExamNameField register={register} error={errors.name} id={id} />
       <EditExamTitleField register={register} error={errors.title} id={id} />
       <EditExamTimeField register={register} error={errors.time} id={id} />
+      <EditExamMinimumPassScoreField
+        register={register}
+        error={errors.minimumPassScore}
+        id={id}
+      />
       <br />
       <FormButton
         canClick={isValid}

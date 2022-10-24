@@ -54,6 +54,7 @@ export interface ICreateExamInput {
   name: string;
   title: string;
   time: number;
+  minimumPassScore: number;
 }
 
 export interface IFindExamListByMeOutput extends ICoreOutput {
@@ -81,6 +82,7 @@ export interface IEditExamInput {
   name: string;
   title: string;
   time: number;
+  minimumPassScore: number;
 }
 
 export interface ICreateQuestionInput {

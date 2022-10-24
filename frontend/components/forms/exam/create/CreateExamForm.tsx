@@ -8,6 +8,7 @@ import { CreateExamTitleField } from "./fields/CreateExamTitleField";
 import { FormButton } from "../../FormButton";
 import { FormError } from "../../FormError";
 import { CreateExamTimeField } from "./fields/CreateExamTimeField";
+import { CreateExamMinimumPassScoreField } from "./fields/CreateExamMinimumPassScoreield";
 
 export const CreateExamForm = () => {
   const {
@@ -27,8 +28,8 @@ export const CreateExamForm = () => {
   });
 
   const onSubmit = () => {
-    const createExamVlaues = getValues();
-    createExamMutation.mutate(createExamVlaues);
+    const createExamValues = getValues();
+    createExamMutation.mutate(createExamValues);
   };
 
   return (
@@ -36,6 +37,10 @@ export const CreateExamForm = () => {
       <CreateExamNameField register={register} error={errors.name} />
       <CreateExamTitleField register={register} error={errors.title} />
       <CreateExamTimeField register={register} error={errors.time} />
+      <CreateExamMinimumPassScoreField
+        register={register}
+        error={errors.minimumPassScore}
+      />
       <FormButton
         canClick={isValid}
         loading={createExamMutation.isLoading}
