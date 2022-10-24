@@ -14,16 +14,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }} backend
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
           cache-dependency-path: "./backend/package-lock.json"
 
-      - run: ls
+      - run: npm install --force
         working-directory: backend
-      # - run: |
-      #     cd backend
-      #     npm install --force
-      #     npm run test:e2e:watch
+
+      - run: npm run test:e2e:watch
+        working-directory: backend
