@@ -23,7 +23,5 @@ jobs:
           working-directory: ./backend
       - run: |
           cd backend
-          ls
           npm install --force
-          npm run build
           npm run test:e2e:watch
