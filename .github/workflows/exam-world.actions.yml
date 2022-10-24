@@ -18,8 +18,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
+          path: backend
           cache: "npm"
-          working-directory: backend
 
       - run: ls
         working-directory: backend
