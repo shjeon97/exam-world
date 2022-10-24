@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -26,14 +26,14 @@ jobs:
 
       - name: Create .env.test file
         run: |
-          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.test
-          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.test
-          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.test
-          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.test
-          echo "DB_NAME=${{ secrets.DB_NAME }}" >> .env.test
-          echo "PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.test
-          echo "PORT=${{ secrets.PORT }}" >> .env.test
-          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> .env.test
+          echo "DB_HOST=${{ secrets.BACKEND_DB_HOST_TEST }}" >> .env.test
+          echo "DB_PORT=${{ secrets.BACKEND_DB_PORT_TEST }}" >> .env.test
+          echo "DB_USERNAME=${{ secrets.BACKEND_DB_USERNAME_TEST }}" >> .env.test
+          echo "DB_PASSWORD=${{ secrets.BACKEND_DB_PASSWORD_TEST }}" >> .env.test
+          echo "DB_NAME=${{ secrets.BACKEND_DB_NAME_TEST }}" >> .env.test
+          echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
+          echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
+          echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
         working-directory: backend
 
       - run: npm run test:e2e
