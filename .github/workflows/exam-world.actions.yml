@@ -15,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-        working-directory: ./backend
         uses: actions/setup-node@v3
+        working-directory: ./backend
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
