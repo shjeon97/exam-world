@@ -21,8 +21,9 @@ jobs:
           cache: "npm"
           cache-dependency-path: "./backend/package-lock.json"
           working-directory: ./backend
-      - run: cd ./backend
-      - run: ls
+      - run: |
+          cd backend
+          ls
       - run: npm install --force
       - run: npm run build
       - run: npm run test:e2e:watch
