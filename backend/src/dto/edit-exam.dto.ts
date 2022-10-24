@@ -5,4 +5,6 @@ export class EditExamInput extends PickType(Exam, [
   'id',
   'name',
   'title',
+  'time',
+  'minimumPassScore',
 ] as const) {}

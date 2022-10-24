@@ -23,7 +23,7 @@ export class ExamService {
   ) {}
 
   async createExam(
-    { name, title }: CreateExamInput,
+    { name, title, time, minimumPassScore }: CreateExamInput,
     user: User,
   ): Promise<CreateExamOutput> {
     try {
@@ -35,6 +35,8 @@ export class ExamService {
           name,
           title,
           user,
+          time,
+          minimumPassScore,
         }),
       );
 
@@ -44,7 +46,6 @@ export class ExamService {
       };
     } catch (error) {
       console.log(error);
-
       return { ok: false, error: '유저 생성 실패' };
     }
   }
@@ -64,12 +65,13 @@ export class ExamService {
     }
   }
 
-  async editExam({ id, name, title }: EditExamInput) {
+  async editExam({ id, name, title, time, minimumPassScore }: EditExamInput) {
     try {
       const exam = await this.exam.findOne({ where: { id } });
       exam.name = name;
       exam.title = title;
-
+      exam.time = time;
+      exam.minimumPassScore = minimumPassScore;
       await this.exam.save(exam);
 
       return {
@@ -85,7 +87,7 @@ export class ExamService {
     }
   }
 
-  async findExamListByme(user: any) {
+  async findExamListByMe(user: any) {
     try {
       const examList = await this.exam.find({
         where: { user: { id: user.id } },
@@ -141,6 +143,37 @@ export class ExamService {
     }
   }
 
+  async deleteExamLastPage(user: User, examId: number): Promise<CoreOutput> {
+    try {
+      const exam = await this.exam.findOne({ where: { id: examId } });
+
+      if (!exam) {
+        return { ok: false, error: '존재하지 않는 시험 정보 입니다.' };
+      }
+
+      if (user.role === UserRole.User && user.id !== exam.userId) {
+        return {
+          ok: false,
+          error: '다른 사용자가 만든 문항을 삭제하실 수 없습니다.',
+        };
+      }
+
+      const { page } = await this.question.findOne({
+        where: { exam: { id: examId } },
+        order: { page: 'DESC' },
+      });
+
+      await this.question.delete({ exam: { id: exam.id }, page });
+
+      await this.multipleChoice.delete({ exam: { id: exam.id }, page });
+
+      return { ok: true };
+    } catch (error) {
+      console.log(error);
+      return { ok: false, error: '마지막 문항 삭제 실패' };
+    }
+  }
+
   async findQuestionListByExamId(
     examId: number,
   ): Promise<FindQuestionListByExamIdOutput> {
@@ -168,6 +201,7 @@ export class ExamService {
     try {
       const multipleChoiceList = await this.multipleChoice.find({
         where: { exam: { id: examId } },
+        order: { no: 'ASC' },
       });
 
       return {

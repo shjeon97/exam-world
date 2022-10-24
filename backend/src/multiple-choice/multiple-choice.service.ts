@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { CreateMultipleChoiceInput } from 'src/dto/create-multiple-choice.dto';
+import { SaveMultipleChoiceInput as saveMultipleChoiceInput } from 'src/dto/save-multiple-choice.dto';
+import { DeleteMultipleChoiceListInput } from 'src/dto/delete-multiple-choice.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
-import { Question } from 'src/entity/question.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -16,13 +16,13 @@ export class MultipleChoiceService {
     private readonly exam: Repository<Exam>,
   ) {}
 
-  async createMultipleChoice({
+  async saveMultipleChoice({
     examId,
     no,
     text,
     isCorrectAnswer,
     page,
-  }: CreateMultipleChoiceInput): Promise<CoreOutput> {
+  }: saveMultipleChoiceInput): Promise<CoreOutput> {
     try {
       const exam = await this.exam.findOne({ where: { id: +examId } });
 
@@ -32,8 +32,6 @@ export class MultipleChoiceService {
           error: '존재하지 않는 시험 입니다.',
         };
       }
-
-      await this.multipleChoice.delete({ exam: { id: exam.id }, page });
 
       await this.multipleChoice.save(
         this.multipleChoice.create({
@@ -52,7 +50,35 @@ export class MultipleChoiceService {
       console.log(error);
       return {
         ok: false,
-        error: '문제 생성 실패',
+        error: '보기 생성 실패',
+      };
+    }
+  }
+
+  async deleteMultipleChoiceList({
+    examId,
+    page,
+  }: DeleteMultipleChoiceListInput): Promise<CoreOutput> {
+    try {
+      const exam = await this.exam.findOne({ where: { id: +examId } });
+
+      if (!exam) {
+        return {
+          ok: false,
+          error: '존재하지 않는 시험 입니다.',
+        };
+      }
+
+      await this.multipleChoice.delete({ exam: { id: exam.id }, page });
+
+      return {
+        ok: true,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ok: false,
+        error: '보기 리스트 삭제 실패',
       };
     }
   }

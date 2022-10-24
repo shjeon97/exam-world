@@ -1,4 +1,4 @@
-import { useEditor, EditorContent } from "@tiptap/react";
+import { useEditor, EditorContent, Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Table from "@tiptap/extension-table";
 import TableCell from "@tiptap/extension-table-cell";
@@ -22,9 +22,6 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
-import { useMutation } from "react-query";
-import { apiUploadImage } from "../api/axios";
-import { IUploadImageOutput } from "../common/type";
 import Youtube from "@tiptap/extension-youtube";
 
 const MenuBar = ({ editor }: any) => {
@@ -32,20 +29,17 @@ const MenuBar = ({ editor }: any) => {
     return null;
   }
 
-  const uploadImageMeMutation = useMutation(apiUploadImage, {
-    onSuccess: async (data: IUploadImageOutput) => {
-      if (data.ok) {
-        console.log(data.fileURL);
-        editor.chain().focus().setImage({ src: data.fileURL }).run();
-      }
-    },
-  });
-
   const addYoutubeVideo = () => {
     Swal.fire({
       title: "Enter YouTube URL",
       input: "text",
       confirmButtonText: "업로드",
+      showClass: {
+        popup: "none",
+      },
+      hideClass: {
+        popup: " animate__fadeOutUp",
+      },
       showCancelButton: true,
       cancelButtonText: "취소",
     }).then((result) => {
@@ -59,6 +53,18 @@ const MenuBar = ({ editor }: any) => {
     });
   };
 
+  function getBase64(event) {
+    let file = event;
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      editor.chain().focus().setImage({ src: reader.result }).run();
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
+  }
+
   const handleUploadImage = () => {
     Swal.fire({
       title: "Select image",
@@ -67,12 +73,18 @@ const MenuBar = ({ editor }: any) => {
         accept: "image/*",
         "aria-label": "Upload your profile picture",
       },
+      showClass: {
+        popup: "none",
+      },
+      hideClass: {
+        popup: " animate__fadeOutUp",
+      },
       confirmButtonText: "업로드",
       showCancelButton: true,
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
-        uploadImageMeMutation.mutate({ file: result.value });
+        getBase64(result.value);
       }
     });
   };
@@ -607,7 +619,7 @@ const CustomImage = Image.extend({
   },
 });
 
-const Tiptap = (prop) => {
+const Tiptap = (props: { editor: (arg0: Editor) => void }) => {
   const editor = useEditor({
     editable: true,
     extensions: [
@@ -619,7 +631,7 @@ const Tiptap = (prop) => {
       TableHeader,
       CustomTableCell,
       Underline,
-      CustomImage,
+      CustomImage.configure({ allowBase64: true }),
       Youtube,
       TextAlign.configure({
         types: ["heading", "paragraph"],
@@ -632,16 +644,13 @@ const Tiptap = (prop) => {
       },
     },
   });
-  prop.editor(editor);
+  props.editor(editor);
 
   return (
     <>
       <MenuBar editor={editor} />
-      <div
-        style={{ maxHeight: "80vh" }}
-        className="  overflow-auto  border-2 border-gray-500"
-      >
-        <EditorContent className="min-w-min" editor={editor} />
+      <div className="overflow-auto border-2 border-gray-500">
+        <EditorContent editor={editor} />
       </div>
     </>
   );

@@ -4,39 +4,42 @@ import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
-  apiCreateMultipleChoice,
-  apiCreateQuestion,
-  apiEditExam,
+  apiSaveMultipleChoice,
+  apiSaveQuestion,
+  apiDeleteMultipleChoiceList,
   apiFindExamById,
   apiFindMultipleChoiceListByExamId,
   apiFindQuestionListByExamId,
   apiGetMe,
+  apiDeleteExamLastPage,
 } from "../../../api/axios";
-import { ICoreOutput, IEditExamInput, IUserInput } from "../../../common/type";
-import { FormButton } from "../../../components/form-button";
-import { FormError } from "../../../components/form-error";
+import { IUserInput } from "../../../common/type";
+import { FormError } from "../../../components/forms/FormError";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
 import React, { useState, useEffect } from "react";
-import Tiptap from "../../../components/tiptap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { v4 as uuidv4 } from "uuid";
 import { GetServerSideProps } from "next";
+import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamForm";
+import Tiptap from "../../../components/Tiptap";
+import Swal from "sweetalert2";
+import { FormButton } from "../../../components/forms/FormButton";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
   const { id } = query;
   return {
     props: {
-      id,
+      id: +id,
     },
   };
 };
 
 export default function ExamInfo({ id }) {
   const [tiptap, setTiptap] = useState<any>(null);
-  const [multipleChoiceNumber, setMulitpleChoiceNumber] = useState<string[]>(
+  const [multipleChoiceNumber, setMultipleChoiceNumber] = useState<string[]>(
     []
   );
   const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
@@ -59,37 +62,31 @@ export default function ExamInfo({ id }) {
     router.push("/login");
   }
 
-  const {
-    register: editExamRegister,
-    getValues: editExamGetValues,
-    formState: { errors: editExamErrors, isValid: editExamIsValid },
-    handleSubmit: editExamHandleSubmit,
-  } = useForm<IEditExamInput>({ mode: "onChange" });
-
-  const editExamRegisterOption = {
-    name: { required: "사용할 제목 입력해 주세요.", maxLength: 30 },
-    title: { maxLength: 30 },
-  };
-
-  const createQuestionAndMulitpleChoiceRegisterOption = {
+  const createQuestionAndMultipleChoiceRegisterOption = {
     score: { required: "사용할 점수 입력해 주세요." },
   };
 
-  const editExamMutation = useMutation(apiEditExam, {
-    onSuccess: async (data: ICoreOutput) => {
+  const saveQuestionMutation = useMutation(apiSaveQuestion);
+  const saveMultipleChoiceMutation = useMutation(apiSaveMultipleChoice);
+  const deleteMultipleChoiceListMutation = useMutation(
+    apiDeleteMultipleChoiceList
+  );
+
+  const deleteExamLastPageMutation = useMutation(apiDeleteExamLastPage, {
+    onSuccess: async (data) => {
       if (data.ok) {
-        Toast.fire({
+        await Toast.fire({
           icon: "success",
-          title: "수정 완료",
+          text: "삭제완료.",
           position: "top-end",
           timer: 1200,
         });
+        onCreateQuestionAndMultipleChoiceClick();
+        queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
+        queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
       }
     },
   });
-
-  const createQuestionMutation = useMutation(apiCreateQuestion);
-  const createMultipleChoiceMutation = useMutation(apiCreateMultipleChoice);
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
     useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
@@ -114,24 +111,19 @@ export default function ExamInfo({ id }) {
     }
   };
 
-  const editExamOnSubmit = () => {
-    const editExamVlaues = editExamGetValues();
-    editExamMutation.mutate({ id, ...editExamVlaues });
-  };
-
   const {
-    register: createQuestionAndMulitpleChoiceRegister,
-    getValues: createQuestionAndMulitpleChoiceGetValues,
-    setValue: createQuestionAndMulitpleChoiceSetValue,
-    handleSubmit: createQuestionAndMulitpleChoiceHandleSubmit,
+    register: saveQuestionAndMultipleChoiceRegister,
+    getValues: saveQuestionAndMultipleChoiceGetValues,
+    setValue: saveQuestionAndMultipleChoiceSetValue,
+    handleSubmit: saveQuestionAndMultipleChoiceHandleSubmit,
     formState: {
-      errors: createQuestionAndMulitpleChoiceErrors,
-      isValid: createQuestionAndMulitpleChoiceIsValid,
+      errors: saveQuestionAndMultipleChoiceErrors,
+      isValid: saveQuestionAndMultipleChoiceIsValid,
     },
   } = useForm<any>({ mode: "onChange" });
 
   const onAddOptionClick = () => {
-    setMulitpleChoiceNumber((e) => [uuidv4(), ...e]);
+    setMultipleChoiceNumber((e) => [uuidv4(), ...e]);
   };
 
   useEffect(() => {
@@ -144,7 +136,7 @@ export default function ExamInfo({ id }) {
     findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
   ]);
 
-  const createQuestionAndMulitpleChoiceOnSubmit = async () => {
+  const saveQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
     if (questionValue.length < 8) {
       return Toast.fire({
@@ -154,21 +146,21 @@ export default function ExamInfo({ id }) {
       });
     }
 
-    const { score, ...rest } = createQuestionAndMulitpleChoiceGetValues();
+    const { score, ...rest } = saveQuestionAndMultipleChoiceGetValues();
     const multipleChoice = multipleChoiceNumber.map((theId) => ({
       multipleChoice: rest[`multipleChoice-${theId}`],
       isCorrectAnswer: rest[`is-correct-answer-${theId}`],
     }));
 
-    let isMulitpleChoiceNull = false;
+    let isMultipleChoiceNull = false;
 
     multipleChoice.map((e) => {
       if (e.multipleChoice.trim() == "") {
-        isMulitpleChoiceNull = true;
+        isMultipleChoiceNull = true;
       }
     });
 
-    if (isMulitpleChoiceNull) {
+    if (isMultipleChoiceNull) {
       return Toast.fire({
         icon: "error",
         text: "보기를 입력하세요.",
@@ -176,15 +168,19 @@ export default function ExamInfo({ id }) {
       });
     }
 
-    await createQuestionMutation.mutateAsync({
+    await saveQuestionMutation.mutateAsync({
       text: questionValue,
       page: page,
       examId: +id,
       score: +score,
     });
 
+    await deleteMultipleChoiceListMutation.mutateAsync({
+      examId: +id,
+      page,
+    });
     multipleChoice.map(async (e, index) => {
-      await createMultipleChoiceMutation.mutateAsync({
+      await saveMultipleChoiceMutation.mutateAsync({
         examId: +id,
         text: e.multipleChoice,
         isCorrectAnswer: e.isCorrectAnswer,
@@ -199,25 +195,23 @@ export default function ExamInfo({ id }) {
       position: "top-end",
       timer: 1200,
     });
+    onCreateQuestionAndMultipleChoiceClick();
     queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
     queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
-    if (page === findQuestionListByExamIdData?.questionList.length) {
-      setPage((page) => page + 1);
-    }
   };
 
   const handleChangePage = (page: number) => {
     setPage(page);
 
-    const findQuesionByPage = findQuestionListByExamIdData.questionList.filter(
+    const findQuestionByPage = findQuestionListByExamIdData.questionList.filter(
       (question) => question.page === page
     )[0];
 
-    if (findQuesionByPage) {
-      tiptap?.commands?.setContent(findQuesionByPage.text);
+    if (findQuestionByPage) {
+      tiptap?.commands?.setContent(findQuestionByPage.text);
     }
 
-    setMulitpleChoiceNumber([]);
+    setMultipleChoiceNumber([]);
 
     setFindMultipleChoiceListByPage(
       findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
@@ -231,24 +225,41 @@ export default function ExamInfo({ id }) {
         onAddOptionClick();
       });
 
-    createQuestionAndMulitpleChoiceSetValue("score", findQuesionByPage.score);
+    saveQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
   };
 
   const onDeleteClick = (idToDelete: string) => {
-    setMulitpleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
-    createQuestionAndMulitpleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
-    createQuestionAndMulitpleChoiceSetValue(
+    setMultipleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
+    saveQuestionAndMultipleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
+    saveQuestionAndMultipleChoiceSetValue(
       `is-correct-answer-${idToDelete}`,
       ""
     );
   };
 
-  const onCreateQuestionAndMulitpleChoiceClick = () => {
+  const onCreateQuestionAndMultipleChoiceClick = () => {
     setPage(findQuestionListByExamIdData?.questionList.length + 1);
     tiptap?.commands?.setContent(``);
-    createQuestionAndMulitpleChoiceSetValue("score", 1);
+    saveQuestionAndMultipleChoiceSetValue("score", 1);
     setFindMultipleChoiceListByPage([]);
-    setMulitpleChoiceNumber([]);
+    setMultipleChoiceNumber([]);
+  };
+
+  const handleDeleteExamPage = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      html: "정말 문항 삭제 원하십니까? <br> 삭제 후 기존 모든 정보는 복구가 불가능합니다.",
+      icon: "warning",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "삭제하기",
+      showCancelButton: true,
+      cancelButtonText: "취소",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteExamLastPageMutation.mutate(+id);
+      }
+    });
   };
 
   return (
@@ -261,54 +272,10 @@ export default function ExamInfo({ id }) {
         !findMultipleChoiceListByExamIdIsLoading &&
         !findQuestionListByIdIsLoading && (
           <>
-            <div className="p-10  m-5 flex flex-col items-center justify-center h-screen">
-              <div className="  max-w-4xl">
+            <div className="p-10  m flex flex-col items-center justify-center">
+              <div className="sm:max-w-2xl  md:scale-100 scale-90  max-w-sm">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
-                <form onSubmit={editExamHandleSubmit(editExamOnSubmit)}>
-                  <label className="text-lg font-medium">제목</label>
-                  <div className=" text-xs  text-gray-500">
-                    시험의 제목을 입력하세요. 예) 자동차 2종보통
-                  </div>
-                  <input
-                    className={classNames(`form-input`, {
-                      "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        editExamErrors.name,
-                    })}
-                    {...editExamRegister("name", editExamRegisterOption.name)}
-                    placeholder="제목"
-                    defaultValue={findExamByIdData.exam.name}
-                  />
-                  <label className="text-lg font-medium">설명</label>
-                  <div className=" text-xs  text-gray-500">
-                    시험에 관련된 설명을 자유롭게 쓰세요. (30자 이내)
-                  </div>
-                  <input
-                    className={classNames(`form-input `, {
-                      "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        editExamErrors.title,
-                    })}
-                    {...editExamRegister("title", editExamRegisterOption.title)}
-                    placeholder="설명"
-                    defaultValue={findExamByIdData.exam.title}
-                  />
-
-                  {Object.values(editExamErrors).length > 0 &&
-                    Object.values(editExamErrors).map((error, key) => {
-                      return (
-                        <div key={`form-error-edit-exam-${key}`}>
-                          <FormError errorMessage={`${error.message}`} />
-                          <br />
-                        </div>
-                      );
-                    })}
-                  <div className="mt-2">
-                    <FormButton
-                      canClick={editExamIsValid}
-                      loading={false}
-                      actionText={"시험제목 및 설명수정"}
-                    />
-                  </div>
-                </form>
+                <EditExamForm id={id} />
                 <div className="mt-4">
                   {findQuestionListByExamIdData &&
                     findQuestionListByExamIdData.questionList.length > 0 && (
@@ -331,43 +298,55 @@ export default function ExamInfo({ id }) {
                         )}
                         <div
                           onClick={() =>
-                            onCreateQuestionAndMulitpleChoiceClick()
+                            onCreateQuestionAndMultipleChoiceClick()
                           }
                           className="button "
                         >
-                          ➕
+                          ✚
                         </div>
                       </div>
                     )}
-                  <label className="text-lg font-medium ">
-                    문제 - {page}번
-                  </label>
-                  <Tiptap editor={tiptapEditor} />
                 </div>
+                <br />
+                <div className="flex flex-row justify-between items-center">
+                  <div className="text-lg font-medium">문제 {page}번</div>
+                  {page ===
+                    findQuestionListByExamIdData?.questionList.length && (
+                    <div
+                      onClick={() => handleDeleteExamPage()}
+                      className="button"
+                    >
+                      삭제
+                    </div>
+                  )}
+                </div>
+                <Tiptap editor={tiptapEditor} />
                 <form
-                  onSubmit={createQuestionAndMulitpleChoiceHandleSubmit(
-                    createQuestionAndMulitpleChoiceOnSubmit
+                  onSubmit={saveQuestionAndMultipleChoiceHandleSubmit(
+                    saveQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
-                  <label className="text-lg font-medium">점수</label>
-                  <div className=" text-xs  text-gray-500">
-                    해당 문제 맞출시 줄 점수를 입력하세요.
+                  <div className="flex flex-row justify-between">
+                    <label className="text-lg font-medium">점수</label>
+                    <div className=" text-xs  text-gray-500">
+                      해당 문제 맞출시 줄 점수를 입력하세요.
+                    </div>
                   </div>
                   <input
-                    {...createQuestionAndMulitpleChoiceRegister(
+                    {...saveQuestionAndMultipleChoiceRegister(
                       "score",
-                      createQuestionAndMulitpleChoiceRegisterOption.score
+                      createQuestionAndMultipleChoiceRegisterOption.score
                     )}
                     className={classNames(`form-input `, {
                       "border-red-500 focus:border-red-500 focus:outline-red-500":
-                        createQuestionAndMulitpleChoiceErrors.score,
+                        saveQuestionAndMultipleChoiceErrors.score,
                     })}
                     type="number"
                     defaultValue={1}
                   />
-                  {Object.values(createQuestionAndMulitpleChoiceErrors).length >
+                  {Object.values(saveQuestionAndMultipleChoiceErrors).length >
                     0 &&
-                    Object.values(createQuestionAndMulitpleChoiceErrors).map(
+                    Object.values(saveQuestionAndMultipleChoiceErrors).map(
                       (error, key) => {
                         return (
                           <div
@@ -406,7 +385,7 @@ export default function ExamInfo({ id }) {
                                       </div>
                                       <input
                                         className="form-input "
-                                        {...createQuestionAndMulitpleChoiceRegister(
+                                        {...saveQuestionAndMultipleChoiceRegister(
                                           `multipleChoice-${id}`
                                         )}
                                         defaultValue={
@@ -421,7 +400,7 @@ export default function ExamInfo({ id }) {
                                         정답일시 체크
                                       </p>
                                       <input
-                                        {...createQuestionAndMulitpleChoiceRegister(
+                                        {...saveQuestionAndMultipleChoiceRegister(
                                           `is-correct-answer-${id}`
                                         )}
                                         type="checkbox"
@@ -443,7 +422,13 @@ export default function ExamInfo({ id }) {
                               );
                             })}
                           </div>
-                          <button className="button">저장</button>
+                          {/* <button className="button">저장</button> */}
+                          <br />
+                          <FormButton
+                            canClick={true}
+                            loading={saveMultipleChoiceMutation.isLoading}
+                            actionText={"저장"}
+                          />
                         </>
                       )}
                     </div>

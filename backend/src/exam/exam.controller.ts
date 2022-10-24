@@ -52,8 +52,8 @@ export class ExamController {
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Get('/me')
-  async findExamListByme(@GetUser() user): Promise<FindExamListByMeOutput> {
-    return this.examService.findExamListByme(user);
+  async findExamListByMe(@GetUser() user): Promise<FindExamListByMeOutput> {
+    return this.examService.findExamListByMe(user);
   }
 
   @ApiOperation({ summary: '모든 시험 정보 가져오기' })
@@ -106,5 +106,17 @@ export class ExamController {
     @Param() { id }: { id: number },
   ): Promise<CoreOutput> {
     return this.examService.deleteExamById(user, id);
+  }
+
+  @ApiOperation({ summary: '시험 페이지 삭제하기' })
+  @ApiResponse({ type: CoreOutput })
+  @Role(['Any'])
+  @UseGuards(JwtAuthGuard)
+  @Delete(':examId/last-page')
+  async deleteExamLastPage(
+    @GetUser() user,
+    @Param() { examId }: { examId: number },
+  ): Promise<CoreOutput> {
+    return this.examService.deleteExamLastPage(user, examId);
   }
 }

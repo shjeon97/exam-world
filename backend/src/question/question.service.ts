@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import {
-  CreateQuestionInput,
-  CreateQuestionOutput,
-} from 'src/dto/create-question';
+import { SaveQuestionInput, SaveQuestionOutput } from 'src/dto/save-question';
 import { Exam } from 'src/entity/exam.entity';
 import { Question } from 'src/entity/question.entity';
 import { Repository } from 'typeorm';
@@ -17,12 +14,12 @@ export class QuestionService {
     private readonly exam: Repository<Exam>,
   ) {}
 
-  async createQuestion({
+  async saveQuestion({
     text,
     examId,
     page,
     score,
-  }: CreateQuestionInput): Promise<CreateQuestionOutput> {
+  }: SaveQuestionInput): Promise<SaveQuestionOutput> {
     try {
       const exam = await this.exam.findOne({ where: { id: examId } });
 

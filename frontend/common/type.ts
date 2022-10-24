@@ -1,11 +1,15 @@
 export interface IUserInput {
   id: number;
   email: string;
-  name: string;
+  nickname: string;
   password: string;
 }
 
-export interface ISignupUserInput extends IUserInput {}
+export interface IRegisterUserInput {
+  email: string;
+  nickname: string;
+  password: string;
+}
 
 export interface IEditMeInput extends IUserInput {
   editPassword?: string;
@@ -49,6 +53,8 @@ export interface ISendQuestionInput {
 export interface ICreateExamInput {
   name: string;
   title: string;
+  time: number;
+  minimumPassScore: number;
 }
 
 export interface IFindExamListByMeOutput extends ICoreOutput {
@@ -75,6 +81,8 @@ export interface IEditExamInput {
   id: number;
   name: string;
   title: string;
+  time: number;
+  minimumPassScore: number;
 }
 
 export interface ICreateQuestionInput {
@@ -89,5 +97,15 @@ export interface ICreateMultipleChoiceInput {
   no: number;
   text: string;
   isCorrectAnswer: number;
+  page: number;
+}
+
+export interface IDeleteMultipleChoiceListInput {
+  examId: number;
+  page: number;
+}
+
+export interface IDeleteExamPageInput {
+  examId: number;
   page: number;
 }

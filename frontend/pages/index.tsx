@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useQuery } from "react-query";
 import { apiAllExamList } from "../api/axios";
 import { IAllExamListOutput } from "../common/type";
-import { ExamCard } from "../components/exam-card";
+import { ExamCard } from "../components/ExamCard";
 import { WEB_TITLE } from "../constant";
 
 export default function Home() {

@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SignupUserInput } from 'src/dto/signup-user.dto';
+import { RegisterUserInput } from 'src/dto/signup-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
@@ -16,18 +16,18 @@ export class AuthService {
   ) {}
   /** User 생성 */
   async createUser({
-    name,
+    nickname,
     password,
     email,
-  }: SignupUserInput): Promise<CoreOutput> {
+  }: RegisterUserInput): Promise<CoreOutput> {
     try {
-      name = name.trim().replace('/', '-');
+      nickname = nickname.trim().replace('/', '-');
       password = password.trim();
       email = email.trim();
 
-      const existsName = await this.user.findOne({ where: { name } });
+      const existsNickname = await this.user.findOne({ where: { nickname } });
 
-      if (existsName) {
+      if (existsNickname) {
         return { ok: false, error: '이미 존재하는 닉네임입니다.' };
       }
 
@@ -39,7 +39,7 @@ export class AuthService {
 
       await this.user.save(
         this.user.create({
-          name,
+          nickname,
           password,
           ...(email && { email }),
           role: UserRole.User,
@@ -70,7 +70,8 @@ export class AuthService {
       if (!user) {
         return {
           ok: false,
-          error: '존재하지 않는 유저입니다.',
+          error:
+            '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
         };
       }
 
@@ -79,12 +80,13 @@ export class AuthService {
       if (!passwordCorrect) {
         return {
           ok: false,
-          error: '비밀번호가 일치하지 않습니다.',
+          error:
+            '등록되지 않은 이메일이거나, 이메일 또는 비밀번호를 잘못 입력하셨습니다.',
         };
       }
 
-      const palyload = { id: user.id };
-      const token = this.jwtService.sign(palyload);
+      const payload = { id: user.id };
+      const token = this.jwtService.sign(payload);
 
       return {
         ok: true,

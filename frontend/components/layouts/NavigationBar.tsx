@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useQuery, useQueryClient } from "react-query";
-import { apiGetMe } from "../api/axios";
+import { apiGetMe } from "../../api/axios";
 import { Transition } from "@headlessui/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -9,24 +9,31 @@ import {
   faRightToBracket,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { LOCALSTORAGE_TOKEN } from "../constant";
+import { LOCAL_STORAGE_TOKEN } from "../../constant";
 import { useRouter } from "next/router";
+import { Toast } from "../../lib/sweetalert2/toast";
 
-export const NavBar: React.FC = () => {
+export const NavigationBar: React.FC = () => {
   const queryClient = useQueryClient();
   let router = useRouter();
 
   const { isLoading: meIsLoading, data: meData } = useQuery("me", apiGetMe);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleLogout = () => {
-    localStorage.removeItem(LOCALSTORAGE_TOKEN);
+  const handleLogout = async () => {
+    localStorage.removeItem(LOCAL_STORAGE_TOKEN);
     queryClient.invalidateQueries("me");
+    window.location.reload();
   };
 
   const clickCreateExamButton = () => {
     if (!meIsLoading && !meData) {
-      alert("해당기능은 로그인이 필요합니다.");
+      Toast.fire({
+        icon: "error",
+        title: `해당기능은 로그인이 필요합니다.`,
+        position: "bottom-end",
+        timer: 3000,
+      });
     } else {
       router.push("/exam");
     }

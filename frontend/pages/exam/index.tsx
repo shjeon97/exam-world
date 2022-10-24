@@ -3,10 +3,11 @@ import { useRouter } from "next/router";
 import { useQuery } from "react-query";
 import { apiFindExamListByMe, apiGetMe } from "../../api/axios";
 import { IFindExamListByMeOutput, IUserInput } from "../../common/type";
-import { ExamCard } from "../../components/exam-card";
-import { LinkButton } from "../../components/link-button";
+import { ExamCard } from "../../components/ExamCard";
+import { LinkButton } from "../../components/buttons/LinkButton";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
+import { GrAdd } from "react-icons/gr";
 
 export default function Index() {
   const { isLoading, data } = useQuery<IFindExamListByMeOutput>(
@@ -34,7 +35,7 @@ export default function Index() {
         <title className=" text-gray-800"> 내가 만든 시험 {WEB_TITLE}</title>
       </Head>
       <div className="flex flex-row m-4 ">
-        <LinkButton name="➕" link="/exam/create" />
+        <LinkButton name={<GrAdd />} link="/exam/create" />
       </div>
       <div className="flex flex-wrap m-4 gap-2 ">
         {!isLoading &&
