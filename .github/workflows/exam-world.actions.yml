@@ -26,9 +26,14 @@ jobs:
 
       - name: Create .env.prod file
         run: |
-          jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' <<< "$SECRETS_CONTEXT" > .env.prod
-        env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> .env.prod
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env.prod
+          echo "DB_USERNAME=${{ secrets.DB_USERNAME }}" >> .env.prod
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env.prod
+          echo "PRIVATE_KEY=${{ secrets.PRIVATE_KEY }}" >> .env.prod
+          echo "PORT=${{ secrets.PORT }}" >> .env.prod
+          echo "SERVER_ADDRESS=${{ secrets.SERVER_ADDRESS }}" >> .env.prod
+        working-directory: backend
 
       - run: npm run test:e2e
         working-directory: backend
