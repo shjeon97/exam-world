@@ -11,6 +11,7 @@ import {
   apiGetMe,
 } from "../../../api/axios";
 import { IUserInput } from "../../../common/type";
+import { PageLoading } from "../../../components/PageLoading";
 import { WEB_TITLE } from "../../../constant";
 import { useInterval } from "../../../hooks/useInterval";
 
@@ -170,83 +171,85 @@ const Test = ({ id }) => {
         <title className=" text-gray-800">시험 {WEB_TITLE}</title>
       </Head>
       {!findExamByIdIsLoading &&
-        findExamByIdData.ok &&
-        !findQuestionListByIdIsLoading &&
-        findQuestionListByExamIdData.ok &&
-        !findMultipleChoiceListByExamIdIsLoading &&
-        findMultipleChoiceListByExamIdData.ok && (
-          <>
-            {time > 0 && (
-              <>
-                <div className=" fixed right-5 m-2 p-3 button text-lg bg-white">
-                  남은시간 {time}초
-                </div>
-                <br />
-              </>
-            )}
-            <div className="flex flex-wrap  mx-5  my-10">
-              {findQuestionListByExamIdData.questionList.map(
-                (question, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className=" w-auto h-min m-3 max-w-3xl  border-2 border-gray-600 p-5 rounded"
-                    >
-                      <div className=" text-lg">
-                        {question.page}번 문제 ({question.score}점)
-                      </div>
-                      <br />
-                      <div className=" border border-gray-400 rounded overflow-auto  ">
-                        <div
-                          contentEditable="true"
-                          translate="no"
-                          tabIndex={0}
-                          className="ProseMirror prose prose-sm sm:prose lg:prose-lg xl:prose-2xl m-5 focus:outline-none"
-                        >
-                          <div
-                            dangerouslySetInnerHTML={{ __html: question.text }}
-                          />
-                        </div>
-                      </div>
-                      <br />
-                      {findMultipleChoiceListByExamIdData.multipleChoiceList
-                        .filter((e) => e.page === question.page)
-                        .map((multipleChoice, index) => {
-                          return (
-                            <div
-                              onClick={() =>
-                                onClickMultipleChoice(
-                                  multipleChoice.page,
-                                  multipleChoice.no
-                                )
-                              }
-                              key={index}
-                              className={classNames(
-                                `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
-                                {
-                                  "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
-                                    multipleChoiceIsCheckedList.find(
-                                      (e) =>
-                                        e.privateKey ===
-                                        `page-${multipleChoice.page}-no-${multipleChoice.no}`
-                                    ),
-                                }
-                              )}
-                            >
-                              {index + 1}번 {multipleChoice.text}
-                            </div>
-                          );
-                        })}
+      findExamByIdData.ok &&
+      !findQuestionListByIdIsLoading &&
+      findQuestionListByExamIdData.ok &&
+      !findMultipleChoiceListByExamIdIsLoading &&
+      findMultipleChoiceListByExamIdData.ok ? (
+        <>
+          {time > 0 && (
+            <div className="mb-8 mt-2 ">
+              <div className=" fixed right-0  px-3 py-2 button text-lg bg-white">
+                남은시간 {time}초
+              </div>
+              <br />
+            </div>
+          )}
+          <div className="flex flex-wrap ">
+            {findQuestionListByExamIdData.questionList.map(
+              (question, index) => {
+                return (
+                  <div
+                    key={index}
+                    className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
+                  >
+                    <div className=" text-lg">
+                      {question.page}번 문제 ({question.score}점)
                     </div>
-                  );
-                }
-              )}
-            </div>
-            <div onClick={() => endTest()} className="button">
-              시험종료
-            </div>
-          </>
-        )}
+                    <br />
+                    <div className=" border border-gray-400 rounded overflow-auto  ">
+                      <div
+                        contentEditable="true"
+                        translate="no"
+                        tabIndex={0}
+                        className="ProseMirror m-5 focus:outline-none pointer-events-none"
+                      >
+                        <div
+                          dangerouslySetInnerHTML={{ __html: question.text }}
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    {findMultipleChoiceListByExamIdData.multipleChoiceList
+                      .filter((e) => e.page === question.page)
+                      .map((multipleChoice, index) => {
+                        return (
+                          <div
+                            onClick={() =>
+                              onClickMultipleChoice(
+                                multipleChoice.page,
+                                multipleChoice.no
+                              )
+                            }
+                            key={index}
+                            className={classNames(
+                              `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
+                              {
+                                "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
+                                  multipleChoiceIsCheckedList.find(
+                                    (e) =>
+                                      e.privateKey ===
+                                      `page-${multipleChoice.page}-no-${multipleChoice.no}`
+                                  ),
+                              }
+                            )}
+                          >
+                            {index + 1}번 {multipleChoice.text}
+                          </div>
+                        );
+                      })}
+                  </div>
+                );
+              }
+            )}
+          </div>
+          <div onClick={() => endTest()} className="button">
+            시험종료
+          </div>
+        </>
+      ) : (
+        <PageLoading text="Loading" />
+      )}
     </>
   );
 };

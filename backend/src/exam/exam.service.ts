@@ -46,7 +46,7 @@ export class ExamService {
       };
     } catch (error) {
       console.log(error);
-      return { ok: false, error: '유저 생성 실패' };
+      return { ok: false, error: '시험 생성 실패' };
     }
   }
 
@@ -61,7 +61,7 @@ export class ExamService {
       };
     } catch (error) {
       console.log(error);
-      return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
+      return { ok: false, error: 'id와 일치하는 시험 정보 가져오기 실패' };
     }
   }
 
