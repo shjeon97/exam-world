@@ -561,5 +561,34 @@ describe('AppController (e2e)', () => {
           });
       });
     });
+    describe('deleteMultipleChoiceList', () => {
+      it('보기리스트 삭제', () => {
+        return request(app.getHttpServer())
+          .delete(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 1,
+            page: 1,
+          })
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
+      it('examId와 일치하는 시험 미존재시', () => {
+        return request(app.getHttpServer())
+          .delete(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 999,
+            page: 1,
+          })
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '존재하지 않는 시험 입니다.',
+          });
+      });
+    });
   });
 });
