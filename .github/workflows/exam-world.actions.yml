@@ -42,8 +42,12 @@ jobs:
 
       - name: exam-world folder
         run: |
+          ls
+
+      - name: exam-world folder
+        run: |
           su
-          shjeon0528
+
         working-directory: ../../../../server/exam-world
 
       # - name: Log in to Docker Hub
