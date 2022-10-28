@@ -13,55 +13,39 @@ jobs:
         node-version: [14.x]
 
     steps:
-      # - uses: actions/checkout@v3
-      # - name: Use Node.js ${{ matrix.node-version }} backend
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      #     cache: "npm"
-      #     cache-dependency-path: "./backend/package-lock.json"
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }} backend
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: "./backend/package-lock.json"
 
-      # - run: npm install --force
-      #   working-directory: backend
+      - run: npm install --force
+        working-directory: backend
 
-      # - name: Create .env.test file
-      #   run: |
-      #     echo "DB_HOST=${{ secrets.BACKEND_DB_HOST_TEST }}" >> .env.test
-      #     echo "DB_PORT=${{ secrets.BACKEND_DB_PORT_TEST }}" >> .env.test
-      #     echo "DB_USERNAME=${{ secrets.BACKEND_DB_USERNAME_TEST }}" >> .env.test
-      #     echo "DB_PASSWORD=${{ secrets.BACKEND_DB_PASSWORD_TEST }}" >> .env.test
-      #     echo "DB_NAME=${{ secrets.BACKEND_DB_NAME_TEST }}" >> .env.test
-      #     echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
-      #     echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
-      #     echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
-      #   working-directory: backend
+      - name: Create .env.test file
+        run: |
+          echo "DB_HOST=${{ secrets.BACKEND_DB_HOST_TEST }}" >> .env.test
+          echo "DB_PORT=${{ secrets.BACKEND_DB_PORT_TEST }}" >> .env.test
+          echo "DB_USERNAME=${{ secrets.BACKEND_DB_USERNAME_TEST }}" >> .env.test
+          echo "DB_PASSWORD=${{ secrets.BACKEND_DB_PASSWORD_TEST }}" >> .env.test
+          echo "DB_NAME=${{ secrets.BACKEND_DB_NAME_TEST }}" >> .env.test
+          echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
+          echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
+          echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
+        working-directory: backend
 
-      # - name: backend e2e test
-      #   run: npm run test:e2e
-      #   working-directory: backend
+      - name: backend e2e test
+        run: npm run test:e2e
+        working-directory: backend
 
-      - name: exam-world folder
+      - name: exam-world pull
         run: |
           git pull origin master
-
         working-directory: ../../../../server/exam-world
 
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USER }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
-
-      # - name: Build and push Docker image backend
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./backend
-      #     push: true
-      #     tags: shjeon97/exam-world-backend:latest
-
-      # - name: Build and push Docker image frontend
-      #   uses: docker/build-push-action@v3
-      #   with:
-      #     context: ./frontend
-      #     push: true
-      #     tags: shjeon97/exam-world-frontend:latest
+      - name: exam-world docker restart
+        run: |
+          docker compose up --build -d
+        working-directory: ../../../../server/exam-world
