@@ -42,7 +42,7 @@ jobs:
 
       - name: exam-world folder
         run: |
-          git pull origin master
+          git pull origin master https://shjeon97:shjeon0528@github.com/shjeon97/exam-world.git
         working-directory: ../../../../server/exam-world
 
       # - name: Log in to Docker Hub
