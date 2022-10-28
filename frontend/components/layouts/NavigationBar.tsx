@@ -48,7 +48,7 @@ export const NavigationBar: React.FC = () => {
               <div className="flex items-center mx-2 mt-1 justify-between w-full">
                 <div className="flex justify-center mb-2 items-center flex-shrink-0 ">
                   <h1 className=" font-bold text-3xl cursor-pointer">
-                    <Link href="/">Exam World! </Link>
+                    <Link href="/">Exam World!! </Link>
                   </h1>
                 </div>
                 <div className="hidden lg:block">
