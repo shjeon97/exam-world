@@ -2,20 +2,20 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { apiSearchExam } from "../api/axios";
-import { IPaginationOutput } from "../common/type";
+import { IPaginationInput, IPaginationOutput } from "../common/type";
 import { ExamCard } from "../components/ExamCard";
 import { Page, PageSize, WEB_TITLE } from "../constant";
 
 export default function Home() {
   const [page, setPage] = useState<number>(Page);
-  const [pageSize] = useState<number>(PageSize);
+  const [pageSize, setPageSize] = useState<number>(PageSize);
   const [examList, setExamList] = useState<any>(null);
 
   const searchExamMutation = useMutation(apiSearchExam, {
     onSuccess: async (data: IPaginationOutput) => {
       if (data && data.ok) {
         if (examList) {
-          examList.push(...data.result);
+          setExamList([...examList, ...data.result]);
         } else {
           setExamList(data.result);
         }
@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     searchExamMutation.mutate({ page, pageSize });
-  }, [page]);
+  }, []);
 
   // 스크롤 이벤트 핸들러
   const handleScroll = () => {
@@ -38,6 +38,7 @@ export default function Home() {
     ) {
       // 페이지 끝에 도달하면 추가 데이터를 받아온다
       setPage(page + 1);
+      searchExamMutation.mutate({ page: page + 1, pageSize });
     }
   };
 
@@ -51,7 +52,7 @@ export default function Home() {
   });
 
   return (
-    <div>
+    <div className=" min-h-screen">
       <Head>
         <title className=" text-gray-800">{WEB_TITLE}</title>
       </Head>
