@@ -382,7 +382,7 @@ describe('AppController (e2e)', () => {
     });
   });
 
-  describe('ExamController (e2e)', () => {
+  describe('ExamController 문제, 보기 생성전 (e2e)', () => {
     const API_EXAM = '/api/exam';
     describe('createExam', () => {
       it('시험 생성 user1', () => {
@@ -419,47 +419,12 @@ describe('AppController (e2e)', () => {
           });
       });
     });
-    describe('findExamListByMe', () => {
-      it('자기가 만든 시험 정보 가져오기', () => {
-        return request(app.getHttpServer())
-          .get(API_EXAM + '/me')
-          .set('authorization', `Bearer ${user1JwtToken}`)
-          .expect(HttpStatus.OK)
-          .expect((res) => {
-            expect(res.body.ok).toBe(true);
-            expect(res.body.examList).toEqual(expect.any(Array));
-          });
-      });
-    });
-    describe('allExamList', () => {
-      it('모든 시험 정보 가져오기', () => {
-        return request(app.getHttpServer())
-          .get(API_EXAM + '/all')
-          .expect(HttpStatus.OK)
-          .expect((res) => {
-            expect(res.body.ok).toBe(true);
-            expect(res.body.examList).toEqual(expect.any(Array));
-          });
-      });
-    });
-    describe('findExamById', () => {
-      it('id로 시험 정보 가져오기', () => {
-        return request(app.getHttpServer())
-          .get(API_EXAM + '/1')
-          .set('authorization', `Bearer ${user1JwtToken}`)
-          .expect(HttpStatus.OK)
-          .expect((res) => {
-            expect(res.body.ok).toBe(true);
-            expect(res.body.exam).toEqual(expect.any(Object));
-          });
-      });
-    });
   });
 
   describe('QuestionController (e2e)', () => {
     const API_QUESTION = '/api/question';
     describe('saveQuestion', () => {
-      it('문제 저장 생성', () => {
+      it('문제 생성', () => {
         return request(app.getHttpServer())
           .post(API_QUESTION)
           .send({
@@ -474,7 +439,7 @@ describe('AppController (e2e)', () => {
             ok: true,
           });
       });
-      it('문제 저장 변경', () => {
+      it('문제 변경', () => {
         return request(app.getHttpServer())
           .post(API_QUESTION)
           .send({
@@ -511,7 +476,7 @@ describe('AppController (e2e)', () => {
   describe('MultipleChoiceController (e2e)', () => {
     const API_MULTIPLE_CHOICE = '/api/multiple-choice';
     describe('saveMultipleChoice', () => {
-      it('보기 저장 생성', () => {
+      it('보기 생성 (delete 예정)', () => {
         return request(app.getHttpServer())
           .post(API_MULTIPLE_CHOICE)
           .send({
@@ -527,7 +492,7 @@ describe('AppController (e2e)', () => {
             ok: true,
           });
       });
-      it('보기 저장 변경', () => {
+      it('보기 변경', () => {
         return request(app.getHttpServer())
           .post(API_MULTIPLE_CHOICE)
           .send({
@@ -575,6 +540,38 @@ describe('AppController (e2e)', () => {
             ok: true,
           });
       });
+      it('보기 생성', () => {
+        return request(app.getHttpServer())
+          .post(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 1,
+            text: 'test',
+            page: 1,
+            isCorrectAnswer: true,
+            no: 1,
+          })
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+      it('보기 생성2', () => {
+        return request(app.getHttpServer())
+          .post(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 1,
+            text: 'test',
+            page: 1,
+            isCorrectAnswer: true,
+            no: 2,
+          })
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
       it('examId와 일치하는 시험 미존재시', () => {
         return request(app.getHttpServer())
           .delete(API_MULTIPLE_CHOICE)
@@ -587,6 +584,147 @@ describe('AppController (e2e)', () => {
           .expect({
             ok: false,
             error: '존재하지 않는 시험 입니다.',
+          });
+      });
+    });
+  });
+
+  describe('ExamController 문제, 보기 생성후 (e2e)', () => {
+    const API_EXAM = '/api/exam';
+    describe('findExamListByMe', () => {
+      it('자기가 만든 시험 정보 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + '/me')
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.examList).toEqual(expect.any(Array));
+          });
+      });
+    });
+    describe('allExamList', () => {
+      it('모든 시험 정보 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + '/all')
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.examList).toEqual(expect.any(Array));
+          });
+      });
+    });
+    describe('findQuestionListByExamId', () => {
+      it('examId 갖고있는 모든 question 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + '/1/question')
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.questionList).toEqual(expect.any(Array));
+          });
+      });
+    });
+    describe('findMultipleChoiceListByExamId', () => {
+      it('examId 갖고있는 모든 multiple-choice 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + '/1/multiple-choice')
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.multipleChoiceList).toEqual(expect.any(Array));
+          });
+      });
+    });
+    describe('findExamById', () => {
+      it('id로 시험 정보 가져오기', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + '/1')
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.exam).toEqual(expect.any(Object));
+          });
+      });
+    });
+    describe('editExam', () => {
+      it('시험 정보 수정', () => {
+        return request(app.getHttpServer())
+          .patch(API_EXAM)
+          .send({
+            id: 1,
+            name: 'test' + update,
+            title: 'test' + update,
+            time: 0,
+            minimumPassScore: 0,
+          })
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+    describe('deleteExamLastPage', () => {
+      it('존재하지 않는 시험 Id일 경우', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/999/last-page')
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '존재하지 않는 시험 정보 입니다.',
+          });
+      });
+      it('해당 시험을 생성한 User가 아닐 경우', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/1/last-page')
+          .set('authorization', `Bearer ${user2JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '다른 사용자가 만든 문항을 삭제하실 수 없습니다.',
+          });
+      });
+      it('시험 마지막 페이지 (문제,보기) 삭제하기', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/1/last-page')
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+
+    describe('deleteExamById', () => {
+      it('존재하지 않는 시험 Id일 경우', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/999')
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '존재하지 않는 시험 정보 입니다.',
+          });
+      });
+      it('해당 시험을 생성한 User가 아닐 경우', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/1')
+          .set('authorization', `Bearer ${user2JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: false,
+            error: '다른 사용자가 만든 시험을 삭제하실 수 없습니다.',
+          });
+      });
+      it('시험 정보 삭제하기', () => {
+        return request(app.getHttpServer())
+          .delete(API_EXAM + '/1')
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
           });
       });
     });

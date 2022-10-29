@@ -12,6 +12,7 @@ import {
   IRegisterUserInput,
   IUploadImageInput,
   IDeleteMultipleChoiceListInput,
+  IPaginationInput,
 } from "../common/type";
 
 axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_SEVER_BASE_URL}/api`;
@@ -178,6 +179,28 @@ export const apiDeleteMultipleChoiceList = async ({
         page,
       },
     })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiSearchExam = async ({
+  pageSize,
+  page,
+  searchType,
+  searchValue,
+}: IPaginationInput) => {
+  return axios
+    .get(
+      `${
+        searchType && searchValue
+          ? `exam/search?pagesize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
+          : `exam/search?pagesize=${pageSize}&page=${page}`
+      }`
+    )
     .then((res) => {
       return res.data;
     })

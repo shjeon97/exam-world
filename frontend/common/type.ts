@@ -1,3 +1,28 @@
+export interface ISearchInput {
+  pagesize: number;
+  page: number;
+  searchType?: string;
+  searchValue?: string;
+}
+
+export interface ICoreOutput {
+  ok: boolean;
+  error?: string;
+}
+export interface IPaginationInput {
+  pageSize: number;
+  page: number;
+  searchType?: string;
+  searchValue?: string;
+}
+export interface IPaginationOutput extends ICoreOutput {
+  totalPage: number;
+  totalResult?: number;
+  searchType?: string;
+  searchValue?: string;
+  result?: any;
+}
+
 export interface IUserInput {
   id: number;
   email: string;
@@ -18,11 +43,6 @@ export interface IEditMeInput extends IUserInput {
 export interface ILoginInput {
   email: string;
   password: string;
-}
-
-export interface ICoreOutput {
-  ok: boolean;
-  error?: string;
 }
 
 export interface ILoginOutput extends ICoreOutput {

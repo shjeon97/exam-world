@@ -6,9 +6,9 @@ export class PaginationInput {
   page: number;
   @ApiProperty({ description: '표시할 리스트 수' })
   pagesize: number;
-  @ApiProperty({ description: '검색 타입' })
+  @ApiProperty({ description: '검색 타입', required: false })
   searchType?: string;
-  @ApiProperty({ description: '검색값' })
+  @ApiProperty({ description: '검색값', required: false })
   searchValue?: string;
 }
 

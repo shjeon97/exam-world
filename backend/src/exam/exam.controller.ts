@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
@@ -15,6 +16,7 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
+import { PaginationInput } from 'src/common/dto/pagination.dto';
 import { AllExamListOutput } from 'src/dto/all-exam-list.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
@@ -28,6 +30,7 @@ import {
   FindQuestionListByExamIdInput,
   FindQuestionListByExamIdOutput,
 } from 'src/dto/find-question-list-by-exam-id.dto';
+import { SearchExamOutput } from 'src/dto/search-exam.dto';
 import { ExamService } from './exam.service';
 
 @Controller('exam')
@@ -63,6 +66,15 @@ export class ExamController {
     return this.examService.allExamList();
   }
 
+  @ApiOperation({ summary: '시험 목록' })
+  @ApiResponse({ type: SearchExamOutput })
+  @Get('/search')
+  async searchExam(
+    @Query() searchExamInput: PaginationInput,
+  ): Promise<SearchExamOutput> {
+    return this.examService.searchExam(searchExamInput);
+  }
+
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })
   @ApiResponse({ type: FindQuestionListByExamIdOutput })
   @Get(':examId/question')
@@ -88,12 +100,24 @@ export class ExamController {
     return this.examService.findExamById(id);
   }
 
-  @ApiOperation({ summary: 'id로 시험 정보 수정' })
+  @ApiOperation({ summary: '시험 정보 수정' })
   @ApiResponse({ type: CoreOutput })
   @Role(['Any'])
   @Patch()
   async editExam(@Body() editExamInput: EditExamInput): Promise<CoreOutput> {
     return this.examService.editExam(editExamInput);
+  }
+
+  @ApiOperation({ summary: '시험 마지막 페이지 (문제,보기) 삭제하기' })
+  @ApiResponse({ type: CoreOutput })
+  @Role(['Any'])
+  @UseGuards(JwtAuthGuard)
+  @Delete(':examId/last-page')
+  async deleteExamLastPage(
+    @GetUser() user,
+    @Param() { examId }: { examId: number },
+  ): Promise<CoreOutput> {
+    return this.examService.deleteExamLastPage(user, examId);
   }
 
   @ApiOperation({ summary: '시험 정보 삭제하기' })
@@ -106,17 +130,5 @@ export class ExamController {
     @Param() { id }: { id: number },
   ): Promise<CoreOutput> {
     return this.examService.deleteExamById(user, id);
-  }
-
-  @ApiOperation({ summary: '시험 페이지 삭제하기' })
-  @ApiResponse({ type: CoreOutput })
-  @Role(['Any'])
-  @UseGuards(JwtAuthGuard)
-  @Delete(':examId/last-page')
-  async deleteExamLastPage(
-    @GetUser() user,
-    @Param() { examId }: { examId: number },
-  ): Promise<CoreOutput> {
-    return this.examService.deleteExamLastPage(user, examId);
   }
 }
