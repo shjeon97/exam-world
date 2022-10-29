@@ -1,15 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
+import { PaginationInput } from 'src/common/dto/pagination.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
 import { FindMultipleChoiceListByExamIdOutput } from 'src/dto/find-multiple-choice-list-by-exam-id.dto';
 import { FindQuestionListByExamIdOutput } from 'src/dto/find-question-list-by-exam-id.dto';
+import { SearchExamOutput } from 'src/dto/search-exam.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
 import { User, UserRole } from 'src/entity/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 
 @Injectable()
 export class ExamService {
@@ -116,6 +118,39 @@ export class ExamService {
     } catch (error) {
       console.log(error);
       return { ok: false, error: '모든 시험 정보 가져오기 실패' };
+    }
+  }
+
+  async searchExam({
+    page,
+    pagesize,
+    searchType,
+    searchValue,
+  }: PaginationInput): Promise<SearchExamOutput> {
+    try {
+      const [examList, totalResult] = await this.exam.findAndCount({
+        ...(searchType &&
+          searchValue && {
+            where: { [searchType]: ILike(`%${searchValue.trim()}%`) },
+          }),
+        skip: (page - 1) * pagesize,
+        take: pagesize,
+        order: {
+          createdAt: 'ASC',
+        },
+      });
+      return {
+        ok: true,
+        result: examList,
+        totalPage: Math.ceil(totalResult / pagesize),
+        totalResult,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ok: false,
+        error: '시험정보 가져오기 실패',
+      };
     }
   }
 
