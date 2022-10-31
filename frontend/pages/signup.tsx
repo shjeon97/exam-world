@@ -8,7 +8,7 @@ import { WEB_TITLE } from "../constant";
 import Head from "next/head";
 import { RegisterForm } from "../components/forms/register/RegisterForm";
 
-const Register = () => {
+const Signup = () => {
   let router = useRouter();
   useQuery("me", apiGetMe, {
     onSuccess: (data) => {
@@ -51,4 +51,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Signup;

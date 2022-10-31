@@ -23,6 +23,23 @@ export interface IPaginationOutput extends ICoreOutput {
   result?: any;
 }
 
+export interface IExam {
+  userId: number;
+  name: string;
+  title?: string;
+  time: number;
+  minimumPassScore: number;
+}
+export interface IQuestion {
+  examId: number;
+  page: number;
+  text: string;
+  score: number;
+}
+export interface IFindQuestionsByExamIdOutput extends ICoreOutput {
+  questions?: IQuestion[];
+}
+
 export interface IUserInput {
   id: number;
   email: string;
@@ -30,7 +47,7 @@ export interface IUserInput {
   password: string;
 }
 
-export interface IRegisterUserInput {
+export interface ISignupUserInput {
   email: string;
   nickname: string;
   password: string;

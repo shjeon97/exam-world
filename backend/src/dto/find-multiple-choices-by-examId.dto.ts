@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
-import { Question } from 'src/entity/question.entity';
 
-export class FindMultipleChoiceListByExamIdInput {
+export class FindMultipleChoicesByExamIdInput {
   @ApiProperty({ description: 'multiple Choice 가져올 examId' })
-  examId: number;
+  id: number;
 }
 
-export class FindMultipleChoiceListByExamIdOutput extends CoreOutput {
+export class FindMultipleChoicesByExamIdOutput extends CoreOutput {
   @ApiProperty({ description: 'multiple Choice 리스트' })
-  multipleChoiceList?: MultipleChoice[];
+  multipleChoices?: MultipleChoice[];
 }

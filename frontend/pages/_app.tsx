@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   const { pathname } = useRouter();
-  const authRoutes = ["/login", "/register"];
+  const authRoutes = ["/login", "/signup"];
   const authRoute = authRoutes.includes(pathname);
 
   return (

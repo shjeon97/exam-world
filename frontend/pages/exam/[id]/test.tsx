@@ -6,11 +6,11 @@ import { useQuery } from "react-query";
 import Swal from "sweetalert2";
 import {
   apiFindExamById,
-  apiFindMultipleChoiceListByExamId,
-  apiFindQuestionListByExamId,
+  apiFindMultipleChoicesByExamId,
+  apiFindQuestionsByExamId,
   apiGetMe,
 } from "../../../api/axios";
-import { IUserInput } from "../../../common/type";
+import { IFindQuestionsByExamIdOutput, IUserInput } from "../../../common/type";
 import { PageLoading } from "../../../components/PageLoading";
 import { WEB_TITLE } from "../../../constant";
 import { useInterval } from "../../../hooks/useInterval";
@@ -33,7 +33,7 @@ interface multipleChoiceIsCheckProps {
 }
 
 const Test = ({ id }) => {
-  const [multipleChoiceIsCheckedList, setMultipleChoiceIsCheckedList] =
+  const [multipleChoiceIsCheckedArray, setMultipleChoiceIsCheckedArray] =
     useState<multipleChoiceIsCheckProps[]>([]);
   const [time, setTime] = useState<number>(0);
 
@@ -45,10 +45,10 @@ const Test = ({ id }) => {
     useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
 
   const {
-    isLoading: findQuestionListByIdIsLoading,
-    data: findQuestionListByExamIdData,
-  } = useQuery<any>([`question-list-by-exam-id`, id], () =>
-    apiFindQuestionListByExamId(+id)
+    isLoading: findQuestionsByIdIsLoading,
+    data: findQuestionsByExamIdData,
+  } = useQuery<IFindQuestionsByExamIdOutput>([`questions-by-examId`, id], () =>
+    apiFindQuestionsByExamId(+id)
   );
 
   useEffect(() => {
@@ -58,23 +58,23 @@ const Test = ({ id }) => {
   }, [findExamByIdData?.exam?.time]);
 
   const {
-    isLoading: findMultipleChoiceListByExamIdIsLoading,
-    data: findMultipleChoiceListByExamIdData,
-  } = useQuery<any>([`multiple-choice-list-by-exam-id`, id], () =>
-    apiFindMultipleChoiceListByExamId(+id)
+    isLoading: findMultipleChoicesByExamIdIsLoading,
+    data: findMultipleChoicesByExamIdData,
+  } = useQuery<any>([`multipleChoices-by-examId`, id], () =>
+    apiFindMultipleChoicesByExamId(+id)
   );
 
   const onClickMultipleChoice = (page, no) => {
     if (
-      multipleChoiceIsCheckedList.find(
+      multipleChoiceIsCheckedArray.find(
         (e) => e.privateKey === `page-${page}-no-${no}`
       )
     ) {
-      setMultipleChoiceIsCheckedList((e) => [
+      setMultipleChoiceIsCheckedArray((e) => [
         ...e.filter((e) => e.privateKey !== `page-${page}-no-${no}`),
       ]);
     } else {
-      setMultipleChoiceIsCheckedList((e) => [
+      setMultipleChoiceIsCheckedArray((e) => [
         ...e,
         { page, no, isChecked: true, privateKey: `page-${page}-no-${no}` },
       ]);
@@ -84,23 +84,25 @@ const Test = ({ id }) => {
   const scoring = () => {
     setTime(0);
     let score = 0;
-    findQuestionListByExamIdData.questionList.map((question) => {
-      const findMultipleChoiceListByPage =
-        findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
+    findQuestionsByExamIdData.questions.map((question) => {
+      const findMultipleChoicesByPage =
+        findMultipleChoicesByExamIdData.multipleChoices.filter(
           (e) => e.isCorrectAnswer === true && e.page === question.page
         );
 
       if (
-        findMultipleChoiceListByPage.length ===
-        multipleChoiceIsCheckedList.filter((e) => e.page === question.page)
+        findMultipleChoicesByPage.length ===
+        multipleChoiceIsCheckedArray.filter((e) => e.page === question.page)
           .length
       ) {
         let isCorrectAnswer = true;
 
-        findMultipleChoiceListByPage.map((multipleChoice) => {
-          multipleChoiceIsCheckedList.find((e) => e.no === multipleChoice.no);
+        findMultipleChoicesByPage.map((multipleChoice) => {
+          multipleChoiceIsCheckedArray.find((e) => e.no === multipleChoice.no);
           if (
-            !multipleChoiceIsCheckedList.find((e) => e.no === multipleChoice.no)
+            !multipleChoiceIsCheckedArray.find(
+              (e) => e.no === multipleChoice.no
+            )
           ) {
             isCorrectAnswer = false;
           }
@@ -172,10 +174,10 @@ const Test = ({ id }) => {
       </Head>
       {!findExamByIdIsLoading &&
       findExamByIdData.ok &&
-      !findQuestionListByIdIsLoading &&
-      findQuestionListByExamIdData.ok &&
-      !findMultipleChoiceListByExamIdIsLoading &&
-      findMultipleChoiceListByExamIdData.ok ? (
+      !findQuestionsByIdIsLoading &&
+      findQuestionsByExamIdData.ok &&
+      !findMultipleChoicesByExamIdIsLoading &&
+      findMultipleChoicesByExamIdData.ok ? (
         <>
           {time > 0 && (
             <div className="mb-8 mt-2 ">
@@ -186,62 +188,60 @@ const Test = ({ id }) => {
             </div>
           )}
           <div className="flex flex-wrap ">
-            {findQuestionListByExamIdData.questionList.map(
-              (question, index) => {
-                return (
-                  <div
-                    key={index}
-                    className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
-                  >
-                    <div className=" text-lg">
-                      {question.page}번 문제 ({question.score}점)
-                    </div>
-                    <br />
-                    <div className=" border border-gray-400 rounded overflow-auto  ">
-                      <div
-                        contentEditable="true"
-                        translate="no"
-                        tabIndex={0}
-                        className="ProseMirror m-5 focus:outline-none pointer-events-none"
-                      >
-                        <div
-                          dangerouslySetInnerHTML={{ __html: question.text }}
-                        />
-                      </div>
-                    </div>
-                    <br />
-                    {findMultipleChoiceListByExamIdData.multipleChoiceList
-                      .filter((e) => e.page === question.page)
-                      .map((multipleChoice, index) => {
-                        return (
-                          <div
-                            onClick={() =>
-                              onClickMultipleChoice(
-                                multipleChoice.page,
-                                multipleChoice.no
-                              )
-                            }
-                            key={index}
-                            className={classNames(
-                              `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
-                              {
-                                "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
-                                  multipleChoiceIsCheckedList.find(
-                                    (e) =>
-                                      e.privateKey ===
-                                      `page-${multipleChoice.page}-no-${multipleChoice.no}`
-                                  ),
-                              }
-                            )}
-                          >
-                            {index + 1}번 {multipleChoice.text}
-                          </div>
-                        );
-                      })}
+            {findQuestionsByExamIdData.questions.map((question, index) => {
+              return (
+                <div
+                  key={index}
+                  className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
+                >
+                  <div className=" text-lg">
+                    {question.page}번 문제 ({question.score}점)
                   </div>
-                );
-              }
-            )}
+                  <br />
+                  <div className=" border border-gray-400 rounded overflow-auto  ">
+                    <div
+                      contentEditable="true"
+                      translate="no"
+                      tabIndex={0}
+                      className="ProseMirror m-5 focus:outline-none pointer-events-none"
+                    >
+                      <div
+                        dangerouslySetInnerHTML={{ __html: question.text }}
+                      />
+                    </div>
+                  </div>
+                  <br />
+                  {findMultipleChoicesByExamIdData.multipleChoices
+                    .filter((e) => e.page === question.page)
+                    .map((multipleChoice, index) => {
+                      return (
+                        <div
+                          onClick={() =>
+                            onClickMultipleChoice(
+                              multipleChoice.page,
+                              multipleChoice.no
+                            )
+                          }
+                          key={index}
+                          className={classNames(
+                            `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
+                            {
+                              "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
+                                multipleChoiceIsCheckedArray.find(
+                                  (e) =>
+                                    e.privateKey ===
+                                    `page-${multipleChoice.page}-no-${multipleChoice.no}`
+                                ),
+                            }
+                          )}
+                        >
+                          {index + 1}번 {multipleChoice.text}
+                        </div>
+                      );
+                    })}
+                </div>
+              );
+            })}
           </div>
           <div onClick={() => endTest()} className="button">
             시험종료

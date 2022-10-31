@@ -8,7 +8,7 @@ import { Page, PageSize, WEB_TITLE } from "../constant";
 
 export default function Home() {
   const [page, setPage] = useState<number>(Page);
-  const [pageSize, setPageSize] = useState<number>(PageSize);
+  const [pageSize] = useState<number>(PageSize);
   const [examList, setExamList] = useState<any>(null);
 
   const searchExamMutation = useMutation(apiSearchExam, {
@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     searchExamMutation.mutate({ page, pageSize });
-  }, []);
+  }, [page]);
 
   // 스크롤 이벤트 핸들러
   const handleScroll = () => {
@@ -38,7 +38,6 @@ export default function Home() {
     ) {
       // 페이지 끝에 도달하면 추가 데이터를 받아온다
       setPage(page + 1);
-      searchExamMutation.mutate({ page: page + 1, pageSize });
     }
   };
 
@@ -70,6 +69,9 @@ export default function Home() {
               </div>
             );
           })}
+      </div>
+      <div className="button" onClick={() => setPage(page + 1)}>
+        더보기
       </div>
     </div>
   );

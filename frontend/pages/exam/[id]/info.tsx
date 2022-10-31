@@ -6,10 +6,10 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
   apiSaveMultipleChoice,
   apiSaveQuestion,
-  apiDeleteMultipleChoiceList,
+  apiDeleteMultipleChoicesByExamIdAndPage,
   apiFindExamById,
-  apiFindMultipleChoiceListByExamId,
-  apiFindQuestionListByExamId,
+  apiFindMultipleChoicesByExamId,
+  apiFindQuestionsByExamId,
   apiGetMe,
   apiDeleteExamLastPage,
 } from "../../../api/axios";
@@ -42,8 +42,9 @@ export default function ExamInfo({ id }) {
   const [multipleChoiceNumber, setMultipleChoiceNumber] = useState<string[]>(
     []
   );
-  const [findMultipleChoiceListByPage, setFindMultipleChoiceListByPage] =
-    useState([]);
+  const [findMultipleChoicesByPage, setFindMultipleChoicesByPage] = useState(
+    []
+  );
   const [page, setPage] = useState(1);
   const queryClient = useQueryClient();
 
@@ -68,8 +69,8 @@ export default function ExamInfo({ id }) {
 
   const saveQuestionMutation = useMutation(apiSaveQuestion);
   const saveMultipleChoiceMutation = useMutation(apiSaveMultipleChoice);
-  const deleteMultipleChoiceListMutation = useMutation(
-    apiDeleteMultipleChoiceList
+  const deleteMultipleChoicesByExamIdAndPageMutation = useMutation(
+    apiDeleteMultipleChoicesByExamIdAndPage
   );
 
   const deleteExamLastPageMutation = useMutation(apiDeleteExamLastPage, {
@@ -82,8 +83,8 @@ export default function ExamInfo({ id }) {
           timer: 1200,
         });
         onCreateQuestionAndMultipleChoiceClick();
-        queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-        queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+        queryClient.invalidateQueries([`questions-by-examId`, id]);
+        queryClient.invalidateQueries([`multipleChoices-by-examId`, id]);
       }
     },
   });
@@ -92,17 +93,17 @@ export default function ExamInfo({ id }) {
     useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
 
   const {
-    isLoading: findQuestionListByIdIsLoading,
-    data: findQuestionListByExamIdData,
-  } = useQuery<any>([`question-list-by-exam-id`, id], () =>
-    apiFindQuestionListByExamId(+id)
+    isLoading: findQuestionsByIdIsLoading,
+    data: findQuestionsByExamIdData,
+  } = useQuery<any>([`questions-by-examId`, id], () =>
+    apiFindQuestionsByExamId(+id)
   );
 
   const {
-    isLoading: findMultipleChoiceListByExamIdIsLoading,
-    data: findMultipleChoiceListByExamIdData,
-  } = useQuery<any>([`multiple-choice-list-by-exam-id`, id], () =>
-    apiFindMultipleChoiceListByExamId(+id)
+    isLoading: findMultipleChoicesByExamIdIsLoading,
+    data: findMultipleChoicesByExamIdData,
+  } = useQuery<any>([`multipleChoices-by-examId`, id], () =>
+    apiFindMultipleChoicesByExamId(+id)
   );
 
   const tiptapEditor = (editor: any) => {
@@ -128,13 +129,11 @@ export default function ExamInfo({ id }) {
 
   useEffect(() => {
     try {
-      setPage(findQuestionListByExamIdData?.questionList.length + 1);
+      setPage(findQuestionsByExamIdData?.questions.length + 1);
     } catch (error) {
       console.log(error);
     }
-  }, [
-    findQuestionListByExamIdData && findQuestionListByExamIdData.questionList,
-  ]);
+  }, [findQuestionsByExamIdData && findQuestionsByExamIdData.questions]);
 
   const saveQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
@@ -175,7 +174,7 @@ export default function ExamInfo({ id }) {
       score: +score,
     });
 
-    await deleteMultipleChoiceListMutation.mutateAsync({
+    await deleteMultipleChoicesByExamIdAndPageMutation.mutateAsync({
       examId: +id,
       page,
     });
@@ -196,14 +195,14 @@ export default function ExamInfo({ id }) {
       timer: 1200,
     });
     onCreateQuestionAndMultipleChoiceClick();
-    queryClient.invalidateQueries([`question-list-by-exam-id`, id]);
-    queryClient.invalidateQueries([`multiple-choice-list-by-exam-id`, id]);
+    queryClient.invalidateQueries([`questions-by-examId`, id]);
+    queryClient.invalidateQueries([`multipleChoices-by-examId`, id]);
   };
 
   const handleChangePage = (page: number) => {
     setPage(page);
 
-    const findQuestionByPage = findQuestionListByExamIdData.questionList.filter(
+    const findQuestionByPage = findQuestionsByExamIdData.questions.filter(
       (question) => question.page === page
     )[0];
 
@@ -213,13 +212,13 @@ export default function ExamInfo({ id }) {
 
     setMultipleChoiceNumber([]);
 
-    setFindMultipleChoiceListByPage(
-      findMultipleChoiceListByExamIdData.multipleChoiceList.filter(
+    setFindMultipleChoicesByPage(
+      findMultipleChoicesByExamIdData.multipleChoices.filter(
         (e) => e.page === page
       )
     );
 
-    findMultipleChoiceListByExamIdData.multipleChoiceList
+    findMultipleChoicesByExamIdData.multipleChoices
       .filter((e) => e.page === page)
       .map(() => {
         onAddOptionClick();
@@ -238,10 +237,10 @@ export default function ExamInfo({ id }) {
   };
 
   const onCreateQuestionAndMultipleChoiceClick = () => {
-    setPage(findQuestionListByExamIdData?.questionList.length + 1);
+    setPage(findQuestionsByExamIdData?.questions.length + 1);
     tiptap?.commands?.setContent(``);
     saveQuestionAndMultipleChoiceSetValue("score", 1);
-    setFindMultipleChoiceListByPage([]);
+    setFindMultipleChoicesByPage([]);
     setMultipleChoiceNumber([]);
   };
 
@@ -269,18 +268,18 @@ export default function ExamInfo({ id }) {
       </Head>
       {!findExamByIdIsLoading &&
         findExamByIdData &&
-        !findMultipleChoiceListByExamIdIsLoading &&
-        !findQuestionListByIdIsLoading && (
+        !findMultipleChoicesByExamIdIsLoading &&
+        !findQuestionsByIdIsLoading && (
           <>
             <div className="p-10  m flex flex-col items-center justify-center">
               <div className="sm:max-w-2xl  md:scale-100 scale-90  max-w-sm">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
                 <EditExamForm id={id} />
                 <div className="mt-4">
-                  {findQuestionListByExamIdData &&
-                    findQuestionListByExamIdData.questionList.length > 0 && (
+                  {findQuestionsByExamIdData &&
+                    findQuestionsByExamIdData.questions.length > 0 && (
                       <div className="flex flex-wrap">
-                        {findQuestionListByExamIdData.questionList.map(
+                        {findQuestionsByExamIdData.questions.map(
                           (question, index) => {
                             return (
                               <div
@@ -310,8 +309,7 @@ export default function ExamInfo({ id }) {
                 <br />
                 <div className="flex flex-row justify-between items-center">
                   <div className="text-lg font-medium">문제 {page}번</div>
-                  {page ===
-                    findQuestionListByExamIdData?.questionList.length && (
+                  {page === findQuestionsByExamIdData?.questions.length && (
                     <div
                       onClick={() => handleDeleteExamPage()}
                       className="button"
@@ -389,8 +387,7 @@ export default function ExamInfo({ id }) {
                                           `multipleChoice-${id}`
                                         )}
                                         defaultValue={
-                                          findMultipleChoiceListByPage[index]
-                                            ?.text
+                                          findMultipleChoicesByPage[index]?.text
                                         }
                                       />
                                     </div>
@@ -406,7 +403,7 @@ export default function ExamInfo({ id }) {
                                         type="checkbox"
                                         className="w-6 h-6 "
                                         defaultChecked={
-                                          findMultipleChoiceListByPage[index]
+                                          findMultipleChoicesByPage[index]
                                             ?.isCorrectAnswer
                                         }
                                       />
