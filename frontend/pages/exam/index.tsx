@@ -11,7 +11,7 @@ import { GrAdd } from "react-icons/gr";
 
 export default function Index() {
   const { isLoading, data } = useQuery<IFindExamListByMeOutput>(
-    "exam_list_by_me",
+    "exams_by_me",
     apiFindExamListByMe
   );
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(

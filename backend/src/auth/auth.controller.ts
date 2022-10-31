@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { RegisterUserInput as RegisterUserInput } from 'src/dto/signup-user.dto';
+import { SignupUserInput as SignupUserInput } from 'src/dto/signup-user.dto';
 import { LoginInput, LoginOutput } from 'src/dto/login.dto';
 import { AuthService } from './auth.service';
 
@@ -12,11 +12,11 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '유저 생성' })
   @ApiResponse({ type: CoreOutput })
-  @Post('/register')
-  async createUser(
-    @Body() createUserInput: RegisterUserInput,
+  @Post('/signup')
+  async signupUser(
+    @Body() signupUserInput: SignupUserInput,
   ): Promise<CoreOutput> {
-    return this.authService.createUser(createUserInput);
+    return this.authService.createUser(signupUserInput);
   }
 
   @HttpCode(HttpStatus.OK)

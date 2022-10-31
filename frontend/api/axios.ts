@@ -9,9 +9,9 @@ import {
   IEditMeInput,
   ILoginInput,
   ISendQuestionInput,
-  IRegisterUserInput,
+  ISignupUserInput,
   IUploadImageInput,
-  IDeleteMultipleChoiceListInput,
+  IDeleteMultipleChoiceListInput as IDeleteMultipleChoicesByExamIdAndPageInput,
   IPaginationInput,
 } from "../common/type";
 
@@ -25,13 +25,13 @@ axios.interceptors.request.use(function (config) {
 });
 
 // 회원가입
-export const apiRegisterUser = async ({
+export const apiSignupUser = async ({
   email,
   nickname,
   password,
-}: IRegisterUserInput) => {
+}: ISignupUserInput) => {
   return axios
-    .post(`/auth/register`, {
+    .post(`/auth/signup`, {
       email,
       nickname,
       password,
@@ -113,7 +113,7 @@ export const apiEditMe = async ({
   editPassword,
 }: IEditMeInput) => {
   return axios
-    .patch("/user/me", {
+    .put("/user/me", {
       email,
       password,
       nickname,
@@ -136,7 +136,7 @@ export const apiEditExam = async ({
   minimumPassScore,
 }: IEditExamInput) => {
   return axios
-    .patch("/exam", {
+    .put("/exam", {
       id,
       name,
       title,
@@ -168,12 +168,12 @@ export const apiDeleteMe = async ({ password }: IDeleteMeInput) => {
 };
 
 // 보기 리스트 삭제
-export const apiDeleteMultipleChoiceList = async ({
+export const apiDeleteMultipleChoicesByExamIdAndPage = async ({
   examId,
   page,
-}: IDeleteMultipleChoiceListInput) => {
+}: IDeleteMultipleChoicesByExamIdAndPageInput) => {
   return axios
-    .delete("/multiple-choice", {
+    .delete("/multiple-choices", {
       data: {
         examId,
         page,
@@ -245,18 +245,6 @@ export const apiGetMe = async () => {
     });
 };
 
-// 모든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정)
-export const apiAllExamList = async () => {
-  return axios
-    .get("exam/all")
-    .then((res) => {
-      return res.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
 // 내가 만든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정))
 export const apiFindExamListByMe = async () => {
   return axios
@@ -270,10 +258,10 @@ export const apiFindExamListByMe = async () => {
 };
 
 // 시험과 관련된 문제 정보 가져오기
-export const apiFindQuestionListByExamId = async (examId: number) => {
+export const apiFindQuestionsByExamId = async (examId: number) => {
   if (examId) {
     return axios
-      .get(`exam/${examId}/question`)
+      .get(`exam/${examId}/questions`)
       .then((res) => {
         return res.data;
       })
@@ -284,10 +272,10 @@ export const apiFindQuestionListByExamId = async (examId: number) => {
 };
 
 // 시험과 관련된 보기 정보 가져오기
-export const apiFindMultipleChoiceListByExamId = async (examId: number) => {
+export const apiFindMultipleChoicesByExamId = async (examId: number) => {
   if (examId) {
     return axios
-      .get(`exam/${examId}/multiple-choice`)
+      .get(`exam/${examId}/multiple-choices`)
       .then((res) => {
         return res.data;
       })

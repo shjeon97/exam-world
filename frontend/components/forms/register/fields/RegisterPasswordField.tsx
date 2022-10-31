@@ -1,11 +1,11 @@
 import classNames from "classnames";
 import { FC } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
-import { IRegisterUserInput } from "../../../../common/type";
+import { ISignupUserInput } from "../../../../common/type";
 import { FormError } from "../../FormError";
 
 type Props = {
-  register: UseFormRegister<IRegisterUserInput>;
+  register: UseFormRegister<ISignupUserInput>;
   error?: FieldError;
 };
 

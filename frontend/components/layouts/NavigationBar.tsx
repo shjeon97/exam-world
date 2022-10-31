@@ -95,7 +95,7 @@ export const NavigationBar: React.FC = () => {
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   type="button"
-                  className=" inline-flex items-center justify-center rounded text-white "
+                  className=" inline-flex items-center justify-center rounded text-white"
                   aria-controls="mobile-menu"
                   aria-expanded="false"
                 >
@@ -133,7 +133,7 @@ export const NavigationBar: React.FC = () => {
           >
             {(ref) => (
               <div
-                className="lg:hidden border-2 border-gray-900 mx-1"
+                className="lg:hidden border-2 border-gray-900 m-1 "
                 id="mobile-menu"
               >
                 <div

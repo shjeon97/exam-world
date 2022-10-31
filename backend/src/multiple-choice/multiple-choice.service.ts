@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { SaveMultipleChoiceInput as saveMultipleChoiceInput } from 'src/dto/save-multiple-choice.dto';
-import { DeleteMultipleChoiceListInput } from 'src/dto/delete-multiple-choice.dto';
+import { DeleteMultipleChoicesByExamIdAndPageInput } from 'src/dto/delete-multiple-choice.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Repository } from 'typeorm';
@@ -55,10 +55,10 @@ export class MultipleChoiceService {
     }
   }
 
-  async deleteMultipleChoiceList({
+  async deleteMultipleChoicesByExamIdAndPage({
     examId,
     page,
-  }: DeleteMultipleChoiceListInput): Promise<CoreOutput> {
+  }: DeleteMultipleChoicesByExamIdAndPageInput): Promise<CoreOutput> {
     try {
       const exam = await this.exam.findOne({ where: { id: +examId } });
 

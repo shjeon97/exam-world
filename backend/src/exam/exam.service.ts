@@ -4,8 +4,8 @@ import { CoreOutput } from 'src/common/dto/output.dto';
 import { PaginationInput } from 'src/common/dto/pagination.dto';
 import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
 import { EditExamInput } from 'src/dto/edit-exam.dto';
-import { FindMultipleChoiceListByExamIdOutput } from 'src/dto/find-multiple-choice-list-by-exam-id.dto';
-import { FindQuestionListByExamIdOutput } from 'src/dto/find-question-list-by-exam-id.dto';
+import { FindMultipleChoicesByExamIdOutput } from 'src/dto/find-multiple-choices-by-examId.dto';
+import { FindQuestionsByExamIdOutput } from 'src/dto/find-questions-by-examId.dto';
 import { SearchExamOutput } from 'src/dto/search-exam.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
@@ -104,22 +104,7 @@ export class ExamService {
       return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
     }
   }
-
-  async allExamList() {
-    try {
-      const examList = await this.exam.find({
-        relations: ['user'],
-        order: { createdAt: 'asc' },
-      });
-      return {
-        ok: true,
-        examList,
-      };
-    } catch (error) {
-      console.log(error);
-      return { ok: false, error: '모든 시험 정보 가져오기 실패' };
-    }
-  }
+  s;
 
   async searchExam({
     page,
@@ -209,17 +194,17 @@ export class ExamService {
     }
   }
 
-  async findQuestionListByExamId(
-    examId: number,
-  ): Promise<FindQuestionListByExamIdOutput> {
+  async findQuestionsByExamId(
+    id: number,
+  ): Promise<FindQuestionsByExamIdOutput> {
     try {
-      const questionList = await this.question.find({
-        where: { exam: { id: examId } },
+      const questions = await this.question.find({
+        where: { exam: { id } },
         order: { page: 'asc' },
       });
       return {
         ok: true,
-        questionList,
+        questions,
       };
     } catch (error) {
       console.log(error);
@@ -230,24 +215,24 @@ export class ExamService {
     }
   }
 
-  async findMultipleChoiceListByExamId(
-    examId: number,
-  ): Promise<FindMultipleChoiceListByExamIdOutput> {
+  async findMultipleChoicesByExamId(
+    id: number,
+  ): Promise<FindMultipleChoicesByExamIdOutput> {
     try {
-      const multipleChoiceList = await this.multipleChoice.find({
-        where: { exam: { id: examId } },
+      const multipleChoices = await this.multipleChoice.find({
+        where: { exam: { id } },
         order: { no: 'ASC' },
       });
 
       return {
         ok: true,
-        multipleChoiceList,
+        multipleChoices,
       };
     } catch (error) {
       console.log(error);
       return {
         ok: false,
-        error: 'examId에 일치하는 multiple Choice list 가져오기 실패',
+        error: 'examId에 일치하는 multiple Choices 가져오기 실패',
       };
     }
   }

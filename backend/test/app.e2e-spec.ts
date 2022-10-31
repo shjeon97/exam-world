@@ -62,8 +62,8 @@ describe('AppController (e2e)', () => {
   });
 
   describe('AuthController (e2e)', () => {
-    describe('createUser', () => {
-      const API_AUTH_SIGNUP = '/api/auth/register';
+    describe('signupUser', () => {
+      const API_AUTH_SIGNUP = '/api/auth/signup';
       it('계정이 생성되는지 확인', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
@@ -234,7 +234,7 @@ describe('AppController (e2e)', () => {
     describe('editMe', () => {
       it('잘못된 비밀번호일시', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: update + user1.email,
             nickname: user1.nickname,
@@ -250,7 +250,7 @@ describe('AppController (e2e)', () => {
 
       it('내 이메일정보 수정', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: update + user1.email,
             nickname: user1.nickname,
@@ -268,7 +268,7 @@ describe('AppController (e2e)', () => {
 
       it('내 닉네임정보 수정', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: user1.email,
             nickname: update + user1.nickname,
@@ -286,7 +286,7 @@ describe('AppController (e2e)', () => {
 
       it('내 비밀번호 정보 수정', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: user1.email,
             nickname: user1.nickname,
@@ -305,7 +305,7 @@ describe('AppController (e2e)', () => {
 
       it('변경할려는 이메일 이미 존재시', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: user2.email,
             nickname: user1.nickname,
@@ -321,7 +321,7 @@ describe('AppController (e2e)', () => {
 
       it('변경할려는 닉네임 이미 존재시', () => {
         return request(app.getHttpServer())
-          .patch(API_USER_ME)
+          .put(API_USER_ME)
           .send({
             email: user1.email,
             nickname: user2.nickname,
@@ -389,8 +389,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_EXAM)
           .send({
-            name: 'TEST2 name',
-            title: 'TEST2 title',
+            name: 'TEST1 name',
+            title: 'TEST1 title',
             time: 60,
             minimumPassScore: 60,
           })
@@ -428,12 +428,12 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_QUESTION)
           .send({
-            examId: 1,
+            examId: 2,
             text: 'test',
             page: 1,
             score: 1,
           })
-          .set('authorization', `Bearer ${user1JwtToken}`)
+          .set('authorization', `Bearer ${user2JwtToken}`)
           .expect(HttpStatus.CREATED)
           .expect({
             ok: true,
@@ -443,12 +443,12 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_QUESTION)
           .send({
-            examId: 1,
+            examId: 2,
             text: 'test2',
             page: 1,
             score: 1,
           })
-          .set('authorization', `Bearer ${user1JwtToken}`)
+          .set('authorization', `Bearer ${user2JwtToken}`)
           .expect(HttpStatus.CREATED)
           .expect({
             ok: true,
@@ -525,11 +525,44 @@ describe('AppController (e2e)', () => {
             error: '존재하지 않는 시험 입니다.',
           });
       });
-    });
-    describe('deleteMultipleChoiceList', () => {
-      it('보기리스트 삭제', () => {
+
+      it('보기 생성', () => {
         return request(app.getHttpServer())
-          .delete(API_MULTIPLE_CHOICE)
+          .post(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 2,
+            text: 'test',
+            page: 1,
+            isCorrectAnswer: true,
+            no: 1,
+          })
+          .set('authorization', `Bearer ${user2JwtToken}`)
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+      it('보기 생성2', () => {
+        return request(app.getHttpServer())
+          .post(API_MULTIPLE_CHOICE)
+          .send({
+            examId: 2,
+            text: 'test',
+            page: 1,
+            isCorrectAnswer: true,
+            no: 2,
+          })
+          .set('authorization', `Bearer ${user2JwtToken}`)
+          .expect(HttpStatus.CREATED)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+    describe('deleteMultipleChoicesByExamIdAndPage', () => {
+      it('examId, page 정보와 일치하는 보기 모두 삭제', () => {
+        return request(app.getHttpServer())
+          .delete(API_MULTIPLE_CHOICE + 's')
           .send({
             examId: 1,
             page: 1,
@@ -540,41 +573,9 @@ describe('AppController (e2e)', () => {
             ok: true,
           });
       });
-      it('보기 생성', () => {
-        return request(app.getHttpServer())
-          .post(API_MULTIPLE_CHOICE)
-          .send({
-            examId: 1,
-            text: 'test',
-            page: 1,
-            isCorrectAnswer: true,
-            no: 1,
-          })
-          .set('authorization', `Bearer ${user1JwtToken}`)
-          .expect(HttpStatus.CREATED)
-          .expect({
-            ok: true,
-          });
-      });
-      it('보기 생성2', () => {
-        return request(app.getHttpServer())
-          .post(API_MULTIPLE_CHOICE)
-          .send({
-            examId: 1,
-            text: 'test',
-            page: 1,
-            isCorrectAnswer: true,
-            no: 2,
-          })
-          .set('authorization', `Bearer ${user1JwtToken}`)
-          .expect(HttpStatus.CREATED)
-          .expect({
-            ok: true,
-          });
-      });
       it('examId와 일치하는 시험 미존재시', () => {
         return request(app.getHttpServer())
-          .delete(API_MULTIPLE_CHOICE)
+          .delete(API_MULTIPLE_CHOICE + 's')
           .send({
             examId: 999,
             page: 1,
@@ -603,36 +604,25 @@ describe('AppController (e2e)', () => {
           });
       });
     });
-    describe('allExamList', () => {
-      it('모든 시험 정보 가져오기', () => {
-        return request(app.getHttpServer())
-          .get(API_EXAM + '/all')
-          .expect(HttpStatus.OK)
-          .expect((res) => {
-            expect(res.body.ok).toBe(true);
-            expect(res.body.examList).toEqual(expect.any(Array));
-          });
-      });
-    });
-    describe('findQuestionListByExamId', () => {
+    describe('findQuestionsByExamId', () => {
       it('examId 갖고있는 모든 question 가져오기', () => {
         return request(app.getHttpServer())
-          .get(API_EXAM + '/1/question')
+          .get(API_EXAM + '/1/questions')
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.ok).toBe(true);
-            expect(res.body.questionList).toEqual(expect.any(Array));
+            expect(res.body.questions).toEqual(expect.any(Array));
           });
       });
     });
-    describe('findMultipleChoiceListByExamId', () => {
+    describe('findMultipleChoicesByExamId', () => {
       it('examId 갖고있는 모든 multiple-choice 가져오기', () => {
         return request(app.getHttpServer())
-          .get(API_EXAM + '/1/multiple-choice')
+          .get(API_EXAM + '/1/multiple-choices')
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.ok).toBe(true);
-            expect(res.body.multipleChoiceList).toEqual(expect.any(Array));
+            expect(res.body.multipleChoices).toEqual(expect.any(Array));
           });
       });
     });
@@ -650,7 +640,7 @@ describe('AppController (e2e)', () => {
     describe('editExam', () => {
       it('시험 정보 수정', () => {
         return request(app.getHttpServer())
-          .patch(API_EXAM)
+          .put(API_EXAM)
           .send({
             id: 1,
             name: 'test' + update,
@@ -688,8 +678,8 @@ describe('AppController (e2e)', () => {
       });
       it('시험 마지막 페이지 (문제,보기) 삭제하기', () => {
         return request(app.getHttpServer())
-          .delete(API_EXAM + '/1/last-page')
-          .set('authorization', `Bearer ${user1JwtToken}`)
+          .delete(API_EXAM + '/2/last-page')
+          .set('authorization', `Bearer ${user2JwtToken}`)
           .expect(HttpStatus.OK)
           .expect({
             ok: true,

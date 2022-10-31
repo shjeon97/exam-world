@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { FormButton } from "../FormButton";
 import { useMutation } from "react-query";
-import { apiRegisterUser as apiRegisterUser } from "../../../api/axios";
-import { ICoreOutput, IRegisterUserInput } from "../../../common/type";
+import { apiSignupUser as apiSignupUser } from "../../../api/axios";
+import { ICoreOutput, ISignupUserInput } from "../../../common/type";
 import { FormError } from "../FormError";
 import { useRouter } from "next/router";
 import { Toast } from "../../../lib/sweetalert2/toast";
@@ -16,9 +16,9 @@ export const RegisterForm = () => {
     getValues,
     formState: { errors, isValid },
     handleSubmit,
-  } = useForm<IRegisterUserInput>({ mode: "onChange" });
+  } = useForm<ISignupUserInput>({ mode: "onChange" });
   let router = useRouter();
-  const registerUserMutation = useMutation(apiRegisterUser, {
+  const registerUserMutation = useMutation(apiSignupUser, {
     onSuccess: (data: ICoreOutput) => {
       if (data.ok) {
         Toast.fire({
