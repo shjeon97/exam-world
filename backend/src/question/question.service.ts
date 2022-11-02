@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SaveQuestionInput, SaveQuestionOutput } from 'src/dto/save-question';
+import {
+  SaveQuestionInput,
+  SaveQuestionOutput,
+} from 'src/question/dto/save-question';
 import { Exam } from 'src/entity/exam.entity';
 import { Question } from 'src/entity/question.entity';
 import { Repository } from 'typeorm';

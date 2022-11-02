@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SaveMultipleChoiceInput as saveMultipleChoiceInput } from 'src/dto/save-multiple-choice.dto';
-import { DeleteMultipleChoicesByExamIdAndPageInput } from 'src/dto/delete-multiple-choice.dto';
+import { SaveMultipleChoiceInput as saveMultipleChoiceInput } from 'src/multipleChoice/dto/save-multipleChoice.dto';
+import { DeleteMultipleChoicesByExamIdAndPageInput } from 'src/multipleChoice/dto/delete-multipleChoice.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Repository } from 'typeorm';

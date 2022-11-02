@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SendQuestionInput } from 'src/dto/send-question.dto';
+import { SendQuestionInput } from 'src/qna/dto/send-question.dto';
 import { Qna } from 'src/entity/qna.entity';
 import { Repository } from 'typeorm';
 

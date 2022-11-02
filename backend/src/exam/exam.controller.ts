@@ -17,21 +17,21 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { PaginationInput } from 'src/common/dto/pagination.dto';
-import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
-import { DeleteExamByIdInput } from 'src/dto/delete-exam-by-id.dto';
-import { DeleteExamLastPageByExamIdInput } from 'src/dto/delete-exam-lastPage-by-exmaId.dto';
-import { EditExamInput } from 'src/dto/edit-exam.dto';
-import { FindExamByIdInput } from 'src/dto/find-exam-by-id.dto';
-import { FindExamListByMeOutput as FindExamListByMeOutput } from 'src/dto/find-examList-by-me.dto';
+import { CreateExamInput, CreateExamOutput } from 'src/exam/dto/create-exam';
+import { DeleteExamByIdInput } from 'src/exam/dto/delete-exam-by-id.dto';
+import { DeleteExamLastPageByExamIdInput } from 'src/exam/dto/delete-exam-lastPage-by-exmaId.dto';
+import { EditExamInput } from 'src/exam/dto/edit-exam.dto';
+import { FindExamByIdInput } from 'src/exam/dto/find-exam-by-id.dto';
+import { FindExamsByMeOutput as FindExamsByMeOutput } from 'src/exam/dto/find-exams-by-me.dto';
 import {
   FindMultipleChoicesByExamIdInput,
   FindMultipleChoicesByExamIdOutput,
-} from 'src/dto/find-multiple-choices-by-examId.dto';
+} from 'src/exam/dto/find-multipleChoices-by-examId.dto';
 import {
   FindQuestionsByExamIdInput,
   FindQuestionsByExamIdOutput,
-} from 'src/dto/find-questions-by-examId.dto';
-import { SearchExamOutput } from 'src/dto/search-exam.dto';
+} from 'src/exam/dto/find-questions-by-examId.dto';
+import { SearchExamOutput } from 'src/exam/dto/search-exam.dto';
 import { User } from 'src/entity/user.entity';
 import { ExamService } from './exam.service';
 
@@ -55,14 +55,12 @@ export class ExamController {
 
   @ApiOperation({ summary: '자기가 만든 시험 정보 가져오기' })
   @ApiBearerAuth('authorization')
-  @ApiResponse({ type: FindExamListByMeOutput })
+  @ApiResponse({ type: FindExamsByMeOutput })
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Get('/me')
-  async findExamListByMe(
-    @GetUser() user: User,
-  ): Promise<FindExamListByMeOutput> {
-    return this.examService.findExamListByMe(user);
+  async findExamsByMe(@GetUser() user: User): Promise<FindExamsByMeOutput> {
+    return this.examService.findExamsByMe(user);
   }
 
   @ApiOperation({ summary: '시험 목록' })
@@ -93,7 +91,7 @@ export class ExamController {
   }
 
   @ApiOperation({ summary: 'id로 시험 정보 가져오기' })
-  @ApiResponse({ type: FindExamListByMeOutput })
+  @ApiResponse({ type: FindExamsByMeOutput })
   @Get(':id')
   async findExamById(@Param() { id }: FindExamByIdInput) {
     return this.examService.findExamById(id);

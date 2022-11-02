@@ -1,17 +1,9 @@
 import Head from "next/head";
 import React from "react";
-import { useQuery } from "react-query";
-import { apiGetMe } from "../api/axios";
-import { IUserInput } from "../common/type";
 import { QnaForm } from "../components/forms/qna/QnaForm";
 import { WEB_TITLE } from "../constant";
 
 const Qna = () => {
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
-
   return (
     <>
       <Head>

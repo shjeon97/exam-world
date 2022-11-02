@@ -11,7 +11,7 @@ import {
   ISendQuestionInput,
   ISignupUserInput,
   IUploadImageInput,
-  IDeleteMultipleChoiceListInput as IDeleteMultipleChoicesByExamIdAndPageInput,
+  IDeleteMultipleChoicesInput as IDeleteMultipleChoicesByExamIdAndPageInput,
   IPaginationInput,
 } from "../common/type";
 
@@ -246,7 +246,7 @@ export const apiGetMe = async () => {
 };
 
 // 내가 만든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정))
-export const apiFindExamListByMe = async () => {
+export const apiFindExamsByMe = async () => {
   return axios
     .get("exam/me")
     .then((res) => {

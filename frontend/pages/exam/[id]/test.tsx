@@ -42,13 +42,14 @@ const Test = ({ id }) => {
     apiGetMe
   );
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
+    useQuery<any>([`exam-by-id`, { id }], () => apiFindExamById(+id));
 
   const {
     isLoading: findQuestionsByIdIsLoading,
     data: findQuestionsByExamIdData,
-  } = useQuery<IFindQuestionsByExamIdOutput>([`questions-by-examId`, id], () =>
-    apiFindQuestionsByExamId(+id)
+  } = useQuery<IFindQuestionsByExamIdOutput>(
+    [`questions-by-examId`, { examId: id }],
+    () => apiFindQuestionsByExamId(+id)
   );
 
   useEffect(() => {
@@ -60,7 +61,7 @@ const Test = ({ id }) => {
   const {
     isLoading: findMultipleChoicesByExamIdIsLoading,
     data: findMultipleChoicesByExamIdData,
-  } = useQuery<any>([`multipleChoices-by-examId`, id], () =>
+  } = useQuery<any>([`multipleChoices-by-examId`, { examId: id }], () =>
     apiFindMultipleChoicesByExamId(+id)
   );
 

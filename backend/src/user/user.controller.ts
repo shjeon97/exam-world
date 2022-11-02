@@ -8,13 +8,19 @@ import {
   Delete,
   Put,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  OmitType,
+  PickType,
+} from '@nestjs/swagger';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { DeleteMeInput } from 'src/dto/delete-me.dto';
-import { EditMeInput } from 'src/dto/edit-me.dto';
+import { DeleteMeInput } from 'src/user/dto/delete-me.dto';
+import { EditMeInput } from 'src/user/dto/edit-me.dto';
 import { User } from 'src/entity/user.entity';
 import { UserService } from './user.service';
 
@@ -25,6 +31,7 @@ export class UserController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '내 정보' })
   @ApiBearerAuth('authorization')
+  @ApiResponse({ type: OmitType(User, ['password']) })
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
   @Get('/me')

@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { PaginationInput } from 'src/common/dto/pagination.dto';
-import { CreateExamInput, CreateExamOutput } from 'src/dto/create-exam';
-import { EditExamInput } from 'src/dto/edit-exam.dto';
-import { FindMultipleChoicesByExamIdOutput } from 'src/dto/find-multiple-choices-by-examId.dto';
-import { FindQuestionsByExamIdOutput } from 'src/dto/find-questions-by-examId.dto';
-import { SearchExamOutput } from 'src/dto/search-exam.dto';
+import { CreateExamInput, CreateExamOutput } from 'src/exam/dto/create-exam';
+import { EditExamInput } from 'src/exam/dto/edit-exam.dto';
+import { FindMultipleChoicesByExamIdOutput } from 'src/exam/dto/find-multipleChoices-by-examId.dto';
+import { FindQuestionsByExamIdOutput } from 'src/exam/dto/find-questions-by-examId.dto';
+import { SearchExamOutput } from 'src/exam/dto/search-exam.dto';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
@@ -89,15 +89,15 @@ export class ExamService {
     }
   }
 
-  async findExamListByMe(user: any) {
+  async findExamsByMe(user: any) {
     try {
-      const examList = await this.exam.find({
+      const exams = await this.exam.find({
         where: { user: { id: user.id } },
         relations: ['user'],
       });
       return {
         ok: true,
-        examList,
+        exams,
       };
     } catch (error) {
       console.log(error);

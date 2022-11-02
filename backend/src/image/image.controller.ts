@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiConsumes, ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { UploadImageOutput } from 'src/dto/upload-image.dto';
+import { UploadImageOutput } from 'src/image/dto/upload-image.dto';
 import { multerOption } from 'src/multer/multer.option';
 import { ImageService } from './image.service';
 

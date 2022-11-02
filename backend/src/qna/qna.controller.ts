@@ -1,7 +1,7 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SendQuestionInput } from 'src/dto/send-question.dto';
+import { SendQuestionInput } from 'src/qna/dto/send-question.dto';
 import { QnaService } from './qna.service';
 
 @Controller('qna')

@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { useMutation } from "react-query";
 import { apiSearchExam } from "../api/axios";
-import { IPaginationInput, IPaginationOutput } from "../common/type";
+import { IPaginationOutput } from "../common/type";
 import { ExamCard } from "../components/ExamCard";
 import { Page, PageSize, WEB_TITLE } from "../constant";
 

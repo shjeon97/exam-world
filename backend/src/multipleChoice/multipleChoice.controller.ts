@@ -9,9 +9,9 @@ import {
 import { ApiBearerAuth, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { Role } from 'src/auth/role.decorator';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SaveMultipleChoiceInput as SaveMultipleChoiceInput } from 'src/dto/save-multiple-choice.dto';
-import { DeleteMultipleChoicesByExamIdAndPageInput } from 'src/dto/delete-multiple-choice.dto';
-import { MultipleChoiceService } from './multiple-choice.service';
+import { SaveMultipleChoiceInput as SaveMultipleChoiceInput } from 'src/multipleChoice/dto/save-multipleChoice.dto';
+import { DeleteMultipleChoicesByExamIdAndPageInput } from 'src/multipleChoice/dto/delete-multipleChoice.dto';
+import { MultipleChoiceService } from './multipleChoice.service';
 
 @Controller()
 export class MultipleChoiceController {

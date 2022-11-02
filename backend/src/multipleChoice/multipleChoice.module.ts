@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
-import { Question } from 'src/entity/question.entity';
-import { MultipleChoiceController } from './multiple-choice.controller';
-import { MultipleChoiceService } from './multiple-choice.service';
+import { MultipleChoiceController } from './multipleChoice.controller';
+import { MultipleChoiceService } from './multipleChoice.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([MultipleChoice, Exam])],
