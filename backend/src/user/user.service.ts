@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { DeleteMeInput } from 'src/dto/delete-me.dto';
-import { EditMeInput } from 'src/dto/edit-me.dto';
+import { DeleteMeInput } from 'src/user/dto/delete-me.dto';
+import { EditMeInput } from 'src/user/dto/edit-me.dto';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 

@@ -10,7 +10,7 @@ import { QnaModule } from './qna/qna.module';
 import { Qna } from './entity/qna.entity';
 import { ExamModule } from './exam/exam.module';
 import { QuestionModule } from './question/question.module';
-import { MultipleChoiceModule } from './multiple-choice/multiple-choice.module';
+import { MultipleChoiceModule } from './multipleChoice/multipleChoice.module';
 import { Exam } from './entity/exam.entity';
 import { Question } from './entity/question.entity';
 import { MultipleChoice } from './entity/multiple-choice.entity';

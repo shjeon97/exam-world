@@ -94,24 +94,16 @@ export interface ICreateExamInput {
   minimumPassScore: number;
 }
 
-export interface IFindExamListByMeOutput extends ICoreOutput {
-  examList?: any[];
+export interface IFindExamsByMeOutput extends ICoreOutput {
+  exams?: any[];
 }
 
-export interface IAllExamListOutput extends ICoreOutput {
-  examList?: any[];
-}
-
-export interface IFindQuestionListByExamIdInput {
+export interface IFindQuestionsByExamIdInput {
   examId: number;
 }
 
-export interface IFindQuestionListByExamIdOutput extends ICoreOutput {
-  questionList?: any[];
-}
-
-export interface IFindMultipleChoiceListByExamIdOutput extends ICoreOutput {
-  multipleChoiceList?: any[];
+export interface IFindMultipleChoicesByExamIdOutput extends ICoreOutput {
+  multipleChoices?: any[];
 }
 
 export interface IEditExamInput {
@@ -137,7 +129,7 @@ export interface ICreateMultipleChoiceInput {
   page: number;
 }
 
-export interface IDeleteMultipleChoiceListInput {
+export interface IDeleteMultipleChoicesInput {
   examId: number;
   page: number;
 }

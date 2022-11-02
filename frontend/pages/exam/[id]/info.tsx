@@ -83,26 +83,29 @@ export default function ExamInfo({ id }) {
           timer: 1200,
         });
         onCreateQuestionAndMultipleChoiceClick();
-        queryClient.invalidateQueries([`questions-by-examId`, id]);
-        queryClient.invalidateQueries([`multipleChoices-by-examId`, id]);
+        queryClient.invalidateQueries([`questions-by-examId`, { examId: id }]);
+        queryClient.invalidateQueries([
+          `multipleChoices-by-examId`,
+          { examId: id },
+        ]);
       }
     },
   });
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(+id));
+    useQuery<any>([`exam-by-id`, { id }], () => apiFindExamById(+id));
 
   const {
     isLoading: findQuestionsByIdIsLoading,
     data: findQuestionsByExamIdData,
-  } = useQuery<any>([`questions-by-examId`, id], () =>
+  } = useQuery<any>([`questions-by-examId`, { examId: id }], () =>
     apiFindQuestionsByExamId(+id)
   );
 
   const {
     isLoading: findMultipleChoicesByExamIdIsLoading,
     data: findMultipleChoicesByExamIdData,
-  } = useQuery<any>([`multipleChoices-by-examId`, id], () =>
+  } = useQuery<any>([`multipleChoices-by-examId`, { examId: id }], () =>
     apiFindMultipleChoicesByExamId(+id)
   );
 
@@ -148,7 +151,7 @@ export default function ExamInfo({ id }) {
     const { score, ...rest } = saveQuestionAndMultipleChoiceGetValues();
     const multipleChoice = multipleChoiceNumber.map((theId) => ({
       multipleChoice: rest[`multipleChoice-${theId}`],
-      isCorrectAnswer: rest[`is-correct-answer-${theId}`],
+      isCorrectAnswer: rest[`is-correctAnswer-${theId}`],
     }));
 
     let isMultipleChoiceNull = false;
@@ -230,10 +233,7 @@ export default function ExamInfo({ id }) {
   const onDeleteClick = (idToDelete: string) => {
     setMultipleChoiceNumber((e) => e.filter((id) => id !== idToDelete));
     saveQuestionAndMultipleChoiceSetValue(`multipleChoice-${idToDelete}`, "");
-    saveQuestionAndMultipleChoiceSetValue(
-      `is-correct-answer-${idToDelete}`,
-      ""
-    );
+    saveQuestionAndMultipleChoiceSetValue(`is-correctAnswer-${idToDelete}`, "");
   };
 
   const onCreateQuestionAndMultipleChoiceClick = () => {
@@ -398,7 +398,7 @@ export default function ExamInfo({ id }) {
                                       </p>
                                       <input
                                         {...saveQuestionAndMultipleChoiceRegister(
-                                          `is-correct-answer-${id}`
+                                          `is-correctAnswer-${id}`
                                         )}
                                         type="checkbox"
                                         className="w-6 h-6 "

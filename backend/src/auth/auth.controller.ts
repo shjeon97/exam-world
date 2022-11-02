@@ -1,8 +1,8 @@
 import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { SignupUserInput as SignupUserInput } from 'src/dto/signup-user.dto';
-import { LoginInput, LoginOutput } from 'src/dto/login.dto';
+import { SignupUserInput as SignupUserInput } from 'src/auth/dto/signup-user.dto';
+import { LoginInput, LoginOutput } from 'src/auth/dto/login.dto';
 import { AuthService } from './auth.service';
 
 @Controller('auth')

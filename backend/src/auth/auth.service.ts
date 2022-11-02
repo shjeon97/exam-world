@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CoreOutput } from 'src/common/dto/output.dto';
-import { LoginInput, LoginOutput } from 'src/dto/login.dto';
-import { SignupUserInput } from 'src/dto/signup-user.dto';
+import { LoginInput, LoginOutput } from 'src/auth/dto/login.dto';
+import { SignupUserInput } from 'src/auth/dto/signup-user.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 

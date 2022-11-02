@@ -1,28 +1,13 @@
-import classNames from "classnames";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useForm } from "react-hook-form";
-import { useMutation, useQuery } from "react-query";
-import { apiCreateExam, apiGetMe } from "../../api/axios";
-import {
-  ICreateExamInput,
-  ICreateExamOutput,
-  IUserInput,
-} from "../../common/type";
+import { useQuery } from "react-query";
+import { apiGetMe } from "../../api/axios";
+import { IUserInput } from "../../common/type";
 import { CreateExamForm } from "../../components/forms/exam/create/CreateExamForm";
-import { FormButton } from "../../components/forms/FormButton";
-import { FormError } from "../../components/forms/FormError";
 import { WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 
 export default function CreateExam() {
-  const {
-    register: createExamRegister,
-    getValues: createExamGetValues,
-    formState: { errors: createExamErrors, isValid: createExamIsValid },
-    handleSubmit: createExamHandleSubmit,
-  } = useForm<ICreateExamInput>({ mode: "onChange" });
-
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
     apiGetMe

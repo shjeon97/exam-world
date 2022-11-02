@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import { apiFindExamListByMe, apiGetMe } from "../../api/axios";
-import { IFindExamListByMeOutput, IUserInput } from "../../common/type";
+import { apiFindExamsByMe, apiGetMe } from "../../api/axios";
+import { IFindExamsByMeOutput, IUserInput } from "../../common/type";
 import { ExamCard } from "../../components/ExamCard";
 import { LinkButton } from "../../components/buttons/LinkButton";
 import { WEB_TITLE } from "../../constant";
@@ -10,9 +10,9 @@ import { Toast } from "../../lib/sweetalert2/toast";
 import { GrAdd } from "react-icons/gr";
 
 export default function Index() {
-  const { isLoading, data } = useQuery<IFindExamListByMeOutput>(
+  const { isLoading, data } = useQuery<IFindExamsByMeOutput>(
     "exams_by_me",
-    apiFindExamListByMe
+    apiFindExamsByMe
   );
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
@@ -42,8 +42,8 @@ export default function Index() {
           !meIsLoading &&
           meData &&
           data.ok &&
-          data.examList.length >= 1 &&
-          data.examList.map((exam, key) => {
+          data.exams.length >= 1 &&
+          data.exams.map((exam, key) => {
             return (
               <div key={`exam_index_${key}`}>
                 <ExamCard
