@@ -53,7 +53,7 @@ export class ExamController {
     return this.examService.createExam(createExamInput, user);
   }
 
-  @ApiOperation({ summary: '자기가 만든 시험 정보 가져오기' })
+  @ApiOperation({ summary: '자기가 만든 시험 정보 모두 가져오기' })
   @ApiBearerAuth('authorization')
   @ApiResponse({ type: FindExamsByMeOutput })
   @Role(['Any'])

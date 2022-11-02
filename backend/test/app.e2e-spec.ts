@@ -592,15 +592,15 @@ describe('AppController (e2e)', () => {
 
   describe('ExamController 문제, 보기 생성후 (e2e)', () => {
     const API_EXAM = '/api/exam';
-    describe('findExamListByMe', () => {
-      it('자기가 만든 시험 정보 가져오기', () => {
+    describe('findExamsByMe', () => {
+      it('자기가 만든 시험 정보 모두 가져오기', () => {
         return request(app.getHttpServer())
           .get(API_EXAM + '/me')
           .set('authorization', `Bearer ${user1JwtToken}`)
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.ok).toBe(true);
-            expect(res.body.examList).toEqual(expect.any(Array));
+            expect(res.body.exams).toEqual(expect.any(Array));
           });
       });
     });
