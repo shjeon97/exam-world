@@ -7,20 +7,20 @@ import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 let user1 = {
-  email: 'test1@test.com',
-  nickname: 'test1',
+  email: 'user1@test.com',
+  nickname: 'user1',
   password: '1234',
 };
 
 let user2 = {
-  email: 'test2@test.com',
-  nickname: 'test2',
+  email: 'user2@test.com',
+  nickname: 'user2',
   password: '1234',
 };
 
 let deleteUser = {
-  email: 'test3@test.com',
-  nickname: 'test3',
+  email: 'deleteUser@test.com',
+  nickname: 'deleteUser',
   password: '1234',
 };
 
@@ -64,7 +64,7 @@ describe('AppController (e2e)', () => {
   describe('AuthController (e2e)', () => {
     describe('signupUser', () => {
       const API_AUTH_SIGNUP = '/api/auth/signup';
-      it('계정이 생성되는지 확인', () => {
+      it('user1 생성', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
@@ -76,7 +76,7 @@ describe('AppController (e2e)', () => {
           .expect({ ok: true });
       });
 
-      it('계정이 생성되는지 확인 2', () => {
+      it('user2 생성', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({
@@ -88,7 +88,7 @@ describe('AppController (e2e)', () => {
           .expect({ ok: true });
       });
 
-      it('계정이 생성되는지 확인 3', () => {
+      it('deleteUser 생성', () => {
         return request(app.getHttpServer())
           .post(API_AUTH_SIGNUP)
           .send({

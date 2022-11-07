@@ -5,19 +5,20 @@ import { apiSearchExam } from "../api/axios";
 import { IPaginationOutput } from "../common/type";
 import { ExamCard } from "../components/ExamCard";
 import { Page, PageSize, WEB_TITLE } from "../constant";
+import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 
 export default function Home() {
   const [page, setPage] = useState<number>(Page);
   const [pageSize] = useState<number>(PageSize);
-  const [examList, setExamList] = useState<any>(null);
+  const [exams, setExams] = useState<any>(null);
 
   const searchExamMutation = useMutation(apiSearchExam, {
     onSuccess: async (data: IPaginationOutput) => {
       if (data && data.ok) {
-        if (examList) {
-          setExamList([...examList, ...data.result]);
+        if (exams) {
+          setExams([...exams, ...data.result]);
         } else {
-          setExamList(data.result);
+          setExams(data.result);
         }
       }
     },
@@ -27,28 +28,13 @@ export default function Home() {
     searchExamMutation.mutate({ page, pageSize });
   }, [page]);
 
-  // 스크롤 이벤트 핸들러
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-    if (
-      scrollTop + clientHeight >= scrollHeight &&
-      !searchExamMutation.isLoading
-    ) {
-      // 페이지 끝에 도달하면 추가 데이터를 받아온다
-      setPage(page + 1);
-    }
-  };
+  const infiniteScroll = useInfiniteScroll(!searchExamMutation.isLoading);
 
   useEffect(() => {
-    // scroll event listener 등록
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      // scroll event listener 해제
-      window.removeEventListener("scroll", handleScroll);
-    };
-  });
+    if (infiniteScroll) {
+      setPage(page + 1);
+    }
+  }, [infiniteScroll]);
 
   return (
     <div className=" min-h-screen">
@@ -56,8 +42,8 @@ export default function Home() {
         <title className=" text-gray-800">{WEB_TITLE}</title>
       </Head>
       <div className="flex flex-wrap m-4 gap-2 ">
-        {examList &&
-          examList.map((exam, key) => {
+        {exams &&
+          exams.map((exam, key) => {
             return (
               <div key={`exam_index_${key}`}>
                 <ExamCard

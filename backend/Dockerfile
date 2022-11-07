@@ -1,8 +1,7 @@
 FROM node:16 AS builder
 WORKDIR /app
 COPY ./ ./
-RUN yarn
-RUN yarn build
+RUN npm install --force
 
 FROM node:16-alpine
 WORKDIR /app

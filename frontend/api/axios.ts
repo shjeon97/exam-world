@@ -245,10 +245,21 @@ export const apiGetMe = async () => {
     });
 };
 
-// 내가 만든 시험 정보 가져오기 (추후 인피니티 스크롤로 변경 예정))
-export const apiFindExamsByMe = async () => {
+// 내가 만든 시험 정보 가져오기
+export const apiSearchExamsByMe = async ({
+  pageSize,
+  page,
+  searchType,
+  searchValue,
+}: IPaginationInput) => {
   return axios
-    .get("exam/me")
+    .get(
+      `${
+        searchType && searchValue
+          ? `exam/me/search?pagesize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
+          : `exam/me/search?pagesize=${pageSize}&page=${page}`
+      }`
+    )
     .then((res) => {
       return res.data;
     })
