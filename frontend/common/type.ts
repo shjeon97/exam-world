@@ -1,10 +1,3 @@
-export interface ISearchInput {
-  pagesize: number;
-  page: number;
-  searchType?: string;
-  searchValue?: string;
-}
-
 export interface ICoreOutput {
   ok: boolean;
   error?: string;
@@ -30,12 +23,14 @@ export interface IExam {
   time: number;
   minimumPassScore: number;
 }
+
 export interface IQuestion {
   examId: number;
   page: number;
   text: string;
   score: number;
 }
+
 export interface IFindQuestionsByExamIdOutput extends ICoreOutput {
   questions?: IQuestion[];
 }

@@ -1,19 +1,36 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useQuery } from "react-query";
-import { apiFindExamsByMe, apiGetMe } from "../../api/axios";
-import { IFindExamsByMeOutput, IUserInput } from "../../common/type";
+import { useMutation, useQuery } from "react-query";
+import { apiSearchExamsByMe, apiGetMe, apiSearchExam } from "../../api/axios";
+import {
+  IFindExamsByMeOutput,
+  IPaginationOutput,
+  IUserInput,
+} from "../../common/type";
 import { ExamCard } from "../../components/ExamCard";
 import { LinkButton } from "../../components/buttons/LinkButton";
-import { WEB_TITLE } from "../../constant";
+import { Page, PageSize, WEB_TITLE } from "../../constant";
 import { Toast } from "../../lib/sweetalert2/toast";
 import { GrAdd } from "react-icons/gr";
+import { useEffect, useState } from "react";
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 
 export default function Index() {
-  const { isLoading, data } = useQuery<IFindExamsByMeOutput>(
-    "exams_by_me",
-    apiFindExamsByMe
-  );
+  const [page, setPage] = useState<number>(Page);
+  const [pageSize] = useState<number>(PageSize);
+  const [exams, setExams] = useState<any>(null);
+  const searchExamByMeMutation = useMutation(apiSearchExamsByMe, {
+    onSuccess: async (data: IPaginationOutput) => {
+      if (data && data.ok) {
+        if (exams) {
+          setExams([...exams, ...data.result]);
+        } else {
+          setExams(data.result);
+        }
+      }
+    },
+  });
+
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
     apiGetMe
@@ -29,6 +46,21 @@ export default function Index() {
     router.push("/login");
   }
 
+  useEffect(() => {
+    searchExamByMeMutation.mutate({
+      page,
+      pageSize,
+    });
+  }, [page, meData]);
+
+  const infiniteScroll = useInfiniteScroll(!searchExamByMeMutation.isLoading);
+
+  useEffect(() => {
+    if (infiniteScroll) {
+      setPage(page + 1);
+    }
+  }, [infiniteScroll]);
+
   return (
     <div>
       <Head>
@@ -38,12 +70,8 @@ export default function Index() {
         <LinkButton name={<GrAdd />} link="/exam/create" />
       </div>
       <div className="flex flex-wrap m-4 gap-2 ">
-        {!isLoading &&
-          !meIsLoading &&
-          meData &&
-          data.ok &&
-          data.exams.length >= 1 &&
-          data.exams.map((exam, key) => {
+        {exams &&
+          exams.map((exam, key) => {
             return (
               <div key={`exam_index_${key}`}>
                 <ExamCard
@@ -55,6 +83,9 @@ export default function Index() {
               </div>
             );
           })}
+      </div>
+      <div className="button" onClick={() => setPage(page + 1)}>
+        더보기
       </div>
     </div>
   );

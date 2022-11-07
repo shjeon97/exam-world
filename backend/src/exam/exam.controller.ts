@@ -53,14 +53,17 @@ export class ExamController {
     return this.examService.createExam(createExamInput, user);
   }
 
-  @ApiOperation({ summary: '자기가 만든 시험 정보 모두 가져오기' })
+  @ApiOperation({ summary: '자기가 만든 시험 목록' })
   @ApiBearerAuth('authorization')
-  @ApiResponse({ type: FindExamsByMeOutput })
+  @ApiResponse({ type: SearchExamOutput })
   @Role(['Any'])
   @UseGuards(JwtAuthGuard)
-  @Get('/me')
-  async findExamsByMe(@GetUser() user: User): Promise<FindExamsByMeOutput> {
-    return this.examService.findExamsByMe(user);
+  @Get('/me/search')
+  async searchExamsByMe(
+    @GetUser() user: User,
+    @Query() searchExamInput: PaginationInput,
+  ): Promise<SearchExamOutput> {
+    return this.examService.searchExamsByMe(user, searchExamInput);
   }
 
   @ApiOperation({ summary: '시험 목록' })

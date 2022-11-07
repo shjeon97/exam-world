@@ -11,7 +11,7 @@ import { Exam } from 'src/entity/exam.entity';
 import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
 import { User, UserRole } from 'src/entity/user.entity';
-import { ILike, In, Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 
 @Injectable()
 export class ExamService {
@@ -89,22 +89,43 @@ export class ExamService {
     }
   }
 
-  async findExamsByMe(user: any) {
+  async searchExamsByMe(
+    user: any,
+    { page, pagesize, searchType, searchValue }: PaginationInput,
+  ): Promise<SearchExamOutput> {
     try {
-      const exams = await this.exam.find({
-        where: { user: { id: user.id } },
+      const [exams, totalResult] = await this.exam.findAndCount({
+        ...(searchType && searchValue
+          ? {
+              where: {
+                user: { id: user.id },
+                [searchType]: ILike(`%${searchValue.trim()}%`),
+              },
+            }
+          : {
+              where: {
+                user: { id: user.id },
+              },
+            }),
+        skip: (page - 1) * pagesize,
+        take: pagesize,
+        order: {
+          createdAt: 'ASC',
+        },
         relations: ['user'],
       });
+
       return {
         ok: true,
-        exams,
+        result: exams,
+        totalPage: Math.ceil(totalResult / pagesize),
+        totalResult,
       };
     } catch (error) {
       console.log(error);
       return { ok: false, error: '내가 만든 시험 정보 가져오기 실패' };
     }
   }
-  s;
 
   async searchExam({
     page,
@@ -113,7 +134,7 @@ export class ExamService {
     searchValue,
   }: PaginationInput): Promise<SearchExamOutput> {
     try {
-      const [examList, totalResult] = await this.exam.findAndCount({
+      const [exams, totalResult] = await this.exam.findAndCount({
         ...(searchType &&
           searchValue && {
             where: { [searchType]: ILike(`%${searchValue.trim()}%`) },
@@ -123,10 +144,11 @@ export class ExamService {
         order: {
           createdAt: 'ASC',
         },
+        relations: ['user'],
       });
       return {
         ok: true,
-        result: examList,
+        result: exams,
         totalPage: Math.ceil(totalResult / pagesize),
         totalResult,
       };
