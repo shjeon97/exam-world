@@ -26,6 +26,11 @@ let deleteUser = {
 
 const update = 'update';
 
+// 기본 게시물 페이지 번호
+export const page = 1;
+// 기본 게시물 개수
+export const pageSize = 15;
+
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let userRepository: Repository<User>;
@@ -592,15 +597,29 @@ describe('AppController (e2e)', () => {
 
   describe('ExamController 문제, 보기 생성후 (e2e)', () => {
     const API_EXAM = '/api/exam';
-    describe('findExamsByMe', () => {
-      it('자기가 만든 시험 정보 모두 가져오기', () => {
+
+    describe('searchExams', () => {
+      it('시험 목록', () => {
         return request(app.getHttpServer())
-          .get(API_EXAM + '/me')
+          .get(API_EXAM + `/search?pageSize=${pageSize}&page=${page}`)
           .set('authorization', `Bearer ${user1JwtToken}`)
           .expect(HttpStatus.OK)
           .expect((res) => {
             expect(res.body.ok).toBe(true);
-            expect(res.body.exams).toEqual(expect.any(Array));
+            expect(res.body.result).toEqual(expect.any(Array));
+          });
+      });
+    });
+
+    describe('searchExamsByMe', () => {
+      it('자기가 만든 시험 목록', () => {
+        return request(app.getHttpServer())
+          .get(API_EXAM + `/me/search?pageSize=${pageSize}&page=${page}`)
+          .set('authorization', `Bearer ${user1JwtToken}`)
+          .expect(HttpStatus.OK)
+          .expect((res) => {
+            expect(res.body.ok).toBe(true);
+            expect(res.body.result).toEqual(expect.any(Array));
           });
       });
     });

@@ -91,7 +91,7 @@ export class ExamService {
 
   async searchExamsByMe(
     user: any,
-    { page, pagesize, searchType, searchValue }: PaginationInput,
+    { page, pageSize, searchType, searchValue }: PaginationInput,
   ): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
@@ -107,8 +107,8 @@ export class ExamService {
                 user: { id: user.id },
               },
             }),
-        skip: (page - 1) * pagesize,
-        take: pagesize,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
         order: {
           createdAt: 'ASC',
         },
@@ -118,7 +118,7 @@ export class ExamService {
       return {
         ok: true,
         result: exams,
-        totalPage: Math.ceil(totalResult / pagesize),
+        totalPage: Math.ceil(totalResult / pageSize),
         totalResult,
       };
     } catch (error) {
@@ -129,7 +129,7 @@ export class ExamService {
 
   async searchExam({
     page,
-    pagesize,
+    pageSize,
     searchType,
     searchValue,
   }: PaginationInput): Promise<SearchExamOutput> {
@@ -139,8 +139,8 @@ export class ExamService {
           searchValue && {
             where: { [searchType]: ILike(`%${searchValue.trim()}%`) },
           }),
-        skip: (page - 1) * pagesize,
-        take: pagesize,
+        skip: (page - 1) * pageSize,
+        take: pageSize,
         order: {
           createdAt: 'ASC',
         },
@@ -149,7 +149,7 @@ export class ExamService {
       return {
         ok: true,
         result: exams,
-        totalPage: Math.ceil(totalResult / pagesize),
+        totalPage: Math.ceil(totalResult / pageSize),
         totalResult,
       };
     } catch (error) {

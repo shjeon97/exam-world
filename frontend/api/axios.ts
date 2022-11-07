@@ -197,8 +197,8 @@ export const apiSearchExam = async ({
     .get(
       `${
         searchType && searchValue
-          ? `exam/search?pagesize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
-          : `exam/search?pagesize=${pageSize}&page=${page}`
+          ? `exam/search?pageSize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
+          : `exam/search?pageSize=${pageSize}&page=${page}`
       }`
     )
     .then((res) => {
@@ -256,8 +256,8 @@ export const apiSearchExamsByMe = async ({
     .get(
       `${
         searchType && searchValue
-          ? `exam/me/search?pagesize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
-          : `exam/me/search?pagesize=${pageSize}&page=${page}`
+          ? `exam/me/search?pageSize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
+          : `exam/me/search?pageSize=${pageSize}&page=${page}`
       }`
     )
     .then((res) => {
