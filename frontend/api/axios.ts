@@ -188,17 +188,17 @@ export const apiDeleteMultipleChoicesByExamIdAndPage = async ({
 };
 
 export const apiSearchExam = async ({
-  pageSize,
+  "page-size": pageSize,
   page,
-  searchType,
-  searchValue,
+  "search-type": searchType,
+  "search-value": searchValue,
 }: IPaginationInput) => {
   return axios
     .get(
       `${
         searchType && searchValue
-          ? `exam/search?pageSize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
-          : `exam/search?pageSize=${pageSize}&page=${page}`
+          ? `exam/search?page-size=${pageSize}&page=${page}&search-type=${searchType}&search-value=${searchValue}`
+          : `exam/search?page-size=${pageSize}&page=${page}`
       }`
     )
     .then((res) => {
@@ -247,17 +247,17 @@ export const apiGetMe = async () => {
 
 // 내가 만든 시험 정보 가져오기
 export const apiSearchExamsByMe = async ({
-  pageSize,
+  "page-size": pageSize,
   page,
-  searchType,
-  searchValue,
+  "search-type": searchType,
+  "search-value": searchValue,
 }: IPaginationInput) => {
   return axios
     .get(
       `${
         searchType && searchValue
-          ? `exam/me/search?pageSize=${pageSize}&page=${page}&searchType=${searchType}&searchValue=${searchValue}`
-          : `exam/me/search?pageSize=${pageSize}&page=${page}`
+          ? `exam/me/search?page-size=${pageSize}&page=${page}&search-type=${searchType}&search-value=${searchValue}`
+          : `exam/me/search?page-size=${pageSize}&page=${page}`
       }`
     )
     .then((res) => {

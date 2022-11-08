@@ -5,6 +5,7 @@
     "nestjs",
     "signup",
     "sweetalert",
-    "Tiptap"
+    "Tiptap",
+    "typeorm"
   ]
 }

@@ -1,13 +1,32 @@
+export enum UserRole {
+  User = "User",
+  Admin = "Admin",
+  SuperAdmin = "SuperAdmin",
+}
+
+export class ICoreEntity {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date;
+}
+
 export interface ICoreOutput {
   ok: boolean;
   error?: string;
 }
 export interface IPaginationInput {
-  pageSize: number;
+  "page-size": number;
   page: number;
-  searchType?: string;
-  searchValue?: string;
+  "search-type"?: string;
+  "search-value"?: string;
 }
+
+export interface IFormSearchInput {
+  searchType: string;
+  searchValue: string;
+}
+
 export interface IPaginationOutput extends ICoreOutput {
   totalPage: number;
   totalResult?: number;
@@ -16,8 +35,17 @@ export interface IPaginationOutput extends ICoreOutput {
   result?: any;
 }
 
-export interface IExam {
+export interface IUser extends ICoreEntity {
+  role: UserRole;
+  email: string;
+  nickname: string;
+  password?: string;
+  phone?: string;
+}
+
+export interface IExam extends ICoreEntity {
   userId: number;
+  user?: IUser;
   name: string;
   title?: string;
   time: number;
