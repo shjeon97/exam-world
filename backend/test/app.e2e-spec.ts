@@ -601,7 +601,7 @@ describe('AppController (e2e)', () => {
     describe('searchExams', () => {
       it('시험 목록', () => {
         return request(app.getHttpServer())
-          .get(API_EXAM + `/search?pageSize=${pageSize}&page=${page}`)
+          .get(API_EXAM + `/search?page-size=${pageSize}&page=${page}`)
           .set('authorization', `Bearer ${user1JwtToken}`)
           .expect(HttpStatus.OK)
           .expect((res) => {
@@ -611,10 +611,10 @@ describe('AppController (e2e)', () => {
       });
     });
 
-    describe('searchExamsByMe', () => {
+    describe('ExamsByMe', () => {
       it('자기가 만든 시험 목록', () => {
         return request(app.getHttpServer())
-          .get(API_EXAM + `/me/search?pageSize=${pageSize}&page=${page}`)
+          .get(API_EXAM + `/me/search?page-size=${pageSize}&page=${page}`)
           .set('authorization', `Bearer ${user1JwtToken}`)
           .expect(HttpStatus.OK)
           .expect((res) => {
