@@ -91,7 +91,12 @@ export class ExamService {
 
   async searchExamsByMe(
     user: any,
-    { page, pageSize, searchType, searchValue }: PaginationInput,
+    {
+      page,
+      'page-size': pageSize,
+      'search-type': searchType,
+      'search-value': searchValue,
+    }: PaginationInput,
   ): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
@@ -129,9 +134,9 @@ export class ExamService {
 
   async searchExam({
     page,
-    pageSize,
-    searchType,
-    searchValue,
+    'page-size': pageSize,
+    'search-type': searchType,
+    'search-value': searchValue,
   }: PaginationInput): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
