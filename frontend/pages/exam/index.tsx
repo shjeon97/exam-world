@@ -22,8 +22,8 @@ export default function Index() {
   const [page, setPage] = useState<number>(Page);
   const [pageSize] = useState<number>(PageSize);
   const [exams, setExams] = useState<IExam[]>(null);
-  const [searchType, setSearchType] = useState<string>("");
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [type, setType] = useState<string>("");
+  const [value, setValue] = useState<string>("");
   const searchExamByMeMutation = useMutation(apiSearchExamsByMe, {
     onSuccess: async (data: IPaginationOutput) => {
       if (data && data.ok) {
@@ -55,8 +55,8 @@ export default function Index() {
     searchExamByMeMutation.mutate({
       page,
       "page-size": pageSize,
-      "search-type": searchType ? searchType : null,
-      "search-value": searchValue ? searchValue : null,
+      type: type ? type : null,
+      value: value ? value : null,
     });
   }, [page, meData]);
 
@@ -74,9 +74,9 @@ export default function Index() {
 
   const onSearchSubmit = () => {
     if (!searchExamByMeMutation.isLoading) {
-      const { searchType, searchValue } = getValues();
-      setSearchType(searchType);
-      setSearchValue(searchValue);
+      const { type, value } = getValues();
+      setType(type);
+      setValue(value);
 
       flushSync(() => {
         setExams(null);
@@ -84,8 +84,8 @@ export default function Index() {
       searchExamByMeMutation.mutate({
         page: 1,
         "page-size": pageSize,
-        "search-type": searchType,
-        "search-value": searchValue,
+        type,
+        value,
       });
     }
   };
@@ -105,19 +105,19 @@ export default function Index() {
               검색대상
             </div>
             <select
-              {...register("searchType")}
+              {...register("type")}
               className="border-2 border-gray-900 py-1 px-3  rounded-r-md "
             >
-              <option value="name">제목</option>
-              <option value="title">부가설명</option>
+              <option value="title">제목</option>
+              <option value="description">부가설명</option>
             </select>
           </div>
           <div className="flex">
             <input
-              {...register("searchValue")}
+              {...register("value")}
               className=" border-2 border-gray-900 shadow-inner  focus: outline-none   py-1 px-3 rounded-md rounded-r-none "
               placeholder="검색값을 입력하세요."
-              defaultValue={searchValue}
+              defaultValue={value}
             />
             <div className="focus:outline-none text-gray-800 py-1.5 px-3 select-none border-2 border-gray-900 border-l-0 hover:bg-gray-200">
               <button>
@@ -146,7 +146,7 @@ export default function Index() {
               <div key={`exam_index_${key}`}>
                 <ExamCard
                   userId={exam.user.id}
-                  name={exam.name}
+                  description={exam.description}
                   title={exam.title}
                   id={exam.id}
                 />

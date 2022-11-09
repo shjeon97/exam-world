@@ -25,7 +25,12 @@ export class ExamService {
   ) {}
 
   async createExam(
-    { name, title, time, minimumPassScore }: CreateExamInput,
+    {
+      title: name,
+      description: title,
+      time,
+      minimumPassScore,
+    }: CreateExamInput,
     user: User,
   ): Promise<CreateExamOutput> {
     try {
@@ -34,8 +39,8 @@ export class ExamService {
 
       const { id } = await this.exam.save(
         this.exam.create({
-          name,
-          title,
+          title: name,
+          description: title,
           user,
           time,
           minimumPassScore,
@@ -67,11 +72,17 @@ export class ExamService {
     }
   }
 
-  async editExam({ id, name, title, time, minimumPassScore }: EditExamInput) {
+  async editExam({
+    id,
+    title,
+    description,
+    time,
+    minimumPassScore,
+  }: EditExamInput) {
     try {
       const exam = await this.exam.findOne({ where: { id } });
-      exam.name = name;
       exam.title = title;
+      exam.description = description;
       exam.time = time;
       exam.minimumPassScore = minimumPassScore;
       await this.exam.save(exam);
@@ -91,20 +102,15 @@ export class ExamService {
 
   async searchExamsByMe(
     user: any,
-    {
-      page,
-      'page-size': pageSize,
-      'search-type': searchType,
-      'search-value': searchValue,
-    }: PaginationInput,
+    { page, 'page-size': pageSize, type, value }: PaginationInput,
   ): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
-        ...(searchType && searchValue
+        ...(type && value
           ? {
               where: {
                 user: { id: user.id },
-                [searchType]: ILike(`%${searchValue.trim()}%`),
+                [type]: ILike(`%${value.trim()}%`),
               },
             }
           : {
@@ -135,14 +141,14 @@ export class ExamService {
   async searchExam({
     page,
     'page-size': pageSize,
-    'search-type': searchType,
-    'search-value': searchValue,
+    type,
+    value,
   }: PaginationInput): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
-        ...(searchType &&
-          searchValue && {
-            where: { [searchType]: ILike(`%${searchValue.trim()}%`) },
+        ...(type &&
+          value && {
+            where: { [type]: ILike(`%${value.trim()}%`) },
           }),
         skip: (page - 1) * pageSize,
         take: pageSize,

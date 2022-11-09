@@ -9,16 +9,16 @@ import { LinkButton } from "./buttons/LinkButton";
 
 interface ILinkCardProp {
   userId: number;
-  name: string;
-  title?: string;
+  title: string;
+  description?: string;
   id: number;
 }
 
 export const ExamCard: React.FC<ILinkCardProp> = ({
   userId,
   id,
-  name,
   title,
+  description,
 }) => {
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
@@ -59,9 +59,9 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   return (
     <div className="p-1 border-2 border-gray-800 w-auto h-auto rounded">
       <div className="block px-14 py-16 bg-white sm:px-16 sm:py-20 rounded max-w-xs">
-        <h5 className="text-xl font-bold text-gray-900 truncate">{name}</h5>
+        <h5 className="text-xl font-bold text-gray-900 truncate">{title}</h5>
 
-        <p className="mt-2 text-sm text-gray-500 ">{title} </p>
+        <p className="mt-2 text-sm text-gray-500 ">{description} </p>
       </div>
       <div className="flex gap-2 m-2 justify-start">
         <div className="text-xs w-16 text-center">

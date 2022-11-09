@@ -394,8 +394,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_EXAM)
           .send({
-            name: 'TEST1 name',
             title: 'TEST1 title',
+            description: 'TEST1 description',
             time: 60,
             minimumPassScore: 60,
           })
@@ -411,8 +411,8 @@ describe('AppController (e2e)', () => {
         return request(app.getHttpServer())
           .post(API_EXAM)
           .send({
-            name: 'TEST2 name',
             title: 'TEST2 title',
+            description: 'TEST2 description',
             time: 60,
             minimumPassScore: 60,
           })
@@ -663,7 +663,7 @@ describe('AppController (e2e)', () => {
           .send({
             id: 1,
             name: 'test' + update,
-            title: 'test' + update,
+            description: 'test' + update,
             time: 0,
             minimumPassScore: 0,
           })

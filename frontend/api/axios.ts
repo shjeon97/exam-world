@@ -130,15 +130,17 @@ export const apiEditMe = async ({
 // 시험 정보 수정
 export const apiEditExam = async ({
   id,
-  name,
+  description,
   title,
   time,
   minimumPassScore,
 }: IEditExamInput) => {
+  console.log(id, description, title, time, minimumPassScore);
+
   return axios
     .put("/exam", {
       id,
-      name,
+      description,
       title,
       time: +time,
       minimumPassScore: +minimumPassScore,
@@ -190,14 +192,14 @@ export const apiDeleteMultipleChoicesByExamIdAndPage = async ({
 export const apiSearchExam = async ({
   "page-size": pageSize,
   page,
-  "search-type": searchType,
-  "search-value": searchValue,
+  type,
+  value,
 }: IPaginationInput) => {
   return axios
     .get(
       `${
-        searchType && searchValue
-          ? `exam/search?page-size=${pageSize}&page=${page}&search-type=${searchType}&search-value=${searchValue}`
+        type && value
+          ? `exam/search?page-size=${pageSize}&page=${page}&type=${type}&value=${value}`
           : `exam/search?page-size=${pageSize}&page=${page}`
       }`
     )
@@ -249,14 +251,14 @@ export const apiGetMe = async () => {
 export const apiSearchExamsByMe = async ({
   "page-size": pageSize,
   page,
-  "search-type": searchType,
-  "search-value": searchValue,
+  type,
+  value,
 }: IPaginationInput) => {
   return axios
     .get(
       `${
-        searchType && searchValue
-          ? `exam/me/search?page-size=${pageSize}&page=${page}&search-type=${searchType}&search-value=${searchValue}`
+        type && value
+          ? `exam/me/search?page-size=${pageSize}&page=${page}&type=${type}&value=${value}`
           : `exam/me/search?page-size=${pageSize}&page=${page}`
       }`
     )

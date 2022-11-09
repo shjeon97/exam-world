@@ -3,8 +3,8 @@ import { CoreOutput } from 'src/common/dto/output.dto';
 import { Exam } from 'src/entity/exam.entity';
 
 export class CreateExamInput extends PickType(Exam, [
-  'name',
   'title',
+  'description',
   'time',
   'minimumPassScore',
 ] as const) {}

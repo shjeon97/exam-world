@@ -6,6 +6,8 @@
     "signup",
     "sweetalert",
     "Tiptap",
-    "typeorm"
+    "typeorm",
+    "uuidv",
+    "Xmark"
   ]
 }

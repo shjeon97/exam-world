@@ -18,7 +18,7 @@ export class Exam extends CoreEntity {
   @IsString()
   @MaxLength(30)
   @MinLength(2)
-  name: string;
+  title: string;
 
   @ApiProperty({
     example: '부가설명',
@@ -28,7 +28,7 @@ export class Exam extends CoreEntity {
   @IsString()
   @MaxLength(50)
   @MinLength(2)
-  title?: string;
+  description?: string;
 
   @ApiProperty({
     example: '제한시간',
