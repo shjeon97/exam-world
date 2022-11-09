@@ -14,17 +14,14 @@ type Props = {
 
 export const EditExamTitleField: FC<Props> = ({ register, error, id }) => {
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () =>
-      apiFindExamById(Object.values(id)[0])
-    );
-
+    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(id));
   return (
     <>
       {!findExamByIdIsLoading && findExamByIdData && (
         <div>
-          <label>설명</label>
+          <label>제목</label>
           <div className=" text-xs  text-gray-500">
-            시험에 관련된 설명을 자유롭게 쓰세요 (50자 이내)
+            시험의 제목을 입력하세요. 예) 자동차 2종보통
           </div>
           <input
             type={"text"}
@@ -33,8 +30,8 @@ export const EditExamTitleField: FC<Props> = ({ register, error, id }) => {
                 error,
             })}
             {...register("title", {
-              required: "설명 입력해 주세요. (50자 이내)",
-              maxLength: 50,
+              required: "사용할 제목 입력해 주세요. (30자 이내)",
+              maxLength: 30,
             })}
             placeholder="title"
             defaultValue={findExamByIdData?.exam?.title}

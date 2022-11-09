@@ -1,16 +1,16 @@
 import { useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { EditExamNameField } from "./fields/EditExamNameField";
 import { EditExamTitleField } from "./fields/EditExamTitleField";
+import { EditExamDescriptionField } from "./fields/EditExamDescriptionField";
 import { FormButton } from "../../../FormButton";
 import { FormError } from "../../../FormError";
 import { ICoreOutput, IEditExamInput } from "../../../../../common/type";
 import { apiEditExam } from "../../../../../api/axios";
 import { Toast } from "../../../../../lib/sweetalert2/toast";
 import { EditExamTimeField } from "./fields/EditExamTimeField";
-import { EditExamMinimumPassScoreField } from "./fields/EditExamMinimumPassScoreield";
+import { EditExamMinimumPassScoreField } from "./fields/EditExamMinimumPassScoreField";
 
-export const EditExamForm = (id) => {
+export const EditExamForm = ({ id }: { id: number }) => {
   const {
     register,
     getValues,
@@ -33,14 +33,17 @@ export const EditExamForm = (id) => {
 
   const onSubmit = () => {
     const editExamValues = getValues();
-
-    editExamMutation.mutate({ id: Object.values(id)[0], ...editExamValues });
+    editExamMutation.mutate({ id, ...editExamValues });
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <EditExamNameField register={register} error={errors.name} id={id} />
       <EditExamTitleField register={register} error={errors.title} id={id} />
+      <EditExamDescriptionField
+        register={register}
+        error={errors.description}
+        id={id}
+      />
       <EditExamTimeField register={register} error={errors.time} id={id} />
       <EditExamMinimumPassScoreField
         register={register}

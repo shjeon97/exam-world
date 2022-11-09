@@ -3,8 +3,8 @@ import { Exam } from 'src/entity/exam.entity';
 
 export class EditExamInput extends PickType(Exam, [
   'id',
-  'name',
   'title',
+  'description',
   'time',
   'minimumPassScore',
 ] as const) {}

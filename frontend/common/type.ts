@@ -18,13 +18,13 @@ export interface ICoreOutput {
 export interface IPaginationInput {
   "page-size": number;
   page: number;
-  "search-type"?: string;
-  "search-value"?: string;
+  type?: string;
+  value?: string;
 }
 
 export interface IFormSearchInput {
-  searchType: string;
-  searchValue: string;
+  type: string;
+  value: string;
 }
 
 export interface IPaginationOutput extends ICoreOutput {
@@ -46,7 +46,7 @@ export interface IUser extends ICoreEntity {
 export interface IExam extends ICoreEntity {
   userId: number;
   user?: IUser;
-  name: string;
+  description: string;
   title?: string;
   time: number;
   minimumPassScore: number;
@@ -131,7 +131,7 @@ export interface IFindMultipleChoicesByExamIdOutput extends ICoreOutput {
 
 export interface IEditExamInput {
   id: number;
-  name: string;
+  description: string;
   title: string;
   time: number;
   minimumPassScore: number;

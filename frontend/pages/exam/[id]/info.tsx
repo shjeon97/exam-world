@@ -37,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-export default function ExamInfo({ id }) {
+export default function ExamInfo({ id }: { id: number }) {
   const [tiptap, setTiptap] = useState<any>(null);
   const [multipleChoiceNumber, setMultipleChoiceNumber] = useState<string[]>(
     []
@@ -274,7 +274,7 @@ export default function ExamInfo({ id }) {
             <div className="p-10  m flex flex-col items-center justify-center">
               <div className="sm:max-w-2xl  md:scale-100 scale-90  max-w-sm">
                 <h1 className="mb-2 font-medium text-2xl ">시험 정보</h1>
-                <EditExamForm id={id} />
+                <EditExamForm id={+id} />
                 <div className="mt-4">
                   {findQuestionsByExamIdData &&
                     findQuestionsByExamIdData.questions.length > 0 && (
@@ -324,10 +324,13 @@ export default function ExamInfo({ id }) {
                     saveQuestionAndMultipleChoiceOnSubmit
                   )}
                 >
-                  <div className="flex flex-row justify-between">
+                  <br />
+                  <div className="flex flex-row justify-between  ">
                     <label className="text-lg font-medium">점수</label>
-                    <div className=" text-xs  text-gray-500">
-                      해당 문제 맞출시 줄 점수를 입력하세요.
+                    <div>
+                      <span className="text-gray-500 inline-block align-bottom text-xs">
+                        해당 문제 맞출시 줄 점수를 입력하세요.
+                      </span>
                     </div>
                   </div>
                   <input

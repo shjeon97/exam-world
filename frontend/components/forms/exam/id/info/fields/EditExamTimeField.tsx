@@ -14,9 +14,7 @@ type Props = {
 
 export const EditExamTimeField: FC<Props> = ({ register, error, id }) => {
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () =>
-      apiFindExamById(Object.values(id)[0])
-    );
+    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(id));
 
   return (
     <>

@@ -12,35 +12,34 @@ type Props = {
   id: number;
 };
 
-export const EditExamMinimumPassScoreField: FC<Props> = ({
+export const EditExamDescriptionField: FC<Props> = ({
   register,
   error,
   id,
 }) => {
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () =>
-      apiFindExamById(Object.values(id)[0])
-    );
+    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(id));
 
   return (
     <>
       {!findExamByIdIsLoading && findExamByIdData && (
         <div>
-          <label>최소 합격점수</label>
+          <label>설명</label>
           <div className=" text-xs  text-gray-500">
-            0점 일시 없음으로 적용됩니다.
+            시험에 관련된 설명을 자유롭게 쓰세요 (50자 이내)
           </div>
-
           <input
-            type={"number"}
+            type={"text"}
             className={classNames(`form-input`, {
               "border-red-500 focus:border-red-500 focus:outline-red-500":
                 error,
             })}
-            {...register("minimumPassScore", {
-              required: "최소 합격점수를 입력해 주세요. ",
+            {...register("description", {
+              required: "설명 입력해 주세요. (50자 이내)",
+              maxLength: 50,
             })}
-            defaultValue={findExamByIdData?.exam?.minimumPassScore}
+            placeholder="description"
+            defaultValue={findExamByIdData?.exam?.description}
           />
           {error && <FormError errorMessage={error.message} />}
         </div>

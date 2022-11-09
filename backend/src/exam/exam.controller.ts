@@ -47,7 +47,7 @@ export class ExamController {
   @UseGuards(JwtAuthGuard)
   @Post()
   async createExam(
-    @GetUser() user,
+    @GetUser() user: User,
     @Body() createExamInput: CreateExamInput,
   ): Promise<CreateExamOutput> {
     return this.examService.createExam(createExamInput, user);
