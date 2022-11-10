@@ -15,10 +15,12 @@ export class QnaService {
   async sendQuestion({
     email,
     question,
+    title,
   }: SendQuestionInput): Promise<CoreOutput> {
     try {
       await this.qna.save(
         this.qna.create({
+          title,
           email,
           question,
         }),

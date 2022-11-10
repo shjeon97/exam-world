@@ -377,6 +377,7 @@ describe('AppController (e2e)', () => {
           .post(APT_QNA_QUESTION)
           .send({
             email: user1.email,
+            title: '문의사항',
             question: '<p>문의사항 TEST 입니다.</p>',
           })
           .expect(HttpStatus.CREATED)

@@ -107,6 +107,7 @@ export interface IUploadImageOutput extends ICoreOutput {
 
 export interface ISendQuestionInput {
   email: string;
+  title: string;
   question: any;
 }
 
