@@ -9,6 +9,7 @@ import { Toast } from "../../../lib/sweetalert2/toast";
 import { QnaEmailField } from "./fields/QnaEmailField";
 import { SetStateAction, useState } from "react";
 import Tiptap from "../../Tiptap";
+import { QnaTitleField } from "./fields/QnaTitleField";
 
 export const QnaForm = () => {
   const [tiptapValue, setTiptapValue] = useState("");
@@ -55,6 +56,7 @@ export const QnaForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <QnaEmailField register={register} error={errors.email} />
+      <QnaTitleField register={register} error={errors.title} />
       <div>
         <label className="text-lg font-medium">내용</label>
         <Tiptap editor={tiptapEditor} />

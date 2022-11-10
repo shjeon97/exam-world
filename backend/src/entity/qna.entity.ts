@@ -10,6 +10,13 @@ export class Qna extends CoreEntity {
   @IsEmail()
   email: string;
 
+  @ApiProperty({ example: '제목', description: '@@이 문제.' })
+  @Column()
+  @IsString()
+  @MaxLength(100)
+  @MinLength(2)
+  title: string;
+
   @ApiProperty({ example: '문의내용', description: '@@이 작동하지 않습니다.' })
   @Column()
   @IsString()

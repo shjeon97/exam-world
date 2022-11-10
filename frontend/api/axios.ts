@@ -331,10 +331,12 @@ export const apiUploadImage = async ({ file }: IUploadImageInput) => {
 export const apiSendQuestion = async ({
   email,
   question,
+  title,
 }: ISendQuestionInput) => {
   return axios
     .post("/qna/question", {
       email,
+      title,
       question,
     })
     .then((res) => {
