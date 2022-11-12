@@ -173,9 +173,11 @@ const Test = ({ id }) => {
     const minutes = Math.floor((seconds - hours * 3600) / 60);
     seconds = seconds - hours * 3600 - minutes * 60;
     if (hours >= 1) {
-      return hours + "시간" + addZero(minutes) + "분" + addZero(seconds) + "초";
+      return (
+        hours + "시간 " + addZero(minutes) + "분 " + addZero(seconds) + "초"
+      );
     }
-    return addZero(minutes) + "분" + addZero(seconds) + "초";
+    return addZero(minutes) + "분 " + addZero(seconds) + "초";
     function addZero(num: number) {
       return (num < 10 ? "0" : "") + num;
     }
@@ -194,19 +196,20 @@ const Test = ({ id }) => {
       findMultipleChoicesByExamIdData.ok ? (
         <>
           {time > 0 && (
-            <div className="mb-8 mt-2 ">
-              <div className=" fixed right-0  px-3 py-2 button text-lg bg-white">
+            <div className="mb-8 mt-2">
+              <div className="fixed inset-x-0  mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
                 남은시간 {secondToTime(time)}
               </div>
               <br />
             </div>
           )}
-          <div className="flex flex-wrap ">
+          <div className="flex flex-wrap justify-center ">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
-                  className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
+                  // className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
+                  className=" lg:w-2/5 md:w-1/2 w-auto  h-auto m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
                 >
                   <div className=" text-lg">
                     {question.page}번 문제 ({question.score}점)
