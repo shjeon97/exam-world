@@ -203,13 +203,13 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="flex flex-wrap justify-center ">
+          <div className="flex flex-wrap md:justify-center">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
                   // className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
-                  className=" lg:w-2/5 md:w-1/2 w-auto  h-auto m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
+                  className=" lg:w-2/5 md:w-1/2 h-auto m-3 max-w-md  border-2 border-gray-600 p-5 rounded"
                 >
                   <div className=" text-lg">
                     {question.page}번 문제 ({question.score}점)
