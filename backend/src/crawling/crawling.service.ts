@@ -37,6 +37,7 @@ export class CrawlingService {
           },
           user,
         );
+
         const examList = $('.exam-question');
         $(examList).each((i, elem) => {
           const question = $(elem).find('h5').text();
