@@ -10,5 +10,6 @@ import { ExamService } from './exam.service';
   imports: [TypeOrmModule.forFeature([Exam, Question, MultipleChoice])],
   controllers: [ExamController],
   providers: [ExamService],
+  exports: [ExamService],
 })
 export class ExamModule {}

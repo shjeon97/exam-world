@@ -14,6 +14,7 @@ import { MultipleChoiceModule } from './multipleChoice/multipleChoice.module';
 import { Exam } from './entity/exam.entity';
 import { Question } from './entity/question.entity';
 import { MultipleChoice } from './entity/multiple-choice.entity';
+import { CrawlingModule } from './crawling/crawling.module';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { MultipleChoice } from './entity/multiple-choice.entity';
     ExamModule,
     QuestionModule,
     MultipleChoiceModule,
+    CrawlingModule,
   ],
   controllers: [],
   providers: [],

@@ -9,5 +9,6 @@ import { MultipleChoiceService } from './multipleChoice.service';
   imports: [TypeOrmModule.forFeature([MultipleChoice, Exam])],
   controllers: [MultipleChoiceController],
   providers: [MultipleChoiceService],
+  exports: [MultipleChoiceService],
 })
 export class MultipleChoiceModule {}
