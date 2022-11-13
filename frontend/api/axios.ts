@@ -349,15 +349,15 @@ export const apiSendQuestion = async ({
 
 // 시험 생성
 export const apiCreateExam = async ({
-  name,
   title,
+  description,
   time,
   minimumPassScore,
 }: ICreateExamInput) => {
   return axios
     .post("/exam", {
-      name,
       title,
+      description,
       time: +time,
       minimumPassScore: +minimumPassScore,
     })

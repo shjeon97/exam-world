@@ -9,20 +9,20 @@ type Props = {
   error?: FieldError;
 };
 
-export const CreateExamNameField: FC<Props> = ({ register, error }) => (
+export const CreateExamDescriptionField: FC<Props> = ({ register, error }) => (
   <div>
-    <label>제목</label>
+    <label>설명</label>
     <div className=" text-xs  text-gray-500">
-      시험의 제목을 입력하세요. 예) 자동차 2종보통
+      시험에 관련된 설명을 자유롭게 쓰세요 (50자 이내)
     </div>
     <input
       type={"text"}
       className={classNames(`form-input`, {
         "border-red-500 focus:border-red-500 focus:outline-red-500": error,
       })}
-      {...register("name", {
-        required: "사용할 제목 입력해 주세요. (30자 이내)",
-        maxLength: 30,
+      {...register("description", {
+        required: "사용할 설명을 입력해 주세요. (50자 이내)",
+        maxLength: 50,
       })}
       placeholder="name"
     />

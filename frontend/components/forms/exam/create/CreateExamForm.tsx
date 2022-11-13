@@ -3,7 +3,7 @@ import { useMutation } from "react-query";
 import { useRouter } from "next/router";
 import { ICreateExamInput, ICreateExamOutput } from "../../../../common/type";
 import { apiCreateExam } from "../../../../api/axios";
-import { CreateExamNameField } from "./fields/CreateExamNameField";
+import { CreateExamDescriptionField as CreateExamDescriptionField } from "./fields/CreateExamDescriptionField";
 import { CreateExamTitleField } from "./fields/CreateExamTitleField";
 import { FormButton } from "../../FormButton";
 import { FormError } from "../../FormError";
@@ -34,8 +34,11 @@ export const CreateExamForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <CreateExamNameField register={register} error={errors.name} />
       <CreateExamTitleField register={register} error={errors.title} />
+      <CreateExamDescriptionField
+        register={register}
+        error={errors.description}
+      />
       <CreateExamTimeField register={register} error={errors.time} />
       <CreateExamMinimumPassScoreField
         register={register}

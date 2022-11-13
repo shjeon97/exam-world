@@ -11,9 +11,9 @@ type Props = {
 
 export const CreateExamTitleField: FC<Props> = ({ register, error }) => (
   <div>
-    <label>설명</label>
+    <label>제목</label>
     <div className=" text-xs  text-gray-500">
-      시험에 관련된 설명을 자유롭게 쓰세요 (50자 이내)
+      시험의 제목을 입력하세요. (30자 이내)
     </div>
     <input
       type={"text"}
