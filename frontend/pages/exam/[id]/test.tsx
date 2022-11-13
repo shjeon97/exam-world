@@ -203,12 +203,12 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="flex flex-wrap ">
+          <div className="flex flex-wrap md:justify-center">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
-                  className="h-auto m-3  max-w-md  lg:max-w-full border-2 border-gray-600 p-5 rounded"
+                  className="h-auto m-3  max-w-md  lg:max-w-2xl p-5 rounded"
                 >
                   <div className=" text-lg">
                     {question.page}번 문제 ({question.score}점)
@@ -219,7 +219,7 @@ const Test = ({ id }) => {
                       contentEditable="true"
                       translate="no"
                       tabIndex={0}
-                      className="ProseMirror m-5 focus:outline-none pointer-events-none"
+                      className="ProseMirror m-5 focus:outline-none hover:cursor-default"
                     >
                       <div
                         dangerouslySetInnerHTML={{ __html: question.text }}
