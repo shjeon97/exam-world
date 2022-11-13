@@ -112,8 +112,8 @@ export interface ISendQuestionInput {
 }
 
 export interface ICreateExamInput {
-  name: string;
   title: string;
+  description: string;
   time: number;
   minimumPassScore: number;
 }

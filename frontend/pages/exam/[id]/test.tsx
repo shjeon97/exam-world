@@ -203,13 +203,12 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="flex flex-wrap md:justify-center">
+          <div className="flex flex-wrap ">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
-                  // className=" w-auto h-min m-3 md:max-w-3xl max-w-md  border-2 border-gray-600 p-5 rounded"
-                  className=" lg:w-2/5 md:w-1/2 h-auto m-3 max-w-md  border-2 border-gray-600 p-5 rounded"
+                  className="h-auto m-3  max-w-md  lg:max-w-full border-2 border-gray-600 p-5 rounded"
                 >
                   <div className=" text-lg">
                     {question.page}번 문제 ({question.score}점)
@@ -241,7 +240,7 @@ const Test = ({ id }) => {
                           }
                           key={index}
                           className={classNames(
-                            `p-1 hover:cursor-pointer hover:underline   hover:text-blue-500`,
+                            `p-1 hover:cursor-pointer hover:underline hover:text-blue-500`,
                             {
                               "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
                                 multipleChoiceIsCheckedArray.find(
