@@ -43,7 +43,7 @@ export class CrawlingService {
           let multipleChoices = $(elem)
             .find('li')
             .text()
-            .split(/① |② |③ |④ |<>/);
+            .split(/① |② |③ |④ |⑤ |<>/);
 
           multipleChoices = multipleChoices.filter((e) => e !== '');
 
