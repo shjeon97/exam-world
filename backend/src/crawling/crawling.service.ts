@@ -32,8 +32,8 @@ export class CrawlingService {
           {
             title: examTitleAndDescription[0],
             description: examTitleAndDescription[1],
-            time: 1800,
-            minimumPassScore: 85,
+            time: 6000,
+            minimumPassScore: 60,
           },
           user,
         );

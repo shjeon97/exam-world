@@ -4,6 +4,7 @@
     "fortawesome",
     "nestjs",
     "signup",
+    "Swal",
     "sweetalert",
     "Tiptap",
     "typeorm",
