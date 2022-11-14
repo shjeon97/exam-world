@@ -211,7 +211,8 @@ const Test = ({ id }) => {
                   className="h-auto m-3  max-w-md  lg:max-w-2xl p-5 rounded"
                 >
                   <div className=" text-lg">
-                    {question.page}번 문제 ({question.score}점)
+                    {question.page}번 문제{" "}
+                    {question.score > 0 && `(${question.score}점)`}
                   </div>
                   <br />
                   <div className=" border border-gray-400 rounded overflow-auto  ">
