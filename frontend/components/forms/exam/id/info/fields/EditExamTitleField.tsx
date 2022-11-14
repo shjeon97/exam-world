@@ -14,7 +14,7 @@ type Props = {
 
 export const EditExamTitleField: FC<Props> = ({ register, error, id }) => {
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(id));
+    useQuery<any>([`exam`, { id }], () => apiFindExamById(id));
   return (
     <>
       {!findExamByIdIsLoading && findExamByIdData && (

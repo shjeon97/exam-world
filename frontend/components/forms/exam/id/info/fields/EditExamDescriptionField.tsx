@@ -18,7 +18,7 @@ export const EditExamDescriptionField: FC<Props> = ({
   id,
 }) => {
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, id], () => apiFindExamById(id));
+    useQuery<any>([`exam`, { id }], () => apiFindExamById(id));
 
   return (
     <>

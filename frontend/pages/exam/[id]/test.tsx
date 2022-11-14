@@ -42,13 +42,13 @@ const Test = ({ id }) => {
     apiGetMe
   );
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, { id }], () => apiFindExamById(+id));
+    useQuery<any>([`exam`, { id }], () => apiFindExamById(+id));
 
   const {
     isLoading: findQuestionsByIdIsLoading,
     data: findQuestionsByExamIdData,
   } = useQuery<IFindQuestionsByExamIdOutput>(
-    [`questions-by-examId`, { examId: id }],
+    [`questions`, { examId: id }],
     () => apiFindQuestionsByExamId(+id)
   );
 
@@ -61,7 +61,7 @@ const Test = ({ id }) => {
   const {
     isLoading: findMultipleChoicesByExamIdIsLoading,
     data: findMultipleChoicesByExamIdData,
-  } = useQuery<any>([`multipleChoices-by-examId`, { examId: id }], () =>
+  } = useQuery<any>([`multipleChoices`, { examId: id }], () =>
     apiFindMultipleChoicesByExamId(+id)
   );
 
@@ -222,6 +222,7 @@ const Test = ({ id }) => {
                       className="ProseMirror m-5 focus:outline-none hover:cursor-default"
                     >
                       <div
+                        spellCheck={false}
                         dangerouslySetInnerHTML={{ __html: question.text }}
                       />
                     </div>

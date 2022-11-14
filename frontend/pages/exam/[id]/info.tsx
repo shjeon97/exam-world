@@ -83,29 +83,26 @@ export default function ExamInfo({ id }: { id: number }) {
           timer: 1200,
         });
         onCreateQuestionAndMultipleChoiceClick();
-        queryClient.invalidateQueries([`questions-by-examId`, { examId: id }]);
-        queryClient.invalidateQueries([
-          `multipleChoices-by-examId`,
-          { examId: id },
-        ]);
+        queryClient.invalidateQueries([`questions`, { examId: id }]);
+        queryClient.invalidateQueries([`multipleChoices`, { examId: id }]);
       }
     },
   });
 
   const { isLoading: findExamByIdIsLoading, data: findExamByIdData } =
-    useQuery<any>([`exam-by-id`, { id }], () => apiFindExamById(+id));
+    useQuery<any>([`exam`, { id }], () => apiFindExamById(+id));
 
   const {
     isLoading: findQuestionsByIdIsLoading,
     data: findQuestionsByExamIdData,
-  } = useQuery<any>([`questions-by-examId`, { examId: id }], () =>
+  } = useQuery<any>([`questions`, { examId: id }], () =>
     apiFindQuestionsByExamId(+id)
   );
 
   const {
     isLoading: findMultipleChoicesByExamIdIsLoading,
     data: findMultipleChoicesByExamIdData,
-  } = useQuery<any>([`multipleChoices-by-examId`, { examId: id }], () =>
+  } = useQuery<any>([`multipleChoices`, { examId: id }], () =>
     apiFindMultipleChoicesByExamId(+id)
   );
 
@@ -132,11 +129,13 @@ export default function ExamInfo({ id }: { id: number }) {
 
   useEffect(() => {
     try {
-      setPage(findQuestionsByExamIdData?.questions.length + 1);
+      if (findQuestionsByExamIdData) {
+        setPage(findQuestionsByExamIdData?.questions.length + 1);
+      }
     } catch (error) {
       console.log(error);
     }
-  }, [findQuestionsByExamIdData && findQuestionsByExamIdData.questions]);
+  }, [findQuestionsByExamIdData && page === 1]);
 
   const saveQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
@@ -198,8 +197,8 @@ export default function ExamInfo({ id }: { id: number }) {
       timer: 1200,
     });
     onCreateQuestionAndMultipleChoiceClick();
-    queryClient.invalidateQueries([`questions-by-examId`, id]);
-    queryClient.invalidateQueries([`multipleChoices-by-examId`, id]);
+    queryClient.invalidateQueries([`questions`, { examId: id }]);
+    queryClient.invalidateQueries([`multipleChoices`, { examId: id }]);
   };
 
   const handleChangePage = (page: number) => {
@@ -237,11 +236,12 @@ export default function ExamInfo({ id }: { id: number }) {
   };
 
   const onCreateQuestionAndMultipleChoiceClick = () => {
-    setPage(findQuestionsByExamIdData?.questions.length + 1);
-    tiptap?.commands?.setContent(``);
-    saveQuestionAndMultipleChoiceSetValue("score", 1);
-    setFindMultipleChoicesByPage([]);
-    setMultipleChoiceNumber([]);
+    handleChangePage(page + 1);
+    setPage(page + 1);
+    // tiptap?.commands?.setContent(``);
+    // saveQuestionAndMultipleChoiceSetValue("score", 1);
+    // setFindMultipleChoicesByPage([]);
+    // setMultipleChoiceNumber([]);
   };
 
   const handleDeleteExamPage = () => {
@@ -359,7 +359,7 @@ export default function ExamInfo({ id }: { id: number }) {
                         );
                       }
                     )}
-                  <div className="  items-start  ">
+                  <div className="items-start">
                     <div>
                       <div className="mt-4"></div>
                       <div
@@ -422,7 +422,6 @@ export default function ExamInfo({ id }: { id: number }) {
                               );
                             })}
                           </div>
-                          {/* <button className="button">저장</button> */}
                           <br />
                           <FormButton
                             canClick={true}
