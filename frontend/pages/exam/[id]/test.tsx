@@ -80,6 +80,14 @@ const Test = ({ id }) => {
         { page, no, isChecked: true, privateKey: `page-${page}-no-${no}` },
       ]);
     }
+
+    if (
+      findMultipleChoicesByExamIdData.multipleChoices.filter(
+        (e) => e.page === page && e.isCorrectAnswer === true
+      ).length === 1
+    ) {
+      checkOnlyOne(`checkbox-${page}`, no);
+    }
   };
 
   const scoring = () => {
@@ -126,7 +134,7 @@ const Test = ({ id }) => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "확인",
-    });
+    }).then((e) => {});
   };
 
   const endTest = () => {
@@ -183,6 +191,16 @@ const Test = ({ id }) => {
     }
   }
 
+  const checkOnlyOne = (name, no) => {
+    const checkboxes = document.getElementsByName(name) as NodeListOf<any>;
+
+    for (let i = 0; i < checkboxes.length; i++) {
+      if (checkboxes[i].id !== name + "-" + no) {
+        checkboxes[i].checked = false;
+      }
+    }
+  };
+
   return (
     <>
       <Head>
@@ -217,6 +235,7 @@ const Test = ({ id }) => {
                   <br />
                   <div className=" border border-gray-400 rounded overflow-auto  ">
                     <div
+                      suppressContentEditableWarning={true}
                       contentEditable="true"
                       translate="no"
                       tabIndex={0}
@@ -253,7 +272,27 @@ const Test = ({ id }) => {
                             }
                           )}
                         >
-                          {index + 1}번 {multipleChoice.text}
+                          <div className="flex items-center mb-4">
+                            <input
+                              name={`checkbox-${multipleChoice.page}`}
+                              id={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
+                              type="checkbox"
+                              className={`w-5 h-5 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 ${
+                                findMultipleChoicesByExamIdData.multipleChoices.filter(
+                                  (e) =>
+                                    e.page === question.page &&
+                                    e.isCorrectAnswer === true
+                                ).length > 1 && "rounded-full"
+                              }`}
+                            />
+                            <label
+                              htmlFor={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
+                              className="ml-2  font-medium text-gray-900 "
+                            >
+                              {" "}
+                              {multipleChoice.text}
+                            </label>
+                          </div>
                         </div>
                       );
                     })}

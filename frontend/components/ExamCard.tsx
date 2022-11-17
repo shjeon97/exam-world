@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import Swal from "sweetalert2";
 import { apiDeleteExam, apiGetMe } from "../api/axios";
@@ -20,6 +20,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   title,
   description,
 }) => {
+  const [isHidden, setIsHidden] = useState(false);
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
     "me",
     apiGetMe
@@ -29,7 +30,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   const deleteExamMutation = useMutation(apiDeleteExam, {
     onSuccess: async (data: ICoreOutput) => {
       if (data) {
-        queryClient.invalidateQueries();
+        setIsHidden(true);
         await Toast.fire({
           icon: "success",
           title: `삭제가 완료되었습니다.`,
@@ -57,7 +58,11 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   };
 
   return (
-    <div className="p-1 border-2 border-gray-800 w-auto h-auto rounded">
+    <div
+      className={`${
+        isHidden && "hidden"
+      } p-1 border-2 border-gray-800 w-auto h-auto rounded`}
+    >
       <div className="block px-14 py-16 bg-white sm:px-16 sm:py-20 rounded max-w-xs">
         <h5 className="text-xl font-bold text-gray-900 ">{title}</h5>
 
