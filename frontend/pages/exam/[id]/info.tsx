@@ -45,7 +45,7 @@ export default function ExamInfo({ id }: { id: number }) {
   const [findMultipleChoicesByPage, setFindMultipleChoicesByPage] = useState(
     []
   );
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const queryClient = useQueryClient();
 
   const router = useRouter();
@@ -135,7 +135,7 @@ export default function ExamInfo({ id }: { id: number }) {
     } catch (error) {
       console.log(error);
     }
-  }, [findQuestionsByExamIdData && page === 1]);
+  }, [findQuestionsByExamIdData && page === 0]);
 
   const saveQuestionAndMultipleChoiceOnSubmit = async () => {
     const questionValue = tiptap.getHTML();
@@ -196,9 +196,14 @@ export default function ExamInfo({ id }: { id: number }) {
       position: "top-end",
       timer: 1200,
     });
-    onCreateQuestionAndMultipleChoiceClick();
-    queryClient.invalidateQueries([`questions`, { examId: id }]);
-    queryClient.invalidateQueries([`multipleChoices`, { examId: id }]);
+
+    if (findQuestionsByExamIdData?.questions.length === page) {
+      onCreateQuestionAndMultipleChoiceClick();
+    } else {
+      handleChangePage(page + 1);
+      queryClient.invalidateQueries([`questions`, { examId: id }]);
+      queryClient.invalidateQueries([`multipleChoices`, { examId: id }]);
+    }
   };
 
   const handleChangePage = (page: number) => {
@@ -226,7 +231,9 @@ export default function ExamInfo({ id }: { id: number }) {
         onAddOptionClick();
       });
 
-    saveQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
+    if (findQuestionByPage?.score) {
+      saveQuestionAndMultipleChoiceSetValue("score", findQuestionByPage.score);
+    }
   };
 
   const onDeleteClick = (idToDelete: string) => {
@@ -236,12 +243,12 @@ export default function ExamInfo({ id }: { id: number }) {
   };
 
   const onCreateQuestionAndMultipleChoiceClick = () => {
-    handleChangePage(page + 1);
-    setPage(page + 1);
-    // tiptap?.commands?.setContent(``);
-    // saveQuestionAndMultipleChoiceSetValue("score", 1);
-    // setFindMultipleChoicesByPage([]);
-    // setMultipleChoiceNumber([]);
+    handleChangePage(findQuestionsByExamIdData?.questions.length + 1);
+    setPage(findQuestionsByExamIdData?.questions.length + 1);
+    tiptap?.commands?.setContent(``);
+    saveQuestionAndMultipleChoiceSetValue("score", 1);
+    setFindMultipleChoicesByPage([]);
+    setMultipleChoiceNumber([]);
   };
 
   const handleDeleteExamPage = () => {
@@ -413,7 +420,7 @@ export default function ExamInfo({ id }: { id: number }) {
                                     </div>
                                     <div
                                       onClick={() => onDeleteClick(id)}
-                                      className="col-span-1 text-3xl  mt-4  hover:cursor-pointer hover:text-red-500"
+                                      className="col-span-1 text-3xl  mt-8  hover:cursor-pointer hover:text-red-500"
                                     >
                                       <FontAwesomeIcon icon={faXmark} />
                                     </div>
