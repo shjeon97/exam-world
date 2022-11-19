@@ -49,3 +49,7 @@ jobs:
         run: |
           docker compose up --build -d
         working-directory: ../../../../server/exam-world
+
+      - name: exam-world docker old image delete
+        run: |
+          docker image prune -a
