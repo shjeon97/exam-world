@@ -1,3 +1,5 @@
+import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { GetServerSideProps } from "next";
 import Head from "next/head";
@@ -66,6 +68,9 @@ const Test = ({ id }) => {
   );
 
   const onClickMultipleChoice = (page, no) => {
+    const multipleChoice = document.getElementById(
+      `checkbox-${page}-${no}`
+    ) as any;
     if (
       multipleChoiceIsCheckedArray.find(
         (e) => e.privateKey === `page-${page}-no-${no}`
@@ -74,11 +79,13 @@ const Test = ({ id }) => {
       setMultipleChoiceIsCheckedArray((e) => [
         ...e.filter((e) => e.privateKey !== `page-${page}-no-${no}`),
       ]);
+      multipleChoice.checked = false;
     } else {
       setMultipleChoiceIsCheckedArray((e) => [
         ...e,
         { page, no, isChecked: true, privateKey: `page-${page}-no-${no}` },
       ]);
+      multipleChoice.checked = true;
     }
 
     if (
@@ -86,7 +93,7 @@ const Test = ({ id }) => {
         (e) => e.page === page && e.isCorrectAnswer === true
       ).length === 1
     ) {
-      checkOnlyOne(`checkbox-${page}`, no);
+      checkOnlyOne(page, no);
     }
   };
 
@@ -94,19 +101,25 @@ const Test = ({ id }) => {
     setTime(0);
     let score = 0;
     findQuestionsByExamIdData.questions.map((question) => {
-      const findMultipleChoicesByPage =
+      const findMultipleChoiceCorrectAnswersByPage =
         findMultipleChoicesByExamIdData.multipleChoices.filter(
           (e) => e.isCorrectAnswer === true && e.page === question.page
         );
 
+      findMultipleChoiceCorrectAnswersByPage.map((multipleChoice) => {
+        document.getElementById(
+          `text-${question.page}-${multipleChoice.no}`
+        ).className = "ml-2 text-green-600";
+      });
+
       if (
-        findMultipleChoicesByPage.length ===
+        findMultipleChoiceCorrectAnswersByPage.length ===
         multipleChoiceIsCheckedArray.filter((e) => e.page === question.page)
           .length
       ) {
         let isCorrectAnswer = true;
 
-        findMultipleChoicesByPage.map((multipleChoice) => {
+        findMultipleChoiceCorrectAnswersByPage.map((multipleChoice) => {
           multipleChoiceIsCheckedArray.find((e) => e.no === multipleChoice.no);
           if (
             !multipleChoiceIsCheckedArray.find(
@@ -116,9 +129,32 @@ const Test = ({ id }) => {
             isCorrectAnswer = false;
           }
         });
+
+        const correctAnswer = document.getElementById(
+          `question-${question.page}-"isCorrectAnswer-true`
+        );
+
+        const wrongAnswer = document.getElementById(
+          `question-${question.page}-"isCorrectAnswer-false`
+        );
         if (isCorrectAnswer) {
           score = score + question.score;
+          correctAnswer.hidden = false;
+          wrongAnswer.hidden = true;
+        } else {
+          wrongAnswer.hidden = false;
+          correctAnswer.hidden = true;
         }
+      } else {
+        const correctAnswer = document.getElementById(
+          `question-${question.page}-"isCorrectAnswer-true`
+        );
+
+        const wrongAnswer = document.getElementById(
+          `question-${question.page}-"isCorrectAnswer-false`
+        );
+        wrongAnswer.hidden = false;
+        correctAnswer.hidden = true;
       }
     });
 
@@ -134,7 +170,7 @@ const Test = ({ id }) => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "확인",
-    }).then((e) => {});
+    });
   };
 
   const endTest = () => {
@@ -191,11 +227,20 @@ const Test = ({ id }) => {
     }
   }
 
-  const checkOnlyOne = (name, no) => {
-    const checkboxes = document.getElementsByName(name) as NodeListOf<any>;
+  const checkOnlyOne = (page, no) => {
+    const checkboxes = document.getElementsByName(
+      `checkbox-${page}`
+    ) as NodeListOf<any>;
 
     for (let i = 0; i < checkboxes.length; i++) {
-      if (checkboxes[i].id !== name + "-" + no) {
+      if (checkboxes[i].id !== `checkbox-${page}` + "-" + no) {
+        setMultipleChoiceIsCheckedArray((e) => [
+          ...e.filter(
+            (e) =>
+              e.privateKey !==
+              `page-${page}-no-${checkboxes[i].id.split("-").slice(-1)[0]}`
+          ),
+        ]);
         checkboxes[i].checked = false;
       }
     }
@@ -228,7 +273,27 @@ const Test = ({ id }) => {
                   key={index}
                   className="h-auto m-3  max-w-md  lg:max-w-2xl p-5 rounded"
                 >
-                  <div className=" text-lg">
+                  <div
+                    id={`question-${question.page}-"isCorrectAnswer-true`}
+                    hidden={true}
+                    className="mb-10"
+                  >
+                    <FontAwesomeIcon
+                      className="absolute top-auto text-8xl opacity-80 text-red-700"
+                      icon={faCheck}
+                    />
+                  </div>
+                  <div
+                    id={`question-${question.page}-"isCorrectAnswer-false`}
+                    hidden={true}
+                    className="mb-8"
+                  >
+                    <FontAwesomeIcon
+                      className="absolute text-8xl  opacity-80 text-red-700"
+                      icon={faXmark}
+                    />
+                  </div>
+                  <div className={classNames(`text-lg`)}>
                     {question.page}번 문제{" "}
                     {question.score > 0 && `(${question.score}점)`}
                   </div>
@@ -252,13 +317,7 @@ const Test = ({ id }) => {
                     .filter((e) => e.page === question.page)
                     .map((multipleChoice, index) => {
                       return (
-                        <div
-                          onClick={() =>
-                            onClickMultipleChoice(
-                              multipleChoice.page,
-                              multipleChoice.no
-                            )
-                          }
+                        <span
                           key={index}
                           className={classNames(
                             `p-1 hover:cursor-pointer hover:underline hover:text-blue-500`,
@@ -272,12 +331,18 @@ const Test = ({ id }) => {
                             }
                           )}
                         >
-                          <div className="flex items-center mb-4">
+                          <div className="flex mb-4 items-center text-md">
                             <input
+                              onClick={() =>
+                                onClickMultipleChoice(
+                                  multipleChoice.page,
+                                  multipleChoice.no
+                                )
+                              }
                               name={`checkbox-${multipleChoice.page}`}
                               id={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
                               type="checkbox"
-                              className={`w-5 h-5 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 ${
+                              className={`w-6 h-6 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 ${
                                 findMultipleChoicesByExamIdData.multipleChoices.filter(
                                   (e) =>
                                     e.page === question.page &&
@@ -285,15 +350,21 @@ const Test = ({ id }) => {
                                 ).length > 1 && "rounded-full"
                               }`}
                             />
-                            <label
-                              htmlFor={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
-                              className="ml-2  font-medium text-gray-900 "
+                            <span
+                              id={`text-${multipleChoice.page}-${multipleChoice.no}`}
+                              onClick={() =>
+                                onClickMultipleChoice(
+                                  multipleChoice.page,
+                                  multipleChoice.no
+                                )
+                              }
+                              className="ml-2"
                             >
                               {" "}
                               {multipleChoice.text}
-                            </label>
+                            </span>
                           </div>
-                        </div>
+                        </span>
                       );
                     })}
                 </div>
