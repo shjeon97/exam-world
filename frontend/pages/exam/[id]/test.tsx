@@ -100,6 +100,8 @@ const Test = ({ id }) => {
   const scoring = () => {
     setTime(0);
     let score = 0;
+    console.log(multipleChoiceIsCheckedArray);
+
     findQuestionsByExamIdData.questions.map((question) => {
       const findMultipleChoiceCorrectAnswersByPage =
         findMultipleChoicesByExamIdData.multipleChoices.filter(
@@ -120,10 +122,9 @@ const Test = ({ id }) => {
         let isCorrectAnswer = true;
 
         findMultipleChoiceCorrectAnswersByPage.map((multipleChoice) => {
-          multipleChoiceIsCheckedArray.find((e) => e.no === multipleChoice.no);
           if (
             !multipleChoiceIsCheckedArray.find(
-              (e) => e.no === multipleChoice.no
+              (e) => e.no === multipleChoice.no && e.page === question.page
             )
           ) {
             isCorrectAnswer = false;
