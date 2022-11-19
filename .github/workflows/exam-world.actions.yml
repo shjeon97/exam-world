@@ -52,5 +52,4 @@ jobs:
 
       - name: exam-world docker old image delete
         run: |
-          docker image prune -a
-          y
+          yes | docker image prune -a
