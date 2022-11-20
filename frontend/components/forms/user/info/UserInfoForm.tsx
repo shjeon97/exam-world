@@ -12,6 +12,7 @@ import { UserInfoEditPasswordField } from "./fields/UserInfoEditPasswordField";
 import { FormButton } from "../../FormButton";
 import { FormError } from "../../FormError";
 import classNames from "classnames";
+import { UserInfoConfirmEditPasswordField } from "./fields/UserInfoConfirmEditPasswordField";
 
 export const UserInfoForm = () => {
   const {
@@ -70,8 +71,17 @@ export const UserInfoForm = () => {
   const onSubmit = () => {
     if (!editMeMutation.isLoading) {
       const editUser = getValues();
-
-      editMeMutation.mutate(editUser);
+      if (
+        editUser.confirmEditPassword &&
+        editUser.confirmEditPassword !== editUser.editPassword
+      ) {
+        Toast.fire({
+          icon: "error",
+          title: "변경할 비밀번호가 일치하지 않습니다",
+        });
+      } else {
+        editMeMutation.mutate(editUser);
+      }
     }
   };
 
@@ -102,7 +112,10 @@ export const UserInfoForm = () => {
         setValue={setValue}
         error={errors.editPassword}
       />
-
+      <UserInfoConfirmEditPasswordField
+        register={register}
+        error={errors.confirmEditPassword}
+      />
       <div className=" grid grid-cols-2 gap-4">
         <FormButton
           canClick={isValid}

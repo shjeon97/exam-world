@@ -74,10 +74,12 @@ export interface ISignupUserInput {
   email: string;
   nickname: string;
   password: string;
+  confirmPassword: string;
 }
 
 export interface IEditMeInput extends IUserInput {
   editPassword?: string;
+  confirmEditPassword?: string;
 }
 
 export interface ILoginInput {
