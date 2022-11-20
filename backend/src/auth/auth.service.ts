@@ -6,12 +6,15 @@ import { LoginInput, LoginOutput } from 'src/auth/dto/login.dto';
 import { SignupUserInput } from 'src/auth/dto/signup-user.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import { Verification } from 'src/entity/verification.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly user: Repository<User>,
+    @InjectRepository(Verification)
+    private readonly verification: Repository<Verification>,
     private readonly jwtService: JwtService,
   ) {}
   /** User 생성 */
@@ -37,7 +40,7 @@ export class AuthService {
         return { ok: false, error: '이미 존재하는 이메일입니다.' };
       }
 
-      await this.user.save(
+      const user = await this.user.save(
         this.user.create({
           nickname,
           password,
@@ -46,12 +49,16 @@ export class AuthService {
         }),
       );
 
+      await this.verification.save(
+        this.verification.create({
+          user,
+        }),
+      );
       return {
         ok: true,
       };
     } catch (error) {
       console.log(error);
-
       return { ok: false, error: '유저 생성 실패' };
     }
   }

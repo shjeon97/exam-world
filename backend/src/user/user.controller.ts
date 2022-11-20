@@ -13,7 +13,6 @@ import {
   ApiOperation,
   ApiResponse,
   OmitType,
-  PickType,
 } from '@nestjs/swagger';
 import { GetUser } from 'src/auth/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';

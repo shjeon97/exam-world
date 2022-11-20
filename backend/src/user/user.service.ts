@@ -5,12 +5,15 @@ import { DeleteMeInput } from 'src/user/dto/delete-me.dto';
 import { EditMeInput } from 'src/user/dto/edit-me.dto';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
+import { Verification } from 'src/entity/verification.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private readonly user: Repository<User>,
+    @InjectRepository(Verification)
+    private readonly verification: Repository<Verification>,
   ) {}
 
   async editMe(
@@ -51,6 +54,12 @@ export class UserService {
 
         if (existsEmail) {
           return { ok: false, error: '이미 존재하는 이메일입니다.' };
+        } else {
+          user.verified = false;
+          await this.verification.delete({ user: { id: user.id } });
+          const verification = await this.verification.save(
+            this.verification.create({ user }),
+          );
         }
       }
 
