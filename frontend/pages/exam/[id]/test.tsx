@@ -343,7 +343,7 @@ const Test = ({ id }) => {
                               name={`checkbox-${multipleChoice.page}`}
                               id={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
                               type="checkbox"
-                              className={`w-6 h-6 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 ${
+                              className={`w-6 h-6 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 focus:ring-2 ${
                                 findMultipleChoicesByExamIdData.multipleChoices.filter(
                                   (e) =>
                                     e.page === question.page &&

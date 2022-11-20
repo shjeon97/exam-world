@@ -9,17 +9,21 @@ type Props = {
   error?: FieldError;
 };
 
-export const RegisterEmailField: FC<Props> = ({ register, error }) => (
+export const SignupConfirmPasswordField: FC<Props> = ({ register, error }) => (
   <div>
     <input
-      type={"email"}
+      type={"password"}
       className={classNames(`form-input`, {
         "border-red-500 focus:border-red-500 focus:outline-red-500": error,
       })}
-      {...register("email", {
-        required: "사용할 이메일 입력해 주세요.",
+      {...register("confirmPassword", {
+        required: "비밀번호 다시 입력해 주세요.",
+        minLength: {
+          value: 4,
+          message: "비밀번호는 4자리 이상이여야 합니다.",
+        },
       })}
-      placeholder="email"
+      placeholder="confirm password"
     />
     {error && <FormError errorMessage={error.message} />}
   </div>

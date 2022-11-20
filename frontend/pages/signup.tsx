@@ -6,7 +6,8 @@ import { Toast } from "../lib/sweetalert2/toast";
 import { useRouter } from "next/router";
 import { WEB_TITLE } from "../constant";
 import Head from "next/head";
-import { RegisterForm } from "../components/forms/register/RegisterForm";
+import { SignupForm } from "../components/forms/signup/SignupForm";
+import { Policy } from "../components/policies/Policy";
 
 const Signup = () => {
   let router = useRouter();
@@ -29,15 +30,19 @@ const Signup = () => {
       <Head>
         <title className=" text-gray-800">회원가입 {WEB_TITLE}</title>
       </Head>
-      <div className=" bg-white">
-        <div className="flex flex-col items-center justify-center h-screen p-6">
-          <div className=" w-10/12 mx-auto md:w-96">
-            <h1 className=" font-bold text-3xl cursor-pointer text-center">
+      <section className="flex min-h-screen flex-col items-center justify-center text-gray-600 body-font">
+        <div className="container mx-auto flex px-5 py-24 lg:flex-row flex-col items-center">
+          <div className="lg:flex-grow lg:w-1/2 lg:pr-24  flex flex-col lg:items-start lg:text-left mb-16 lg:mb-0 items-center text-center">
+            <Policy />
+          </div>
+          <div className="lg:max-w-lg w-full ">
+            <h1 className=" font-bold text-4xl cursor-pointer text-center mb-6">
               <Link href="/">Exam World! </Link>
-            </h1>{" "}
-            <br />
-            <h1 className="mb-2 font-medium text-2xl">회원가입</h1>
-            <RegisterForm />
+            </h1>
+            <h1 className="title-font sm:text-3xl text-2xl mb-4 font-medium text-gray-900">
+              회원가입
+            </h1>
+            <SignupForm />
             <small>
               이미 가입하셨나요?
               <Link href="/login">
@@ -46,7 +51,7 @@ const Signup = () => {
             </small>
           </div>
         </div>
-      </div>
+      </section>
     </>
   );
 };
