@@ -9,6 +9,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from './role.guard';
+import { Verification } from 'src/entity/verification.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { RoleGuard } from './role.guard';
         signOptions: { expiresIn: '1d' },
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Verification]),
   ],
   providers: [
     AuthService,

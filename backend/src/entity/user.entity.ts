@@ -51,6 +51,10 @@ export class User extends CoreEntity {
   @IsString()
   phone?: string;
 
+  @ApiProperty({ example: false, description: '인증' })
+  @Column({ default: false })
+  verified: boolean;
+
   @BeforeInsert()
   @BeforeUpdate()
   async hashPassword(): Promise<void> {

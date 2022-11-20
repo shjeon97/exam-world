@@ -15,6 +15,8 @@ import { Exam } from './entity/exam.entity';
 import { Question } from './entity/question.entity';
 import { MultipleChoice } from './entity/multiple-choice.entity';
 import { CrawlingModule } from './crawling/crawling.module';
+import { Verification } from './entity/verification.entity';
+import { VerificationModule } from './verification/verification.module';
 
 @Module({
   imports: [
@@ -59,7 +61,7 @@ import { CrawlingModule } from './crawling/crawling.module';
       // hot load 사용시 선언
       keepConnectionAlive: true,
       // 사용할 entity들 선언
-      entities: [User, Qna, Exam, Question, MultipleChoice],
+      entities: [User, Qna, Exam, Question, MultipleChoice, Verification],
     }),
     AuthModule,
     UserModule,
@@ -69,6 +71,7 @@ import { CrawlingModule } from './crawling/crawling.module';
     QuestionModule,
     MultipleChoiceModule,
     CrawlingModule,
+    VerificationModule,
   ],
   controllers: [],
   providers: [],

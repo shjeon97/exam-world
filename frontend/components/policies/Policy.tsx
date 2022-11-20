@@ -17,23 +17,24 @@ export const Policy: React.FC = () => {
           <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
             <div className="overflow-hidden">
               <table className="min-w-full border text-center">
-                <thead className="border-b">
+                <thead className="border-b ">
                   <tr>
                     <th
                       scope="col"
-                      className="text-sm font-medium text-gray-900 px-6 py-4 border-r"
+                      style={{ minWidth: "100px" }}
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r"
                     >
                       이용목적
                     </th>
                     <th
                       scope="col"
-                      className="text-sm font-medium text-gray-900 px-6 py-4 border-r"
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r"
                     >
                       수집항목
                     </th>
                     <th
                       scope="col"
-                      className="text-sm font-medium text-gray-900 px-6 py-4"
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4"
                     >
                       보유기간
                     </th>
@@ -41,17 +42,17 @@ export const Policy: React.FC = () => {
                 </thead>
                 <tbody className="text-left">
                   <tr className="border-b ">
-                    <td className="px-6 py-4   text-gray-900 border-r">
+                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r">
                       불량회원의 부정 이용 방지와 비인가 사용 방지, 불만처리 등
                       민원처리
                     </td>
-                    <td className="text-sm text-gray-900 px-6 py-4  border-r">
+                    <td className="lg:text-sm text-xs text-gray-900 px-6 py-4  border-r">
                       (필수)아이디, 비밀번호,닉네임,이메일,암호화된 이용자
                       확인값(CI)
                     </td>
                     <td
                       rowSpan={2}
-                      className=" text-gray-900  px-6 py-4  border-r "
+                      className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r "
                     >
                       고객님의 개인정보는 서비스 제공 기간동안 보유 및 이용하며,
                       내부지침에 의해 부정이용 방지, 명예훼손 등 권리침해 분쟁
@@ -60,10 +61,10 @@ export const Policy: React.FC = () => {
                     </td>
                   </tr>
                   <tr className="bg-white border-b">
-                    <td className="px-6 py-4   text-gray-900 border-r">
+                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r">
                       소비자보호를 위한 법적의무준수, 서비스통계 분석 등
                     </td>
-                    <td className=" text-gray-900  px-6 py-4  border-r">
+                    <td className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r">
                       IP Address, 쿠키, 방문일자, 서비스 이용기록
                     </td>
                   </tr>
