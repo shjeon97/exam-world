@@ -34,6 +34,8 @@ jobs:
           echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
           echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
           echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
+          echo "GMAIL_SMTP_NAME=${{ secrets.BACKEND_GMAIL_SMTP_NAME_TEST }}" >> .env.test
+          echo "GMAIL_SMTP_KEY=${{ secrets.BACKEND_GMAIL_SMTP_KEY_TEST }}" >> .env.test
         working-directory: backend
 
       - name: backend e2e test
