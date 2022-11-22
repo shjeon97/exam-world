@@ -235,6 +235,20 @@ export const apiDeleteExamLastPage = async (id: number) => {
     });
 };
 
+// 시험 마지막 페이지 삭제 (문제, 보기)
+export const apiVerifyEmail = async (code: string) => {
+  return axios
+    .put(`verification/email`, {
+      code,
+    })
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 // 내 정보
 export const apiGetMe = async () => {
   return axios

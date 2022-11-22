@@ -37,6 +37,12 @@ export class ExamService {
       name = name.trim().replace('/', '-');
       title = title.trim().replace('/', '-');
 
+      if (!user.verified) {
+        return {
+          ok: false,
+          error: '해당기능은 이메일 인증이 필요합니다.',
+        };
+      }
       const { id } = await this.exam.save(
         this.exam.create({
           title: name,

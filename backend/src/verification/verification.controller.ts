@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Put } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CoreOutput } from 'src/common/dto/output.dto';
 import { VerifyEmailInput } from './dto/verify-email.dto';
@@ -11,7 +11,7 @@ export class VerificationController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '유저 이메일 인증' })
   @ApiResponse({ type: CoreOutput })
-  @Post('/email')
+  @Put('/email')
   async verifyEmail(
     @Body() verifyEmailInput: VerifyEmailInput,
   ): Promise<CoreOutput> {

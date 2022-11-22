@@ -34,6 +34,13 @@ export const NavigationBar: React.FC = () => {
         position: "bottom-end",
         timer: 3000,
       });
+    } else if (!meData.verified) {
+      Toast.fire({
+        icon: "error",
+        title: `해당기능은 이메일 인증이 필요합니다.`,
+        position: "bottom-end",
+        timer: 3000,
+      });
     } else {
       router.push("/exam");
     }

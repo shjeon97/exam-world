@@ -7,6 +7,7 @@ import { SignupUserInput } from 'src/auth/dto/signup-user.dto';
 import { User, UserRole } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Verification } from 'src/entity/verification.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     @InjectRepository(Verification)
     private readonly verification: Repository<Verification>,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
   ) {}
   /** User 생성 */
   async createUser({
@@ -49,11 +51,14 @@ export class AuthService {
         }),
       );
 
-      await this.verification.save(
+      const verification = await this.verification.save(
         this.verification.create({
           user,
         }),
       );
+
+      this.emailService.sendEmail(email, verification.code);
+
       return {
         ok: true,
       };

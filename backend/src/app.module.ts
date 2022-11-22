@@ -17,6 +17,8 @@ import { MultipleChoice } from './entity/multiple-choice.entity';
 import { CrawlingModule } from './crawling/crawling.module';
 import { Verification } from './entity/verification.entity';
 import { VerificationModule } from './verification/verification.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { EmailModule } from './email/email.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { VerificationModule } from './verification/verification.module';
         DB_NAME: Joi.string().required(),
         PRIVATE_KEY: Joi.string().required(),
         SERVER_ADDRESS: Joi.string().required(),
+        GMAIL_SMTP_NAME: Joi.string().required(),
+        GMAIL_SMTP_KEY: Joi.string().required(),
       }),
     }),
     // typeORM 정의
@@ -62,6 +66,16 @@ import { VerificationModule } from './verification/verification.module';
       keepConnectionAlive: true,
       // 사용할 entity들 선언
       entities: [User, Qna, Exam, Question, MultipleChoice, Verification],
+    }), // 메일 속성 정의
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+          user: process.env.GMAIL_SMTP_NAME,
+          pass: process.env.GMAIL_SMTP_KEY,
+        },
+      },
     }),
     AuthModule,
     UserModule,
@@ -72,6 +86,7 @@ import { VerificationModule } from './verification/verification.module';
     MultipleChoiceModule,
     CrawlingModule,
     VerificationModule,
+    EmailModule,
   ],
   controllers: [],
   providers: [],
