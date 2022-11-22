@@ -6,6 +6,7 @@ import { EditMeInput } from 'src/user/dto/edit-me.dto';
 import { User } from 'src/entity/user.entity';
 import { Repository } from 'typeorm';
 import { Verification } from 'src/entity/verification.entity';
+import { EmailService } from 'src/email/email.service';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,7 @@ export class UserService {
     private readonly user: Repository<User>,
     @InjectRepository(Verification)
     private readonly verification: Repository<Verification>,
+    private readonly emailService: EmailService,
   ) {}
 
   async editMe(
@@ -60,6 +62,7 @@ export class UserService {
           const verification = await this.verification.save(
             this.verification.create({ user }),
           );
+          this.emailService.sendEmail(email, verification.code);
         }
       }
 

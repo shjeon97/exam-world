@@ -10,6 +10,7 @@ import { JwtStrategy } from './jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { RoleGuard } from './role.guard';
 import { Verification } from 'src/entity/verification.entity';
+import { EmailModule } from 'src/email/email.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { Verification } from 'src/entity/verification.entity';
       }),
     }),
     TypeOrmModule.forFeature([User, Verification]),
+    EmailModule,
   ],
   providers: [
     AuthService,
