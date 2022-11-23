@@ -8,7 +8,7 @@ import { VerificationService } from './verification.service';
 export class VerificationController {
   constructor(private readonly verificationService: VerificationService) {}
 
-  @HttpCode(HttpStatus.CREATED)
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '유저 이메일 인증' })
   @ApiResponse({ type: CoreOutput })
   @Put('/email')
