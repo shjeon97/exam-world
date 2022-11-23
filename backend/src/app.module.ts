@@ -66,7 +66,8 @@ import { EmailModule } from './email/email.module';
       keepConnectionAlive: true,
       // 사용할 entity들 선언
       entities: [User, Qna, Exam, Question, MultipleChoice, Verification],
-    }), // 메일 속성 정의
+    }),
+    // 메일 속성 정의
     MailerModule.forRoot({
       transport: {
         host: 'smtp.gmail.com',
