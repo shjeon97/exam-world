@@ -5,6 +5,7 @@ import { AppModule } from '../src/app.module';
 import { DataSource, Repository } from 'typeorm';
 import { User } from 'src/entity/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Verification } from 'src/entity/verification.entity';
 
 let user1 = {
   email: 'user1@test.com',
@@ -34,6 +35,7 @@ export const pageSize = 15;
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let userRepository: Repository<User>;
+  let verificationRepository: Repository<Verification>;
   let user1JwtToken: string;
   let user2JwtToken: string;
   let deleteUserJwtToken: string;
@@ -47,6 +49,10 @@ describe('AppController (e2e)', () => {
     userRepository = moduleFixture.get<Repository<User>>(
       getRepositoryToken(User),
     );
+    verificationRepository = moduleFixture.get<Repository<Verification>>(
+      getRepositoryToken(Verification),
+    );
+
     await app.init();
   });
 
@@ -369,12 +375,46 @@ describe('AppController (e2e)', () => {
     });
   });
 
+  describe('VerificationController', () => {
+    const API_VERIFICATION = '/api/verification';
+    describe('verifyEmail', () => {
+      it('user1 이메일 인증', async () => {
+        const user1Verification = await verificationRepository.findOne({
+          where: { user: { nickname: user1.nickname } },
+        });
+
+        return request(app.getHttpServer())
+          .put(API_VERIFICATION + '/email')
+          .send({ code: user1Verification.code })
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+    describe('verifyEmail', () => {
+      it('user2 이메일 인증', async () => {
+        const user2Verification = await verificationRepository.findOne({
+          where: { user: { nickname: user2.nickname } },
+        });
+
+        return request(app.getHttpServer())
+          .put(API_VERIFICATION + '/email')
+          .send({ code: user2Verification.code })
+          .expect(HttpStatus.OK)
+          .expect({
+            ok: true,
+          });
+      });
+    });
+  });
+
   describe('QnaController (e2e)', () => {
-    const APT_QNA_QUESTION = '/api/qna/question';
+    const API_QNA_QUESTION = '/api/qna/question';
     describe('sendQuestion', () => {
       it('문의사항 질문 전송', () => {
         return request(app.getHttpServer())
-          .post(APT_QNA_QUESTION)
+          .post(API_QNA_QUESTION)
           .send({
             email: user1.email,
             title: '문의사항',

@@ -17,8 +17,6 @@ export class VerificationService {
 
   async verifyEmail({ code }: VerifyEmailInput): Promise<CoreOutput> {
     try {
-      console.log(code);
-
       const verification = await this.verification.findOne({
         where: { code },
         relations: ['user'],
