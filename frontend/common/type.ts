@@ -68,6 +68,7 @@ export interface IUserInput {
   email: string;
   nickname: string;
   password: string;
+  verified?: boolean;
 }
 
 export interface ISignupUserInput {

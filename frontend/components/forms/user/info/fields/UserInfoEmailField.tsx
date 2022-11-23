@@ -1,3 +1,8 @@
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { FC } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
@@ -21,7 +26,23 @@ export const UserInfoEmailField: FC<Props> = ({ register, error }) => {
     <>
       {!meIsLoading && meData && (
         <div>
-          <label>이메일</label>
+          <div className="flex flex-row justify-between ">
+            <label>이메일</label>
+            <div>
+              인증{" "}
+              {meData.verified ? (
+                <FontAwesomeIcon
+                  className=" text-green-500"
+                  icon={faCircleCheck}
+                />
+              ) : (
+                <FontAwesomeIcon
+                  className=" text-red-500"
+                  icon={faCircleXmark}
+                />
+              )}
+            </div>
+          </div>
           <input
             type={"email"}
             className={classNames(`form-input`, {
