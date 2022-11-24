@@ -5,10 +5,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { json, urlencoded } from 'express';
+import { winstonLogger } from './util/winston.util';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bodyParser: true,
+    logger: winstonLogger,
   });
   // 유효성검사 파이프 전역 설정
   app.useGlobalPipes(new ValidationPipe());

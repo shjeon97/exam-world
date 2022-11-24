@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": false,
+        "amount": 30
+    },
+    "auditLog": "/Users/shjeon/Desktop/workspace/exam-world/backend-log/warn/.11f34682ec1e8a5172f3c94fafbc14b6c5cd8402-audit.json",
+    "files": [
+        {
+            "date": 1669254717547,
+            "name": "/Users/shjeon/Desktop/workspace/exam-world/backend-log/warn/2022-11-24.warn.log",
+            "hash": "980c87ff793d78d4b991b6c8f37acc7b6e987644cd7114b337b6bfd9097443ec"
+        }
+    ],
+    "hashType": "sha256"
+}

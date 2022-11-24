@@ -19,6 +19,9 @@ import { Verification } from './entity/verification.entity';
 import { VerificationModule } from './verification/verification.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailModule } from './email/email.module';
+import { NestModule } from '@nestjs/common';
+import { MiddlewareConsumer } from '@nestjs/common';
+import { LoggerMiddleware } from './common/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -92,4 +95,8 @@ import { EmailModule } from './email/email.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}
