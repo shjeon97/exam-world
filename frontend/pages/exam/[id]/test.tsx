@@ -261,18 +261,18 @@ const Test = ({ id }) => {
         <>
           {time > 0 && (
             <div className="mb-8 mt-2">
-              <div className="fixed inset-x-0 dark:bg-gray-100 mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
+              <div className="fixed inset-x-0 sm:scale-100 scale-75  dark:bg-gray-100 mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
                 남은시간 {secondToTime(time)}
               </div>
               <br />
             </div>
           )}
-          <div className="flex flex-wrap md:justify-center">
+          <div className="flex flex-wrap justify-center  ">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
-                  className="h-auto m-3  max-w-md  lg:max-w-2xl p-5 rounded"
+                  className="h-auto m-3 max-w-md sm:scale-100 scale-75  lg:max-w-2xl p-5 rounded"
                 >
                   <div
                     id={`question-${question.page}-"isCorrectAnswer-true`}
