@@ -3,7 +3,7 @@ import * as winstonDaily from 'winston-daily-rotate-file';
 import * as winston from 'winston';
 
 const env = process.env.NODE_ENV;
-const logDir = __dirname + '/../../../backend-log'; // log 파일을 관리할 폴더
+const logDir = __dirname + '/../../log'; // log 파일을 관리할 폴더
 
 const dailyOptions = (level: string) => {
   return {
@@ -11,7 +11,7 @@ const dailyOptions = (level: string) => {
     datePattern: 'YYYY-MM-DD',
     dirname: logDir + `/${level}`,
     filename: `%DATE%.${level}.log`,
-    maxFiles: 30, //30일치 로그파일 저장
+    maxFiles: 30, // 30일치 로그파일 저장
     zippedArchive: true, // 로그가 쌓이면 압축하여 관리
   };
 };

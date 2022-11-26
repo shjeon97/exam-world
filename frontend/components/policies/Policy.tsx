@@ -12,47 +12,47 @@ export const Policy: React.FC = () => {
         개인정보를 수집하고 있으며, 그리고 보다 다양한 서비스 제공을 위하여
         아래와 같이 회원의 개인정보를 수집, 이용합니다.
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col  ">
         <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+          <div className="py-2 inline-block min-w-full sm:px-6 lg:px-8 ">
             <div className="overflow-hidden">
-              <table className="min-w-full border text-center">
-                <thead className="border-b ">
+              <table className="min-w-full border text-center border-gray-400 ">
+                <thead className="border-b border-gray-400">
                   <tr>
                     <th
                       scope="col"
                       style={{ minWidth: "100px" }}
-                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r"
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r border-gray-400"
                     >
                       이용목적
                     </th>
                     <th
                       scope="col"
-                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r"
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-r border-gray-400"
                     >
                       수집항목
                     </th>
                     <th
                       scope="col"
-                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4"
+                      className="lg:text-sm text-xs font-medium text-gray-900 px-6 py-4 border-gray-400"
                     >
                       보유기간
                     </th>
                   </tr>
                 </thead>
                 <tbody className="text-left">
-                  <tr className="border-b ">
-                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r">
+                  <tr className="border-b border-gray-400">
+                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r border-gray-400">
                       불량회원의 부정 이용 방지와 비인가 사용 방지, 불만처리 등
                       민원처리
                     </td>
-                    <td className="lg:text-sm text-xs text-gray-900 px-6 py-4  border-r">
+                    <td className="lg:text-sm text-xs text-gray-900 px-6 py-4  border-r border-gray-400">
                       (필수)아이디, 비밀번호,닉네임,이메일,암호화된 이용자
                       확인값(CI)
                     </td>
                     <td
                       rowSpan={2}
-                      className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r "
+                      className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r border-gray-400 "
                     >
                       고객님의 개인정보는 서비스 제공 기간동안 보유 및 이용하며,
                       내부지침에 의해 부정이용 방지, 명예훼손 등 권리침해 분쟁
@@ -60,11 +60,11 @@ export const Policy: React.FC = () => {
                       관계법령에 의해 보존할 경우 그 의무기간동안 보관합니다.
                     </td>
                   </tr>
-                  <tr className="bg-white border-b">
-                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r">
+                  <tr className=" border-b border-gray-400">
+                    <td className="px-6 py-4  lg:text-sm text-xs text-gray-900 border-r border-gray-400">
                       소비자보호를 위한 법적의무준수, 서비스통계 분석 등
                     </td>
-                    <td className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r">
+                    <td className=" text-gray-900 lg:text-sm text-xs px-6 py-4  border-r border-gray-400">
                       IP Address, 쿠키, 방문일자, 서비스 이용기록
                     </td>
                   </tr>

@@ -32,7 +32,7 @@ const Info = () => {
       </Head>
       {!meIsLoading && meData && (
         <>
-          <div className="p-10  m-5">
+          <div className="p-10  m-5 h-screen">
             <div className="flex flex-col items-center">
               <h1 className="mb-2 font-medium text-2xl ">내 정보</h1>
               <div>

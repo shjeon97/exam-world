@@ -261,7 +261,7 @@ const Test = ({ id }) => {
         <>
           {time > 0 && (
             <div className="mb-8 mt-2">
-              <div className="fixed inset-x-0  mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
+              <div className="fixed inset-x-0 dark:bg-gray-100 mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
                 남은시간 {secondToTime(time)}
               </div>
               <br />
@@ -299,7 +299,7 @@ const Test = ({ id }) => {
                     {question.score > 0 && `(${question.score}점)`}
                   </div>
                   <br />
-                  <div className=" border border-gray-400 rounded overflow-auto  ">
+                  <div className=" border border-gray-400 dark:border-gray-900 rounded overflow-auto  ">
                     <div
                       suppressContentEditableWarning={true}
                       contentEditable="true"
