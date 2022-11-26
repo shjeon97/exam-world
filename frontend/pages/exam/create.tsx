@@ -58,7 +58,7 @@ export default function CreateExam() {
       <Head>
         <title className=" text-gray-800">시험 만들기 {WEB_TITLE}</title>
       </Head>
-      <div className="p-10  m-5">
+      <div className="p-10  m-5 h-screen">
         <div className="flex flex-col items-center">
           <h1 className="mb-2 font-medium text-2xl ">시험 만들기</h1>
           <CreateExamForm />

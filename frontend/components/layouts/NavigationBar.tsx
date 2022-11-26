@@ -48,8 +48,8 @@ export const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <header className="text-gray-600 body-font z-50 ">
-        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white">
+      <header className="text-gray-700 body-font z-50 ">
+        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white dark:bg-gray-300">
           <div className="w-full">
             <div className="flex items-center h-16 py-1  w-full">
               <div className="flex items-center mx-2 mt-1 justify-between w-full">
@@ -98,7 +98,7 @@ export const NavigationBar: React.FC = () => {
                   )}
                 </div>
               </div>
-              <div className=" flex lg:hidden ">
+              <div className=" flex lg:hidden  ">
                 <button
                   onClick={() => setIsOpen(!isOpen)}
                   type="button"
@@ -146,7 +146,7 @@ export const NavigationBar: React.FC = () => {
                 <div
                   onClick={() => setIsOpen(!isOpen)}
                   ref={ref}
-                  className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3"
+                  className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3  dark:bg-gray-300"
                 >
                   <Link href="/">
                     <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">

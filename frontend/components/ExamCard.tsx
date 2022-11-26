@@ -61,9 +61,9 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
     <div
       className={`${
         isHidden && "hidden"
-      } p-1 border-2 border-gray-800 w-auto h-auto rounded`}
+      } p-1 border-2 border-gray-800 w-auto h-auto rounded `}
     >
-      <div className="block px-14 py-16 bg-white sm:px-16 sm:py-20 rounded max-w-xs">
+      <div className="block px-14 py-16 sm:px-16 sm:py-20 rounded max-w-xs">
         <h5 className="text-xl font-bold text-gray-900 ">{title}</h5>
 
         <p className="mt-2 text-sm text-gray-500 ">{description} </p>
@@ -82,7 +82,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
               className="text-xs w-12 text-center"
             >
               <div className="block h-auto group w-auto  hover:cursor-pointer ">
-                <div className="relative  inset-0  transition bg-white border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
+                <div className="relative  inset-0  transition bg-white dark:bg-gray-200 border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
                   <span className="text-gray-900  font-semibold"> 삭제</span>
                 </div>
               </div>

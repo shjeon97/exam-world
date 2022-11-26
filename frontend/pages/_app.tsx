@@ -18,7 +18,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       {!authRoute && <NavigationBar />}
-      <div className={authRoute ? "" : "pt-16"}>
+      <div
+        className={authRoute ? "dark:bg-gray-200" : "pt-16 dark:bg-gray-200"}
+      >
         <Component {...pageProps} />
       </div>
       <ReactQueryDevtools initialIsOpen={false} />

@@ -8,19 +8,19 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Verification } from 'src/entity/verification.entity';
 
 let user1 = {
-  email: 'user1@test.com',
+  email: 'user1@gamil.com',
   nickname: 'user1',
   password: '1234',
 };
 
 let user2 = {
-  email: 'user2@test.com',
+  email: 'user2@gamil.com',
   nickname: 'user2',
   password: '1234',
 };
 
 let deleteUser = {
-  email: 'deleteUser@test.com',
+  email: 'deleteUser@gamil.com',
   nickname: 'deleteUser',
   password: '1234',
 };

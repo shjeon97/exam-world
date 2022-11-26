@@ -71,31 +71,31 @@ export default function Home() {
       <Head>
         <title className=" text-gray-800">{WEB_TITLE}</title>
       </Head>
-      <div className=" items-center justify-center flex text-lg ">
+      <div className=" items-center justify-center flex lg:text-lg text-md ">
         <form
-          className=" mt-4 flex flex-wrap gap-4 "
+          className=" mt-4 flex flex-wrap gap-3 "
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
-            <div className="focus:outline-none text-gray-800  py-1.5 px-3 select-none border-2 border-gray-900 border-r-0">
+            <div className="focus:outline-none text-gray-800  py-1.5 px-2 select-none border-2 border-gray-900 border-r-0">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="border-2 border-gray-900 py-1 px-3  rounded-r-md "
+              className="border-2 border-gray-900 py-1 px-2  rounded-r-md dark:bg-gray-100"
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
             </select>
           </div>
-          <div className="flex">
+          <div className="flex ">
             <input
               {...register("value")}
-              className=" border-2 border-gray-900 shadow-inner  focus: outline-none   py-1 px-3 rounded-md rounded-r-none "
+              className=" border-2 border-gray-900 shadow-inner dark:bg-gray-100  focus: outline-none   py-1 px-3 rounded-md rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="focus:outline-none text-gray-800 py-1.5 px-3 select-none border-2 border-gray-900 border-l-0 hover:bg-gray-200">
+            <div className="focus:outline-none text-gray-800 py-1.5 px-2 select-none border-2 border-gray-900 border-l-0 hover:bg-gray-200">
               <button>
                 {searchExamMutation.isLoading ? "Loading..." : "검색"}
               </button>
