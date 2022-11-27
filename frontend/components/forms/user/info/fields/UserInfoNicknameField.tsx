@@ -1,9 +1,8 @@
 import classNames from "classnames";
 import { FC } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
-import { useQuery } from "react-query";
-import { apiGetMe } from "../../../../../api/axios";
-import { IEditMeInput, IUserInput } from "../../../../../common/type";
+import { IEditMeInput } from "../../../../../common/type";
+import { useMe } from "../../../../../hooks/useMe";
 import { FormError } from "../../../FormError";
 
 type Props = {
@@ -12,13 +11,11 @@ type Props = {
 };
 
 export const UserInfoNicknameField: FC<Props> = ({ register, error }) => {
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
+  const { isLoading, data } = useMe();
+
   return (
     <>
-      {!meIsLoading && meData && (
+      {!isLoading && data && (
         <div>
           <label>닉네임</label>
           <input
@@ -39,7 +36,7 @@ export const UserInfoNicknameField: FC<Props> = ({ register, error }) => {
               },
             })}
             placeholder="nickname"
-            defaultValue={meData.nickname}
+            defaultValue={data.nickname}
           />
           {error && <FormError errorMessage={error.message} />}
         </div>

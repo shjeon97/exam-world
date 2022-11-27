@@ -25,7 +25,6 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
     "me",
     apiGetMe
   );
-  const queryClient = useQueryClient();
 
   const deleteExamMutation = useMutation(apiDeleteExam, {
     onSuccess: async (data: ICoreOutput) => {
