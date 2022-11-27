@@ -1,6 +1,5 @@
 import classNames from "classnames";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
@@ -10,10 +9,8 @@ import {
   apiFindExamById,
   apiFindMultipleChoicesByExamId,
   apiFindQuestionsByExamId,
-  apiGetMe,
   apiDeleteExamLastPage,
 } from "../../../api/axios";
-import { IUserInput } from "../../../common/type";
 import { FormError } from "../../../components/forms/FormError";
 import { WEB_TITLE } from "../../../constant";
 import { Toast } from "../../../lib/sweetalert2/toast";
@@ -26,6 +23,8 @@ import { EditExamForm } from "../../../components/forms/exam/id/info/EditExamFor
 import Tiptap from "../../../components/Tiptap";
 import Swal from "sweetalert2";
 import { FormButton } from "../../../components/forms/FormButton";
+import { useMe } from "../../../hooks/useMe";
+import { PageLoading } from "../../../components/PageLoading";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { query } = context;
@@ -48,20 +47,7 @@ export default function ExamInfo({ id }: { id: number }) {
   const [page, setPage] = useState(0);
   const queryClient = useQueryClient();
 
-  const router = useRouter();
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
-  if (!meIsLoading && !meData) {
-    Toast.fire({
-      icon: "error",
-      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
-      position: "top-end",
-      timer: 3000,
-    });
-    router.push("/login");
-  }
+  const { isLoading } = useMe();
 
   const createQuestionAndMultipleChoiceRegisterOption = {
     score: { required: "사용할 점수 입력해 주세요." },
@@ -267,6 +253,10 @@ export default function ExamInfo({ id }: { id: number }) {
       }
     });
   };
+
+  if (isLoading) {
+    return <PageLoading text="Loading" />;
+  }
 
   return (
     <>

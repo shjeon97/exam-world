@@ -1,35 +1,16 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { useQuery } from "react-query";
 import Swal from "sweetalert2";
-import { apiGetMe } from "../../api/axios";
-import { IUserInput } from "../../common/type";
 import { CreateExamForm } from "../../components/forms/exam/create/CreateExamForm";
+import { PageLoading } from "../../components/PageLoading";
 import { WEB_TITLE } from "../../constant";
-import { Toast } from "../../lib/sweetalert2/toast";
+import { useMe } from "../../hooks/useMe";
 
 export default function CreateExam() {
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
+  const { isLoading } = useMe();
+
   let router = useRouter();
-  if (!meIsLoading && !meData) {
-    Toast.fire({
-      icon: "error",
-      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
-      position: "top-end",
-      timer: 3000,
-      showClass: {
-        popup: "none",
-      },
-      hideClass: {
-        popup: " animate__fadeOutUp",
-      },
-    });
-    router.push("/login");
-  }
 
   useEffect(() => {
     Swal.fire({
@@ -53,6 +34,9 @@ export default function CreateExam() {
     });
   }, []);
 
+  if (isLoading) {
+    return <PageLoading text="Loading" />;
+  }
   return (
     <div>
       <Head>

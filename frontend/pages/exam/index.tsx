@@ -1,22 +1,17 @@
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useMutation, useQuery } from "react-query";
-import { apiSearchExamsByMe, apiGetMe } from "../../api/axios";
-import {
-  IExam,
-  IFormSearchInput,
-  IPaginationOutput,
-  IUserInput,
-} from "../../common/type";
+import { useMutation } from "react-query";
+import { apiSearchExamsByMe } from "../../api/axios";
+import { IExam, IFormSearchInput, IPaginationOutput } from "../../common/type";
 import { ExamCard } from "../../components/ExamCard";
 import { LinkButton } from "../../components/buttons/LinkButton";
 import { Page, PageSize, WEB_TITLE } from "../../constant";
-import { Toast } from "../../lib/sweetalert2/toast";
 import { GrAdd } from "react-icons/gr";
 import { useEffect, useState } from "react";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
 import { flushSync } from "react-dom";
 import { useForm } from "react-hook-form";
+import { useMe } from "../../hooks/useMe";
+import { PageLoading } from "../../components/PageLoading";
 
 export default function Index() {
   const [page, setPage] = useState<number>(Page);
@@ -36,20 +31,7 @@ export default function Index() {
     },
   });
 
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
-  let router = useRouter();
-  if (!meIsLoading && !meData) {
-    Toast.fire({
-      icon: "error",
-      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
-      position: "top-end",
-      timer: 3000,
-    });
-    router.push("/login");
-  }
+  const { isLoading } = useMe();
 
   useEffect(() => {
     searchExamByMeMutation.mutate({
@@ -58,7 +40,7 @@ export default function Index() {
       type: type ? type : null,
       value: value ? value : null,
     });
-  }, [page, meData]);
+  }, [page]);
 
   const infiniteScroll = useInfiniteScroll(!searchExamByMeMutation.isLoading);
 
@@ -89,6 +71,10 @@ export default function Index() {
       });
     }
   };
+
+  if (isLoading) {
+    return <PageLoading text="Loading" />;
+  }
 
   return (
     <div>

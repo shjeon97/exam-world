@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { apiGetMe, apiVerifyEmail } from "../../api/axios";
-import { IUserInput } from "../../common/type";
+import { useMutation, useQueryClient } from "react-query";
+import { apiVerifyEmail } from "../../api/axios";
+import { useMe } from "../../hooks/useMe";
 import { Toast } from "../../lib/sweetalert2/toast";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -19,20 +19,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Email({ code }: { code: string }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
-  if (!meIsLoading && !meData) {
-    Toast.fire({
-      icon: "error",
-      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
-      position: "top-end",
-      timer: 3000,
-    });
-    router.push("/login");
-  }
+  useMe();
 
   const verifyEmailMutation = useMutation(apiVerifyEmail, {
     onSuccess: async (data) => {

@@ -13,6 +13,7 @@ import { FormButton } from "../../FormButton";
 import { FormError } from "../../FormError";
 import classNames from "classnames";
 import { UserInfoConfirmEditPasswordField } from "./fields/UserInfoConfirmEditPasswordField";
+import { useMe } from "../../../../hooks/useMe";
 
 export const UserInfoForm = () => {
   const {
@@ -53,20 +54,7 @@ export const UserInfoForm = () => {
     },
   });
 
-  const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
-    "me",
-    apiGetMe
-  );
-
-  if (!meIsLoading && !meData) {
-    Toast.fire({
-      icon: "error",
-      title: `유저 정보를 찾지 못하였습니다. 다시 로그인 해주세요.`,
-      position: "top-end",
-      timer: 3000,
-    });
-    router.push("/login");
-  }
+  useMe();
 
   const onSubmit = () => {
     if (!editMeMutation.isLoading) {
