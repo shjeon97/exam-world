@@ -31,6 +31,14 @@ export class Exam extends CoreEntity {
   description?: string;
 
   @ApiProperty({
+    example: '조회수',
+    description: '0',
+  })
+  @Column({ default: 0 })
+  @IsNumber()
+  view: number;
+
+  @ApiProperty({
     example: '제한시간',
     description: '1000',
   })

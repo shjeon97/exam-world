@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
@@ -12,6 +13,7 @@ import { useInfiniteScroll } from "../hooks/useInfiniteScroll";
 export default function Home() {
   const [page, setPage] = useState<number>(Page);
   const [pageSize] = useState<number>(PageSize);
+  const [sort, setSort] = useState<string>("view");
   const [exams, setExams] = useState<IExam[]>(null);
   const [type, setType] = useState<string>("");
   const [value, setValue] = useState<string>("");
@@ -33,6 +35,7 @@ export default function Home() {
       "page-size": pageSize,
       type: type ? type : null,
       value: value ? value : null,
+      sort: sort ? sort : null,
     });
   }, [page]);
 
@@ -53,7 +56,6 @@ export default function Home() {
       const { type, value } = getValues();
       setType(type);
       setValue(value);
-
       flushSync(() => {
         setExams(null);
       });
@@ -62,6 +64,7 @@ export default function Home() {
         "page-size": pageSize,
         type,
         value,
+        sort,
       });
     }
   };
@@ -77,12 +80,34 @@ export default function Home() {
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
+            <button
+              onClick={(e) => setSort("view")}
+              className={classNames(
+                "button py-1.5 px-2 m-0 rounded-none border-2 border-r-0 lg:text-lg text-md",
+                {
+                  "bg-slate-900 text-white": sort === "view",
+                }
+              )}
+            >
+              인기순
+            </button>
+            <button
+              onClick={(e) => setSort("createdAt")}
+              className={classNames(
+                "button py-1.5 m-0 rounded-none px-2 border-2 lg:text-lg text-md",
+                { "bg-slate-900 text-white": sort === "createdAt" }
+              )}
+            >
+              최신순
+            </button>
+          </div>
+          <div className="flex">
             <div className="focus:outline-none text-gray-800  py-1.5 px-2 select-none border-2 border-gray-900 border-r-0">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="border-2 border-gray-900 py-1 px-2  rounded-r-md dark:bg-gray-100"
+              className="border-2 border-gray-900 rounded-r-md dark:bg-gray-100"
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>

@@ -20,6 +20,7 @@ export interface IPaginationInput {
   page: number;
   type?: string;
   value?: string;
+  sort?: string;
 }
 
 export interface IFormSearchInput {
