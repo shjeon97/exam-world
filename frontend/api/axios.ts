@@ -135,8 +135,6 @@ export const apiEditExam = async ({
   time,
   minimumPassScore,
 }: IEditExamInput) => {
-  console.log(id, description, title, time, minimumPassScore);
-
   return axios
     .put("/exam", {
       id,
@@ -194,13 +192,14 @@ export const apiSearchExam = async ({
   page,
   type,
   value,
+  sort,
 }: IPaginationInput) => {
   return axios
     .get(
       `${
         type && value
-          ? `exam/search?page-size=${pageSize}&page=${page}&type=${type}&value=${value}`
-          : `exam/search?page-size=${pageSize}&page=${page}`
+          ? `exam/search?page-size=${pageSize}&page=${page}&type=${type}&value=${value}&sort=${sort}`
+          : `exam/search?page-size=${pageSize}&page=${page}&sort=${sort}`
       }`
     )
     .then((res) => {

@@ -10,6 +10,8 @@ export class PaginationInput {
   type?: string;
   @ApiProperty({ description: '검색값', required: false })
   value?: string;
+  @ApiProperty({ description: '정렬' })
+  sort?: string;
 }
 
 export class PaginationOutput extends CoreOutput {
@@ -21,4 +23,6 @@ export class PaginationOutput extends CoreOutput {
   type?: string;
   @ApiProperty({ description: '검색값' })
   value?: string;
+  @ApiProperty({ description: '정렬' })
+  sort?: string;
 }

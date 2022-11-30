@@ -68,6 +68,11 @@ export class ExamService {
       const exam = await this.exam.findOne({
         where: { id },
       });
+
+      exam.view = exam.view + 1;
+
+      await this.exam.save(exam);
+
       return {
         ok: true,
         exam,
@@ -127,7 +132,7 @@ export class ExamService {
         skip: (page - 1) * pageSize,
         take: pageSize,
         order: {
-          createdAt: 'ASC',
+          createdAt: 'DESC',
         },
         relations: ['user'],
       });
@@ -149,6 +154,7 @@ export class ExamService {
     'page-size': pageSize,
     type,
     value,
+    sort,
   }: PaginationInput): Promise<SearchExamOutput> {
     try {
       const [exams, totalResult] = await this.exam.findAndCount({
@@ -159,7 +165,7 @@ export class ExamService {
         skip: (page - 1) * pageSize,
         take: pageSize,
         order: {
-          createdAt: 'ASC',
+          ...(sort && { [sort]: 'DESC' }),
         },
         relations: ['user'],
       });

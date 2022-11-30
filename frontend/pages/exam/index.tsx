@@ -87,12 +87,12 @@ export default function Index() {
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
-            <div className="focus:outline-none text-gray-800  py-1.5 px-2 select-none border-2 border-gray-900 border-r-0">
+            <div className="focus:outline-none text-gray-800  py-1.5 px-2  select-none border-2 border-gray-900 border-r-0">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="border-2 border-gray-900 dark:bg-gray-100 py-1 px-3  rounded-r-md "
+              className="border-2 border-gray-900 dark:bg-gray-100 rounded-r-md "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
