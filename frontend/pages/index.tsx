@@ -83,7 +83,7 @@ export default function Home() {
             <button
               onClick={(e) => setSort("view")}
               className={classNames(
-                "button py-1.5 px-2 m-0 rounded-none border-2 border-r-0 lg:text-lg text-md",
+                "button border-r-0 mx-0 rounded-none focus:outline-none focus:ring-0",
                 {
                   "bg-slate-900 text-white": sort === "view",
                 }
@@ -94,20 +94,22 @@ export default function Home() {
             <button
               onClick={(e) => setSort("createdAt")}
               className={classNames(
-                "button py-1.5 m-0 rounded-none px-2 border-2 lg:text-lg text-md",
-                { "bg-slate-900 text-white": sort === "createdAt" }
+                "button mx-0 rounded-none focus:outline-none focus:ring-0",
+                {
+                  "bg-slate-900 text-white": sort === "createdAt",
+                }
               )}
             >
               최신순
             </button>
           </div>
           <div className="flex">
-            <div className="focus:outline-none text-gray-800  py-1.5 px-2 select-none border-2 border-gray-900 border-r-0">
+            <div className="button focus:outline-none border-r-none border-r-0 mr-0 ">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="border-2 border-gray-900 rounded-r-md dark:bg-gray-100"
+              className="form-input text-sm w-28 h-11 mx-0 justify-center border-2 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
@@ -116,11 +118,11 @@ export default function Home() {
           <div className="flex ">
             <input
               {...register("value")}
-              className=" border-2 border-gray-900 shadow-inner dark:bg-gray-100  focus: outline-none   py-1 px-3 rounded-md rounded-r-none "
+              className=" form-input h-11 border-2 rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="focus:outline-none text-gray-800 py-1.5 px-2 select-none border-2 border-gray-900 border-l-0 hover:bg-gray-200">
+            <div className="button border-l-0 mx-0 w-20">
               <button>
                 {searchExamMutation.isLoading ? "Loading..." : "검색"}
               </button>
@@ -131,7 +133,7 @@ export default function Home() {
             onClick={() => {
               window.location.reload();
             }}
-            className="focus:outline-none text-gray-800 py-1.5 px-3 select-none border-2 border-gray-900  hover:bg-gray-200"
+            className="button"
           >
             전체
           </div>

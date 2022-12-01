@@ -32,10 +32,10 @@ const Signup = () => {
       </Head>
       <section className="flex min-h-screen flex-col items-center justify-center text-gray-600 body-font">
         <div className="container mx-auto flex px-5 py-24 lg:flex-row flex-col items-center">
-          <div className="lg:flex-grow lg:w-1/2 lg:pr-24  flex flex-col lg:items-start lg:text-left mb-16 lg:mb-0 items-center text-center">
+          <div className="lg:flex-grow lg:w-1/2 lg:pr-24 flex flex-col lg:items-start lg:text-left mb-16 lg:mb-0 items-center text-center">
             <Policy />
           </div>
-          <div className="lg:max-w-lg w-full ">
+          <div className="lg:max-w-lg dark:text-gray-100 w-full ">
             <h1 className=" font-bold text-4xl cursor-pointer text-center mb-6">
               <Link href="/">Exam World! </Link>
             </h1>

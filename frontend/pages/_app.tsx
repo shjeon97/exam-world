@@ -19,7 +19,11 @@ function MyApp({ Component, pageProps }: AppProps) {
     <QueryClientProvider client={queryClient}>
       {!authRoute && <NavigationBar />}
       <div
-        className={authRoute ? "dark:bg-gray-200" : "pt-16 dark:bg-gray-200"}
+        className={
+          authRoute
+            ? "dark:bg-gray-900 dark:text-gray-100"
+            : "pt-16 dark:bg-gray-900 dark:text-gray-100"
+        }
       >
         <Component {...pageProps} />
       </div>

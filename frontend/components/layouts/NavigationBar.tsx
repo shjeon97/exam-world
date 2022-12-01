@@ -49,12 +49,12 @@ export const NavigationBar: React.FC = () => {
   return (
     <>
       <header className="text-gray-700 body-font z-50 ">
-        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white dark:bg-gray-300">
+        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white dark:bg-gray-800">
           <div className="w-full">
             <div className="flex items-center h-16 py-1  w-full">
               <div className="flex items-center mx-2 mt-1 justify-between w-full">
                 <div className="flex justify-center mb-2 items-center flex-shrink-0 ">
-                  <h1 className=" font-bold text-3xl cursor-pointer">
+                  <h1 className=" font-bold text-3xl cursor-pointer dark:text-gray-100">
                     <Link href="/">Exam World!</Link>
                   </h1>
                 </div>
@@ -146,21 +146,21 @@ export const NavigationBar: React.FC = () => {
                 <div
                   onClick={() => setIsOpen(!isOpen)}
                   ref={ref}
-                  className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3  dark:bg-gray-300"
+                  className="bg-white px-2 pt-2 pb-3 space-y-1 sm:px-3  dark:bg-gray-900"
                 >
                   <Link href="/">
-                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <div className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
                       시험목록
                     </div>
                   </Link>
                   <div onClick={() => clickCreateExamButton()}>
-                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <div className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
                       내가 만든 시험
                     </div>
                   </div>
 
                   <Link href="/qna">
-                    <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                    <div className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
                       문의
                     </div>
                   </Link>
@@ -168,13 +168,13 @@ export const NavigationBar: React.FC = () => {
                   {meData ? (
                     <>
                       <Link href="/user/info">
-                        <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                        <div className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
                           내 정보
                         </div>
                       </Link>
                       <div
                         onClick={() => handleLogout()}
-                        className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+                        className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium"
                       >
                         <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
                       </div>
@@ -182,7 +182,7 @@ export const NavigationBar: React.FC = () => {
                   ) : (
                     <>
                       <Link href="/login">
-                        <div className="cursor-pointer hover:bg-gray-600 text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
+                        <div className="cursor-pointer hover:bg-gray-600 dark:text-white text-black hover:text-white block px-3 py-2 rounded-md text-base font-medium">
                           <FontAwesomeIcon
                             className="mr-2"
                             icon={faRightToBracket}
