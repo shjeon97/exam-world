@@ -85,7 +85,7 @@ export const SignupForm = () => {
       <FormButton
         canClick={isValid && policyChecked}
         loading={signupUserMutation.isLoading}
-        actionText={"register"}
+        actionText={"signup"}
       />
       {signupUserMutation?.data?.error && (
         <FormError errorMessage={signupUserMutation.data.error} />

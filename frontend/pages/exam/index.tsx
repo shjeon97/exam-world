@@ -87,12 +87,12 @@ export default function Index() {
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
-            <div className="focus:outline-none text-gray-800  py-1.5 px-2  select-none border-2 border-gray-900 border-r-0">
+            <div className="button focus:outline-none border-r-none border-r-0 mr-0 ">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="border-2 border-gray-900 dark:bg-gray-100 rounded-r-md "
+              className="form-input text-sm w-28 h-11 mx-0 justify-center border-2 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
@@ -101,11 +101,11 @@ export default function Index() {
           <div className="flex">
             <input
               {...register("value")}
-              className=" border-2 border-gray-900 dark:bg-gray-100 shadow-inner  focus: outline-none   py-1 px-3 rounded-md rounded-r-none "
+              className=" form-input h-11 border-2 rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="focus:outline-none text-gray-800 py-1.5 px-2 select-none border-2 border-gray-900 border-l-0 hover:bg-gray-200">
+            <div className="button border-l-0 mx-0 w-20">
               <button>
                 {searchExamByMeMutation.isLoading ? "Loading..." : "검색"}
               </button>

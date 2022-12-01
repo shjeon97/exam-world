@@ -29,10 +29,10 @@ const Login = () => {
       <Head>
         <title className=" text-gray-700">로그인 {WEB_TITLE}</title>
       </Head>
-      <div className=" bg-white dark:bg-gray-200">
+      <div className=" bg-white dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center h-screen p-6">
           <div className=" w-10/12 mx-auto md:w-96">
-            <h1 className=" font-bold text-gray-700 text-3xl cursor-pointer text-center">
+            <h1 className=" font-bold dark:text-gray-100 text-gray-700 text-3xl cursor-pointer text-center">
               <Link href="/">Exam World! </Link>
             </h1>
             <br />
