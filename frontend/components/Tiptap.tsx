@@ -16,8 +16,14 @@ import {
   faFill,
   faImage,
   faItalic,
+  faList,
+  faListOl,
+  faMinus,
   faRemoveFormat,
+  faRotateLeft,
+  faRotateRight,
   faStrikethrough,
+  faTable,
   faUnderline,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
@@ -91,7 +97,7 @@ const MenuBar = ({ editor }: any) => {
   return (
     <div className="text-sm pt-1 flex flex-wrap justify-start items-center border-2 border-b-0 border-gray-500 p-1">
       <button
-        className="p-1 hover:bg-gray-200 mr-1"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 mr-1"
         onClick={() => editor.chain().focus().undo().run()}
       >
         <svg
@@ -101,11 +107,11 @@ const MenuBar = ({ editor }: any) => {
           viewBox="0 0 24 24"
         >
           <title>뒤로</title>
-          <path d="M17.786,3.77A12.542,12.542,0,0,0,4.821,2.905a.249.249,0,0,1-.292-.045L1.937.269A.507.507,0,0,0,1.392.16a.5.5,0,0,0-.308.462v6.7a.5.5,0,0,0,.5.5h6.7a.5.5,0,0,0,.354-.854L6.783,5.115a.253.253,0,0,1-.068-.228.249.249,0,0,1,.152-.181,10,10,0,0,1,9.466,1.1,9.759,9.759,0,0,1,.094,15.809A1.25,1.25,0,0,0,17.9,23.631a12.122,12.122,0,0,0,5.013-9.961A12.125,12.125,0,0,0,17.786,3.77Z" />
+          <FontAwesomeIcon icon={faRotateLeft} />
         </svg>
       </button>
       <button
-        className="p-1 hover:bg-gray-200 m-1"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         onClick={() => editor.chain().focus().redo().run()}
       >
         <svg
@@ -115,10 +121,7 @@ const MenuBar = ({ editor }: any) => {
           viewBox="0 0 24 24"
         >
           <title>앞으로</title>
-          <path
-            xmlns="http://www.w3.org/2000/svg"
-            d="M22.608.161a.5.5,0,0,0-.545.108L19.472,2.86a.25.25,0,0,1-.292.045A12.537,12.537,0,0,0,6.214,3.77,12.259,12.259,0,0,0,6.1,23.632a1.25,1.25,0,0,0,1.476-2.018A9.759,9.759,0,0,1,7.667,5.805a10,10,0,0,1,9.466-1.1.25.25,0,0,1,.084.409l-1.85,1.85a.5.5,0,0,0,.354.853h6.7a.5.5,0,0,0,.5-.5V.623A.5.5,0,0,0,22.608.161Z"
-          />
+          <FontAwesomeIcon icon={faRotateRight} />
         </svg>
       </button>
       <button
@@ -126,7 +129,7 @@ const MenuBar = ({ editor }: any) => {
         className={
           editor.isActive("bold")
             ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -144,7 +147,7 @@ const MenuBar = ({ editor }: any) => {
         className={
           editor.isActive("italic")
             ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -162,7 +165,7 @@ const MenuBar = ({ editor }: any) => {
         className={
           editor.isActive("strike")
             ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -180,7 +183,7 @@ const MenuBar = ({ editor }: any) => {
         className={
           editor.isActive("underline")
             ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -194,7 +197,7 @@ const MenuBar = ({ editor }: any) => {
         </svg>
       </button>
       <button
-        className="p-1 hover:bg-gray-200 m-1"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         onClick={() => editor.chain().focus().unsetAllMarks().run()}
       >
         <svg
@@ -211,8 +214,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().setParagraph().run()}
         className={
           editor.isActive("paragraph")
-            ? "p-1 bg-gray-200 m-1 font-bold text-xl w-9"
-            : "p-1 hover:bg-gray-200 m-1 font-bold text-xl w-9 "
+            ? "p-1 bg-gray-200 dark:bg-gray-600 m-1 font-bold text-xl w-9"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1 font-bold text-xl w-9 "
         }
         title="기본"
       >
@@ -222,8 +225,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={
           editor.isActive("heading", { level: 1 })
-            ? "p-1 bg-gray-200 m-1 font-bold text-xl"
-            : "p-1 hover:bg-gray-200 m-1 font-bold text-xl"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1 font-bold text-xl"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1 font-bold text-xl"
         }
       >
         H1
@@ -232,8 +235,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         className={
           editor.isActive("heading", { level: 2 })
-            ? "p-1 bg-gray-200 m-1 font-bold text-xl"
-            : "p-1 hover:bg-gray-200 m-1 font-bold text-xl"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1 font-bold text-xl"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1 font-bold text-xl"
         }
       >
         H2
@@ -242,14 +245,14 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={
           editor.isActive("heading", { level: 3 })
-            ? "p-1 bg-gray-200 m-1 font-bold text-xl"
-            : "p-1 hover:bg-gray-200 m-1 font-bold text-xl"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1 font-bold text-xl"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1 font-bold text-xl"
         }
       >
         H3
       </button>
       <button
-        className="p-1 hover:bg-gray-200 m-2"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-2"
         onClick={() => handleUploadImage()}
       >
         <svg
@@ -262,7 +265,10 @@ const MenuBar = ({ editor }: any) => {
           <FontAwesomeIcon icon={faImage} />
         </svg>
       </button>
-      <button className="p-1 hover:bg-gray-200 m-2" onClick={addYoutubeVideo}>
+      <button
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-2"
+        onClick={addYoutubeVideo}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="25"
@@ -278,8 +284,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().setTextAlign("left").run()}
         className={
           editor.isActive({ textAlign: "left" })
-            ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -296,8 +302,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().setTextAlign("center").run()}
         className={
           editor.isActive({ textAlign: "center" })
-            ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            ? "p-1 bg-gray-200 dark:bg-gray-600 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -314,8 +320,8 @@ const MenuBar = ({ editor }: any) => {
         onClick={() => editor.chain().focus().setTextAlign("right").run()}
         className={
           editor.isActive({ textAlign: "right" })
-            ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            ? "p-1 bg-gray-200 dark:bg-gray-600 m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -329,7 +335,7 @@ const MenuBar = ({ editor }: any) => {
         </svg>
       </button>
       <button
-        className="p-1 hover:bg-gray-200 m-1"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
       >
         <svg
@@ -339,15 +345,15 @@ const MenuBar = ({ editor }: any) => {
           viewBox="0 0 24 24"
         >
           <title> horizontal rule</title>
-          <path d="M5,13 C4.44771525,13 4,12.5522847 4,12 C4,11.4477153 4.44771525,11 5,11 L19,11 C19.5522847,11 20,11.4477153 20,12 C20,12.5522847 19.5522847,13 19,13 L5,13 Z" />
+          <FontAwesomeIcon icon={faMinus} />
         </svg>
       </button>
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={
           editor.isActive("bulletList")
-            ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -357,20 +363,15 @@ const MenuBar = ({ editor }: any) => {
           viewBox="0 0 24 24"
         >
           <title>list-bullets</title>
-          <circle cx="2.5" cy="3.998" r="2.5" />
-          <path d="M8.5,5H23a1,1,0,0,0,0-2H8.5a1,1,0,0,0,0,2Z" />
-          <circle cx="2.5" cy="11.998" r="2.5" />
-          <path d="M23,11H8.5a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z" />
-          <circle cx="2.5" cy="19.998" r="2.5" />
-          <path d="M23,19H8.5a1,1,0,0,0,0,2H23a1,1,0,0,0,0-2Z" />
+          <FontAwesomeIcon icon={faList} />
         </svg>
       </button>
       <button
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         className={
           editor.isActive("orderedList")
-            ? "p-1 bg-gray-200 m-1"
-            : "p-1 hover:bg-gray-200 m-1"
+            ? "p-1 bg-gray-200 dark:bg-gray-600  m-1"
+            : "p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         }
       >
         <svg
@@ -380,16 +381,11 @@ const MenuBar = ({ editor }: any) => {
           viewBox="0 0 24 24"
         >
           <title>list-numbers</title>
-          <path d="M7.75,4.5h15a1,1,0,0,0,0-2h-15a1,1,0,0,0,0,2Z" />
-          <path d="M22.75,11h-15a1,1,0,1,0,0,2h15a1,1,0,0,0,0-2Z" />
-          <path d="M22.75,19.5h-15a1,1,0,0,0,0,2h15a1,1,0,0,0,0-2Z" />
-          <path d="M2.212,17.248A2,2,0,0,0,.279,18.732a.75.75,0,1,0,1.45.386.5.5,0,1,1,.483.63.75.75,0,1,0,0,1.5.5.5,0,1,1-.482.635.75.75,0,1,0-1.445.4,2,2,0,1,0,3.589-1.648.251.251,0,0,1,0-.278,2,2,0,0,0-1.662-3.111Z" />
-          <path d="M4.25,10.748a2,2,0,0,0-4,0,.75.75,0,0,0,1.5,0,.5.5,0,0,1,1,0,1.031,1.031,0,0,1-.227.645L.414,14.029A.75.75,0,0,0,1,15.248H3.5a.75.75,0,0,0,0-1.5H3.081a.249.249,0,0,1-.195-.406L3.7,12.33A2.544,2.544,0,0,0,4.25,10.748Z" />
-          <path d="M4,5.248H3.75A.25.25,0,0,1,3.5,5V1.623A1.377,1.377,0,0,0,2.125.248H1.5a.75.75,0,0,0,0,1.5h.25A.25.25,0,0,1,2,2V5a.25.25,0,0,1-.25.25H1.5a.75.75,0,0,0,0,1.5H4a.75.75,0,0,0,0-1.5Z" />
+          <FontAwesomeIcon icon={faListOl} />
         </svg>
       </button>
       <button
-        className="p-1 hover:bg-gray-200 m-1"
+        className="p-1 dark:hover:bg-gray-600 hover:bg-gray-200 m-1"
         onClick={() =>
           editor
             .chain()
@@ -404,15 +400,14 @@ const MenuBar = ({ editor }: any) => {
           height="20"
           viewBox="0 0 24 24"
         >
-          <path
-            fillRule="evenodd"
-            d="M17,17 L17,22 L19,22 C20.6568542,22 22,20.6568542 22,19 L22,17 L17,17 Z M15,17 L9,17 L9,22 L15,22 L15,17 Z M17,15 L22,15 L22,9 L17,9 L17,15 Z M15,15 L15,9 L9,9 L9,15 L15,15 Z M17,7 L22,7 L22,5 C22,3.34314575 20.6568542,2 19,2 L17,2 L17,7 Z M15,7 L15,2 L9,2 L9,7 L15,7 Z M24,16.1768671 L24,19 C24,21.7614237 21.7614237,24 19,24 L5,24 C2.23857625,24 2.11453371e-15,21.7614237 1.77635684e-15,19 L0,5 C-3.38176876e-16,2.23857625 2.23857625,2.28362215e-15 5,0 L19,0 C21.7614237,-5.07265313e-16 24,2.23857625 24,5 L24,7.82313285 C24.0122947,7.88054124 24.0187107,7.93964623 24.0187107,8 C24.0187107,8.06035377 24.0122947,8.11945876 24,8.17686715 L24,15.8231329 C24.0122947,15.8805412 24.0187107,15.9396462 24.0187107,16 C24.0187107,16.0603538 24.0122947,16.1194588 24,16.1768671 Z M7,2 L5,2 C3.34314575,2 2,3.34314575 2,5 L2,7 L7,7 L7,2 Z M2,9 L2,15 L7,15 L7,9 L2,9 Z M2,17 L2,19 C2,20.6568542 3.34314575,22 5,22 L7,22 L7,17 L2,17 Z"
-          />
+          <FontAwesomeIcon icon={faTable} />
         </svg>
       </button>
       <button
         className={`p-1  m-1 ${
-          editor.can().addColumnBefore() ? `hover:bg-gray-200 ` : ` hidden `
+          editor.can().addColumnBefore()
+            ? `dark:hover:bg-gray-600 hover:bg-gray-200 bg-gray-200 rounded-md `
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().addColumnBefore().run()}
         disabled={!editor.can().addColumnBefore()}
@@ -428,7 +423,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1  m-1 ${
-          editor.can().addColumnAfter() ? `hover:bg-gray-200` : ` hidden `
+          editor.can().addColumnAfter()
+            ? `hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().addColumnAfter().run()}
         disabled={!editor.can().addColumnAfter()}
@@ -444,7 +441,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1 m-1 ${
-          editor.can().deleteColumn() ? `hover:bg-gray-200` : ` hidden `
+          editor.can().deleteColumn()
+            ? `hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().deleteColumn().run()}
         disabled={!editor.can().deleteColumn()}
@@ -460,7 +459,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1   m-1 ${
-          editor.can().addRowBefore() ? `hover:bg-gray-200 ` : ` hidden `
+          editor.can().addRowBefore()
+            ? `dark:hover:bg-gray-600 hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().addRowBefore().run()}
         disabled={!editor.can().addRowBefore()}
@@ -476,7 +477,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1   m-1 ${
-          editor.can().addRowAfter() ? `hover:bg-gray-200 ` : ` hidden `
+          editor.can().addRowAfter()
+            ? `dark:hover:bg-gray-600 hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().addRowAfter().run()}
         disabled={!editor.can().addRowAfter()}
@@ -492,7 +495,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1   m-1 ${
-          editor.can().deleteRow() ? `hover:bg-gray-200` : ` hidden `
+          editor.can().deleteRow()
+            ? `hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().deleteRow().run()}
         disabled={!editor.can().deleteRow()}
@@ -508,7 +513,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1    m-1 ${
-          editor.can().deleteTable() ? `hover:bg-gray-200 ` : ` hidden `
+          editor.can().deleteTable()
+            ? `dark:hover:bg-gray-600 hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().deleteTable().run()}
         disabled={!editor.can().deleteTable()}
@@ -525,7 +532,9 @@ const MenuBar = ({ editor }: any) => {
 
       <button
         className={`p-1 m-1 ${
-          editor.can().toggleHeaderCell() ? `hover:bg-gray-200 ` : ` hidden `
+          editor.can().toggleHeaderCell()
+            ? `dark:hover:bg-gray-600 dark:text-black hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().toggleHeaderCell().run()}
         disabled={!editor.can().toggleHeaderCell()}
@@ -541,7 +550,9 @@ const MenuBar = ({ editor }: any) => {
       </button>
       <button
         className={`p-1   ml-1 ${
-          editor.can().mergeOrSplit() ? `hover:bg-gray-200` : ` hidden `
+          editor.can().mergeOrSplit()
+            ? `hover:bg-gray-200 bg-gray-200 rounded-md`
+            : ` hidden `
         }`}
         onClick={() => editor.chain().focus().mergeOrSplit().run()}
         disabled={!editor.can().mergeOrSplit()}
