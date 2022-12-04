@@ -29,6 +29,11 @@
             "date": 1669768560044,
             "name": "/Users/shjeon/Desktop/workspace/exam-world/backend/log/warn/2022-11-30.warn.log",
             "hash": "99d11560366964044ce581a978042ebc6d1476913ed4c057be1ea1643cdd5a76"
+        },
+        {
+            "date": 1670083202347,
+            "name": "/Users/shjeon/Desktop/workspace/exam-world/backend/log/warn/2022-12-04.warn.log",
+            "hash": "434465ed44aca98cee6e3ea467c82c223ae4cbd67974634cf9ae62661cba261a"
         }
     ],
     "hashType": "sha256"

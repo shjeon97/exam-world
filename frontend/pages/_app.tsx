@@ -6,6 +6,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { useRouter } from "next/router";
 import { NavigationBar } from "../components/layouts/NavigationBar";
+import { ThemeProvider } from "next-themes";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -17,16 +18,18 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {!authRoute && <NavigationBar />}
-      <div
-        className={
-          authRoute
-            ? "dark:bg-gray-900 dark:text-gray-100"
-            : "pt-16 dark:bg-gray-900 dark:text-gray-100"
-        }
-      >
-        <Component {...pageProps} />
-      </div>
+      <ThemeProvider attribute="class">
+        {!authRoute && <NavigationBar />}
+        <div
+          className={
+            authRoute
+              ? "dark:bg-gray-900 dark:text-gray-100"
+              : "pt-16 dark:bg-gray-900 dark:text-gray-100"
+          }
+        >
+          <Component {...pageProps} />
+        </div>
+      </ThemeProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
