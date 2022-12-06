@@ -22,7 +22,7 @@ export const UserInfoEmailField: FC<Props> = ({ register, error }) => {
     <>
       {!isLoading && data && (
         <div>
-          <div className="flex flex-row justify-between ">
+          <div className="flex flex-row justify-between  ">
             <label>이메일</label>
             <div>
               인증{" "}
@@ -32,10 +32,15 @@ export const UserInfoEmailField: FC<Props> = ({ register, error }) => {
                   icon={faCircleCheck}
                 />
               ) : (
-                <FontAwesomeIcon
-                  className=" text-red-500"
-                  icon={faCircleXmark}
-                />
+                <>
+                  <FontAwesomeIcon
+                    className=" text-red-500"
+                    icon={faCircleXmark}
+                  />{" "}
+                  <span className=" text-xs inline-block align-text-bottom hover:cursor-pointer hover:text-blue-800">
+                    인증 메일 재전송
+                  </span>
+                </>
               )}
             </div>
           </div>

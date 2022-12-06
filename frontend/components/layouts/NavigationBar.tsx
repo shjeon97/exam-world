@@ -50,7 +50,7 @@ export const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <header className="text-gray-700 body-font z-50 ">
+      <header className="text-gray-700 z-50 ">
         <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white dark:bg-gray-800">
           <div className="w-full">
             <div className="flex items-center h-16 py-1  w-full">
@@ -73,13 +73,12 @@ export const NavigationBar: React.FC = () => {
                     </Link>
                   </div>
                 </div>
-                <div className="">
-                  <button
-                    type="button"
+                <div className="flex justify-center items-center">
+                  <div
                     onClick={() =>
                       setTheme(theme === "dark" ? "light" : "dark")
                     }
-                    className=" text-gray-500 dark:text-gray-400"
+                    className=" text-gray-500 dark:text-gray-400 mr-5 hover:cursor-pointer"
                   >
                     {theme === "light" ? (
                       <svg
@@ -104,32 +103,32 @@ export const NavigationBar: React.FC = () => {
                         ></path>
                       </svg>
                     )}
-                  </button>
-                </div>
-                <div className="hidden lg:block">
-                  {!meIsLoading && meData ? (
-                    <div className="flex">
-                      <Link href="/user/info">
-                        <div className="button ">내 정보</div>
-                      </Link>
+                  </div>
+                  <div className="hidden lg:block">
+                    {!meIsLoading && meData ? (
+                      <div className="flex">
+                        <Link href="/user/info">
+                          <div className="button ">내 정보</div>
+                        </Link>
 
-                      <div onClick={() => handleLogout()} className="button ">
-                        <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
+                        <div onClick={() => handleLogout()} className="button ">
+                          <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <>
-                      <Link href="/login">
-                        <button className="button">
-                          <FontAwesomeIcon
-                            className="mr-2"
-                            icon={faRightToBracket}
-                          />
-                          로그인
-                        </button>
-                      </Link>
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <Link href="/login">
+                          <button className="button">
+                            <FontAwesomeIcon
+                              className="mr-2"
+                              icon={faRightToBracket}
+                            />
+                            로그인
+                          </button>
+                        </Link>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className=" flex lg:hidden  ">
@@ -162,7 +161,6 @@ export const NavigationBar: React.FC = () => {
               </div>
             </div>
           </div>
-
           <Transition
             show={isOpen}
             enter="transition ease-out duration-100 transform"

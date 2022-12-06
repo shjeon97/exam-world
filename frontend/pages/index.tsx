@@ -106,12 +106,12 @@ export default function Home() {
             </button>
           </div>
           <div className="flex">
-            <div className="button focus:outline-none border-r-none border-r-0 mr-0 ">
+            <div className="button focus:outline-none rounded-r-none border-r-0 mr-0 ">
               검색대상
             </div>
             <select
               {...register("type")}
-              className="form-input text-sm w-28 h-11 mx-0 justify-center border-2 "
+              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-gray-900 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
@@ -120,11 +120,11 @@ export default function Home() {
           <div className="flex ">
             <input
               {...register("value")}
-              className=" form-input h-11 border-2 rounded-r-none "
+              className=" form-input h-11 border-2 border-gray-900 dark:border-gray-400 rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="button border-l-0 mx-0 w-20">
+            <div className="button border-l-0 rounded-l-none mx-0 w-20">
               <button>
                 {searchExamMutation.isLoading ? "Loading..." : "검색"}
               </button>
