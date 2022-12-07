@@ -260,6 +260,17 @@ export const apiGetMe = async () => {
     });
 };
 
+export const apiResendEmail = async () => {
+  return axios
+    .get("email/resend")
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
 // 내가 만든 시험 정보 가져오기
 export const apiSearchExamsByMe = async ({
   "page-size": pageSize,

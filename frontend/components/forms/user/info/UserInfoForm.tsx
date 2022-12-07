@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useRouter } from "next/router";
-import { ICoreOutput, IEditMeInput, IUserInput } from "../../../../common/type";
-import { apiDeleteMe, apiEditMe, apiGetMe } from "../../../../api/axios";
+import { useMutation, useQueryClient } from "react-query";
+import { ICoreOutput, IEditMeInput } from "../../../../common/type";
+import { apiDeleteMe, apiEditMe } from "../../../../api/axios";
 import { Toast } from "../../../../lib/sweetalert2/toast";
 import Swal from "sweetalert2";
 import { UserInfoEmailField } from "./fields/UserInfoEmailField";
@@ -24,7 +23,6 @@ export const UserInfoForm = () => {
     handleSubmit,
   } = useForm<IEditMeInput>({ mode: "onChange" });
   const queryClient = useQueryClient();
-  let router = useRouter();
 
   const editMeMutation = useMutation(apiEditMe, {
     onSuccess: (data: ICoreOutput) => {
