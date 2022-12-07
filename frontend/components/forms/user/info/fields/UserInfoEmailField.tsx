@@ -6,8 +6,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { FC } from "react";
 import { UseFormRegister, FieldError } from "react-hook-form";
+import { useMutation } from "react-query";
+import { apiResendEmail } from "../../../../../api/axios";
 import { IEditMeInput } from "../../../../../common/type";
 import { useMe } from "../../../../../hooks/useMe";
+import { Toast } from "../../../../../lib/sweetalert2/toast";
 import { FormError } from "../../../FormError";
 
 type Props = {
@@ -17,6 +20,19 @@ type Props = {
 
 export const UserInfoEmailField: FC<Props> = ({ register, error }) => {
   const { isLoading, data } = useMe();
+
+  const resendEmailMutation = useMutation(apiResendEmail, {
+    onSuccess: (data: Boolean) => {
+      if (data) {
+        Toast.fire({
+          icon: "success",
+          title: `인증 메일 재전송 완료`,
+          position: "top-end",
+          timer: 2000,
+        });
+      }
+    },
+  });
 
   return (
     <>
@@ -37,7 +53,10 @@ export const UserInfoEmailField: FC<Props> = ({ register, error }) => {
                     className=" text-red-500"
                     icon={faCircleXmark}
                   />{" "}
-                  <span className=" text-xs inline-block align-text-bottom hover:cursor-pointer hover:text-blue-800">
+                  <span
+                    onClick={() => resendEmailMutation.mutate()}
+                    className=" text-xs inline-block align-text-bottom hover:cursor-pointer hover:text-blue-800"
+                  >
                     인증 메일 재전송
                   </span>
                 </>

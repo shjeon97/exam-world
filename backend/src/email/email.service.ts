@@ -1,9 +1,34 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/entity/user.entity';
+import { Verification } from 'src/entity/verification.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService,
+    @InjectRepository(Verification)
+    private readonly verification: Repository<Verification>,
+  ) {}
+
+  async resendEmail(user: User): Promise<boolean> {
+    try {
+      const verification = await this.verification.findOne({
+        where: { user: { id: user.id } },
+      });
+      if (!verification) {
+        return false;
+      }
+      return this.sendEmail(user.email, verification.code);
+    } catch (error) {
+      console.log(error);
+
+      return false;
+    }
+  }
+
   async sendEmail(email: string, code: string): Promise<boolean> {
     try {
       const html = `
