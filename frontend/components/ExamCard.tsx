@@ -60,7 +60,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
     <div
       className={`${
         isHidden && "hidden"
-      } p-1 border-2 border-gray-800 dark:border-gray-400 w-auto h-auto rounded `}
+      } p-1 border-2 border-gray-800 dark:border-gray-400 w-80 h-auto rounded `}
     >
       <div className="block px-14 py-10 rounded max-w-xs">
         <h5 className="text-md font-bold text-gray-900 dark:text-gray-100">

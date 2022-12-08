@@ -18,7 +18,6 @@ export const NavigationBar: React.FC = () => {
   const queryClient = useQueryClient();
   let router = useRouter();
   const { theme, setTheme } = useTheme();
-
   const { isLoading: meIsLoading, data: meData } = useQuery("me", apiGetMe);
   const [isOpen, setIsOpen] = useState(false);
 
