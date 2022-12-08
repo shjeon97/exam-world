@@ -76,7 +76,7 @@ export default function Home() {
       </Head>
       <div className=" items-center justify-center flex lg:text-lg text-md ">
         <form
-          className=" mt-4 flex flex-wrap gap-3 "
+          className=" mt-4 flex flex-wrap gap-1 "
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
@@ -141,7 +141,7 @@ export default function Home() {
           </div>
         </form>
       </div>
-      <div className="flex flex-wrap m-4 gap-2 ">
+      <div className="flex flex-wrap m-4 gap-2 justify-center">
         {exams &&
           exams.map((exam, key) => {
             return (
