@@ -271,21 +271,23 @@ const Test = ({ id }) => {
             <div className="flex flex-wrap">
               {findQuestionsByExamIdData.questions.map((question, index) => {
                 return (
-                  <div
-                    key={index}
-                    className="h-auto m-2 p-2 rounded dark:bg-slate-700  bg-slate-200 "
+                  <a
+                    href={`#question-page-${question.page}`}
+                    key={`href-${index}`}
+                    className="h-auto m-2 hover:cursor-pointer hover:dark:bg-slate-800 hover:bg-slate-300 p-2 rounded dark:bg-slate-700  bg-slate-200 "
                   >
                     {question.page}
-                  </div>
+                  </a>
                 );
               })}
             </div>
           </div>
 
-          <div className="flex flex-wrap   ">
+          <div className="flex flex-wrap">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div key={index} className="h-auto m-3 p-5 w-3/5 rounded">
+                  <a id={`question-page-${question.page}`} />
                   <div
                     id={`question-${question.page}-"isCorrectAnswer-true`}
                     hidden={true}
