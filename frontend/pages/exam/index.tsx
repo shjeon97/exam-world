@@ -83,11 +83,11 @@ export default function Index() {
       </Head>
       <div className=" items-center justify-center flex lg:text-lg text-md ">
         <form
-          className=" mt-4 flex flex-wrap gap-3 "
+          className=" mt-4 flex flex-wrap gap-1"
           onSubmit={handleSubmit(onSearchSubmit)}
         >
           <div className="flex">
-            <div className="button focus:outline-none border-r-none border-r-0 mr-0 ">
+            <div className="button focus:outline-none rounded-r-none border-r-0 mr-0 ">
               검색대상
             </div>
             <select
@@ -105,7 +105,7 @@ export default function Index() {
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="button border-l-0 mx-0 w-20">
+            <div className="button border-l-0 rounded-l-none mx-0 w-20">
               <button>
                 {searchExamByMeMutation.isLoading ? "Loading..." : "검색"}
               </button>
@@ -116,7 +116,7 @@ export default function Index() {
             onClick={() => {
               window.location.reload();
             }}
-            className="focus:outline-none text-gray-800 py-1.5 px-3 select-none border-2 border-gray-900  hover:bg-gray-200"
+            className="button"
           >
             전체
           </div>
