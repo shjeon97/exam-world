@@ -282,7 +282,7 @@ export default function ExamInfo({ id }: { id: number }) {
                               <div
                                 onClick={() => handleChangePage(question.page)}
                                 className={classNames(`button`, {
-                                  "bg-gray-900 text-white":
+                                  "bg-gray-900 text-white dark:bg-gray-300 dark:text-gray-900":
                                     question.page === page,
                                 })}
                                 key={`exam-${id}-info-${index}`}

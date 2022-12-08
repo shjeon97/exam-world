@@ -288,6 +288,7 @@ const Test = ({ id }) => {
               return (
                 <div key={index} className="h-auto m-3 p-5 w-3/5 rounded">
                   <a id={`question-page-${question.page}`} />
+                  <div className="h-20"></div>
                   <div
                     id={`question-${question.page}-"isCorrectAnswer-true`}
                     hidden={true}
