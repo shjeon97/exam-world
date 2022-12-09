@@ -7,7 +7,7 @@
     @apply w-full p-3 my-1 dark:bg-black dark:hover:bg-black border border-gray-400  bg-gray-50 focus:bg-white dark:focus:bg-black hover:bg-white;
   }
   .button {
-    @apply text-yellow-900  dark:text-white dark:bg-gray-700  dark:border-gray-400 hover:text-white hover:cursor-pointer border-2 border-yellow-600 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm px-5 py-2.5 text-center m-1 mb-2  bg-orange-200;
+    @apply text-yellow-900  dark:text-white dark:bg-gray-700 dark:border-gray-400 hover:text-white hover:cursor-pointer border-2 border-yellow-600 hover:bg-yellow-600 focus:ring-4 focus:outline-none focus:ring-gray-300 font-medium rounded text-sm px-5 py-2.5 text-center m-1 mb-2  bg-orange-200;
   }
 }
 

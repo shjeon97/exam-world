@@ -274,7 +274,7 @@ const Test = ({ id }) => {
                   <a
                     href={`#question-page-${question.page}`}
                     key={`href-${index}`}
-                    className="h-auto m-2 hover:cursor-pointer hover:dark:bg-slate-800 hover:bg-slate-300 p-2 rounded dark:bg-slate-700  bg-slate-200 "
+                    className="h-auto m-2 text-yellow-900 hover:cursor-pointer hover:dark:bg-slate-800 hover:bg-orange-300 p-2 rounded dark:text-gray-100 dark:bg-slate-700 dark:border-slate-800  bg-orange-200 border-2 border-orange-300 "
                   >
                     {question.page}
                   </a>

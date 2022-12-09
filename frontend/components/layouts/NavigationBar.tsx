@@ -13,6 +13,8 @@ import { LOCAL_STORAGE_TOKEN } from "../../constant";
 import { useRouter } from "next/router";
 import { Toast } from "../../lib/sweetalert2/toast";
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import titlePic from "../../public/title.png";
 
 export const NavigationBar: React.FC = () => {
   const queryClient = useQueryClient();
@@ -56,7 +58,14 @@ export const NavigationBar: React.FC = () => {
               <div className="flex items-center mx-2 mt-1 justify-between w-full">
                 <div className="flex justify-center mb-2 items-center flex-shrink-0 ">
                   <h1 className=" font-bold text-3xl cursor-pointer dark:text-gray-100">
-                    <Link href="/">Exam World!</Link>
+                    <Link href="/">
+                      <Image
+                        src={titlePic}
+                        height={55}
+                        width={180}
+                        alt="title"
+                      />
+                    </Link>
                   </h1>
                 </div>
                 <div className="hidden lg:block">
