@@ -49,8 +49,8 @@ export const NavigationBar: React.FC = () => {
 
   return (
     <>
-      <header className="text-gray-700 z-50 ">
-        <nav className=" border-b-2 border-gray-900 fixed w-full z-50 bg-white dark:bg-gray-800">
+      <header className=" z-50 text-white">
+        <nav className=" border-b-2 border-gray-900 fixed w-full z-50  bg-orange-300 dark:bg-gray-800">
           <div className="w-full">
             <div className="flex items-center h-16 py-1  w-full">
               <div className="flex items-center mx-2 mt-1 justify-between w-full">
@@ -77,7 +77,7 @@ export const NavigationBar: React.FC = () => {
                     onClick={() =>
                       setTheme(theme === "dark" ? "light" : "dark")
                     }
-                    className=" text-gray-500 dark:text-gray-400 mr-5 hover:cursor-pointer"
+                    className=" text-gray-700 dark:text-gray-400 mr-5 hover:cursor-pointer"
                   >
                     {theme === "light" ? (
                       <svg
@@ -110,7 +110,7 @@ export const NavigationBar: React.FC = () => {
                           <div className="button ">내 정보</div>
                         </Link>
 
-                        <div onClick={() => handleLogout()} className="button ">
+                        <div onClick={() => handleLogout()} className="button">
                           <FontAwesomeIcon icon={faRightToBracket} /> 로그아웃
                         </div>
                       </div>
