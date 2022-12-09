@@ -59,16 +59,18 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
     <div
       className={`${
         isHidden && "hidden"
-      } p-1 border-2 border-gray-800 dark:border-gray-400 w-72 h-auto rounded `}
+      } p-1 border-2 border-gray-800 grid grid-rows-1 grid-col-10 dark:border-gray-400 w-72 h-44 rounded `}
     >
-      <div className="block px-14 py-10 rounded max-w-xs">
-        <h5 className="text-md font-bold text-gray-900 dark:text-gray-100">
-          {title}
-        </h5>
-
-        <p className="mt-2 text-sm text-gray-500 ">{description} </p>
+      <div>
+        <div className="flex flex-col pt-3 pl-3 ">
+          <h5 className="text-md font-bold text-gray-900 dark:text-gray-100">
+            {title}
+          </h5>
+          <p className="mt-2 text-sm text-gray-500 ">{description} </p>
+        </div>
       </div>
-      <div className="flex gap-2 m-2 justify-start">
+
+      <div className="flex m-2 gap-1">
         <div className="text-xs w-16 text-center">
           <LinkButton name="시험시작" link={`/exam/${id}/test`} />
         </div>
@@ -82,10 +84,8 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
               className="text-xs w-12 text-center"
             >
               <div className="block h-auto group w-auto  hover:cursor-pointer ">
-                <div className="relative  inset-0  transition dark:bg-red-500 bg-white  border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
-                  <span className="text-gray-900 dark:text-gray-100  font-semibold">
-                    삭제
-                  </span>
+                <div className="relative inset-0  transition bg-red-500  border-2 border-black group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
+                  <span className=" text-gray-100  font-semibold">삭제</span>
                 </div>
               </div>
             </div>

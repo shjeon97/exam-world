@@ -85,7 +85,7 @@ export default function Home() {
               className={classNames(
                 "button border-r-0 mx-0 rounded-none focus:outline-none focus:ring-0",
                 {
-                  "bg-slate-900 text-white dark:bg-slate-200 dark:text-gray-900":
+                  "bg-orange-400 text-white dark:bg-slate-200 dark:text-gray-900":
                     sort === "view",
                 }
               )}
@@ -97,7 +97,7 @@ export default function Home() {
               className={classNames(
                 "button mx-0 rounded-none focus:outline-none focus:ring-0",
                 {
-                  "bg-slate-900 text-white dark:bg-slate-200 dark:text-gray-900":
+                  "bg-orange-400 text-white dark:bg-slate-200 dark:text-gray-900":
                     sort === "createdAt",
                 }
               )}

@@ -14,7 +14,7 @@ export const FormButton: React.FC<IFormButtonProp> = ({
   <button
     className={`w-full select-none font-medium focus:outline-none text-white py-2  transition-colors  ${
       canClick
-        ? "bg-gray-800 hover:bg-gray-700 "
+        ? "dark:bg-gray-800 dark:hover:bg-gray-700 bg-yellow-600 hover:bg-yellow-700"
         : "bg-gray-400 pointer-events-none "
     }`}
   >
