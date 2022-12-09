@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <div
           className={
             authRoute
-              ? "dark:bg-gray-900 dark:text-gray-100 bg-yellow-500"
+              ? "dark:bg-gray-900 dark:text-gray-100 bg-amber-50"
               : "pt-16 dark:bg-gray-900 dark:text-gray-100  bg-amber-50 "
           }
         >
