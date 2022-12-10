@@ -8,6 +8,8 @@ import { WEB_TITLE } from "../constant";
 import Head from "next/head";
 import { SignupForm } from "../components/forms/signup/SignupForm";
 import { Policy } from "../components/policies/Policy";
+import Image from "next/image";
+import titlePic from "../public/title.png";
 
 const Signup = () => {
   let router = useRouter();
@@ -37,7 +39,9 @@ const Signup = () => {
           </div>
           <div className="lg:max-w-lg dark:text-gray-100 w-full ">
             <h1 className=" font-bold text-4xl cursor-pointer text-center mb-6">
-              <Link href="/">Exam World! </Link>
+              <Link href="/">
+                <Image src={titlePic} alt="title" width={400} height={200} />
+              </Link>
             </h1>
             <h1 className="title-font sm:text-3xl text-2xl mb-4 font-medium text-gray-900">
               회원가입

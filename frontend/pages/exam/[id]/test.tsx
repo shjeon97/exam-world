@@ -286,7 +286,10 @@ const Test = ({ id }) => {
           <div className="flex flex-wrap">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
-                <div key={index} className="h-auto m-3 p-5 w-3/5 rounded">
+                <div
+                  key={index}
+                  className="h-auto m-3 p-5  lg:w-3/5 w-full rounded"
+                >
                   <a id={`question-page-${question.page}`} />
                   <div className="h-20"></div>
                   <div

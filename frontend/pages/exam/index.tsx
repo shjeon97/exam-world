@@ -77,7 +77,7 @@ export default function Index() {
   }
 
   return (
-    <div>
+    <div className="h-screen">
       <Head>
         <title className=" text-gray-800"> 내가 만든 시험 {WEB_TITLE}</title>
       </Head>
@@ -92,7 +92,7 @@ export default function Index() {
             </div>
             <select
               {...register("type")}
-              className="form-input text-sm w-28 h-11 mx-0 justify-center border-2 "
+              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-yellow-600 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
@@ -101,15 +101,13 @@ export default function Index() {
           <div className="flex">
             <input
               {...register("value")}
-              className=" form-input h-11 border-2 rounded-r-none "
+              className=" form-input h-11 border-2 border-yellow-600 dark:border-gray-400 rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="button border-l-0 rounded-l-none mx-0 w-20">
-              <button>
-                {searchExamByMeMutation.isLoading ? "Loading..." : "검색"}
-              </button>
-            </div>
+            <button className="button border-l-0 rounded-l-none mx-0 w-20">
+              {searchExamByMeMutation.isLoading ? "로딩" : "검색"}
+            </button>
           </div>
 
           <div

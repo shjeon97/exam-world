@@ -72,7 +72,7 @@ export default function Home() {
   return (
     <div className=" min-h-screen">
       <Head>
-        <title className=" text-gray-800">{WEB_TITLE}</title>
+        <title>{WEB_TITLE}</title>
       </Head>
       <div className=" items-center justify-center flex lg:text-lg text-md ">
         <form
@@ -111,7 +111,7 @@ export default function Home() {
             </div>
             <select
               {...register("type")}
-              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-gray-900 "
+              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-yellow-600 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
@@ -120,15 +120,13 @@ export default function Home() {
           <div className="flex ">
             <input
               {...register("value")}
-              className=" form-input h-11 border-2 border-gray-900 dark:border-gray-400 rounded-r-none "
+              className=" form-input h-11 border-2 border-yellow-600 dark:border-gray-400 rounded-r-none "
               placeholder="검색값을 입력하세요."
               defaultValue={value}
             />
-            <div className="button border-l-0 rounded-l-none mx-0 w-20">
-              <button>
-                {searchExamMutation.isLoading ? "Loading..." : "검색"}
-              </button>
-            </div>
+            <button className="button border-l-0 rounded-l-none mx-0 w-20">
+              {searchExamMutation.isLoading ? "로딩" : "검색"}
+            </button>
           </div>
 
           <div
