@@ -266,7 +266,7 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-scroll max-h-2/3  right-0 w-96 m-5 mb-8  ">
+          <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-scroll  max-h-96  right-0 w-96 m-5 mb-8  ">
             <div className="flex flex-wrap  ">
               {findQuestionsByExamIdData.questions.map((question, index) => {
                 return (
