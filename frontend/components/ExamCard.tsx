@@ -84,7 +84,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
               className="text-xs w-12 text-center"
             >
               <div className="block h-auto group w-auto  hover:cursor-pointer ">
-                <div className="relative inset-0  transition bg-red-500  border-2 border-red-700 group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
+                <div className="relative inset-0  transition bg-red-600  border-2 border-red-400 group-hover:-translate-x group-hover:-translate-y rounded group-hover:shadow-[2px_2px_0_0_#000] p-2 ">
                   <span className=" text-gray-50  font-semibold">삭제</span>
                 </div>
               </div>
