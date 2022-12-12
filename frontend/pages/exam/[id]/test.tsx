@@ -100,7 +100,6 @@ const Test = ({ id }) => {
   const scoring = () => {
     setTime(0);
     let score = 0;
-    console.log(multipleChoiceIsCheckedArray);
 
     findQuestionsByExamIdData.questions.map((question) => {
       const findMultipleChoiceCorrectAnswersByPage =
@@ -267,28 +266,42 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="  hidden lg:block fixed  right-0 w-96 m-5 mb-8  ">
-            <div className="flex flex-wrap">
+          <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-scroll max-h-2/3  right-0 w-96 m-5 mb-8  ">
+            <div className="flex flex-wrap  ">
               {findQuestionsByExamIdData.questions.map((question, index) => {
                 return (
                   <a
                     href={`#question-page-${question.page}`}
                     key={`href-${index}`}
-                    className="h-auto m-2 text-yellow-900 hover:cursor-pointer hover:dark:bg-slate-800 hover:bg-orange-300 p-2 rounded dark:text-gray-100 dark:bg-slate-700 dark:border-slate-800  bg-orange-200 border-2 border-orange-300 "
                   >
-                    {question.page}
+                    <table className="w-14 h-14 m-2 text-yellow-900 hover:cursor-pointer hover:dark:bg-slate-800 hover:bg-orange-300 p-2 rounded dark:text-gray-100 dark:bg-slate-700 dark:border-slate-800  bg-orange-200 border-2 border-orange-700">
+                      <th className="border-2  border-orange-700 dark:border-slate-800 ">
+                        {question.page}
+                      </th>
+                      <tbody className="text-center h-7 border-2  border-orange-700 dark:border-slate-800">
+                        <span></span>
+                        {multipleChoiceIsCheckedArray
+                          .filter((e) => e.page === question.page)
+                          .map((e, index) => {
+                            if (index === 0) {
+                              return <span>{e.no}</span>;
+                            } else {
+                              return <span>,{e.no}</span>;
+                            }
+                          })}
+                      </tbody>
+                    </table>
                   </a>
                 );
               })}
             </div>
           </div>
-
-          <div className="flex flex-wrap">
+          <div className=" flex-wrap justify-center items-center  ">
             {findQuestionsByExamIdData.questions.map((question, index) => {
               return (
                 <div
                   key={index}
-                  className="h-auto m-3 p-5  lg:w-3/5 w-full rounded"
+                  className="h-auto  p-2  lg:w-3/5 lg:max-w-3xl  w-full rounded"
                 >
                   <a id={`question-page-${question.page}`} />
                   <div className="h-20"></div>
@@ -317,7 +330,7 @@ const Test = ({ id }) => {
                     {question.score > 0 && `(${question.score}점)`}
                   </div>
                   <br />
-                  <div className=" border border-gray-400 dark:border-gray-300 rounded overflow-auto  ">
+                  <div className=" border border-yellow-900 dark:border-gray-300 rounded overflow-auto  ">
                     <div
                       suppressContentEditableWarning={true}
                       contentEditable="true"
