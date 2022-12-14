@@ -113,6 +113,27 @@ const Test = ({ id }) => {
         ).className = "ml-2 text-green-600";
       });
 
+      multipleChoiceIsCheckedArray.map((e) => {
+        const pageNo = document.getElementById(
+          `question-${question.page}-no-${e.no}`
+        );
+        if (pageNo) {
+          pageNo.style.color = "red";
+        }
+      });
+      findMultipleChoiceCorrectAnswersByPage.map((multipleChoice) => {
+        multipleChoiceIsCheckedArray
+          .filter((e) => e.no === multipleChoice.no && e.page === question.page)
+          .map((e) => {
+            const pageNo = document.getElementById(
+              `question-${question.page}-no-${e.no}`
+            );
+            if (pageNo) {
+              pageNo.style.color = "green";
+            }
+          });
+      });
+
       if (
         findMultipleChoiceCorrectAnswersByPage.length ===
         multipleChoiceIsCheckedArray.filter((e) => e.page === question.page)
@@ -131,12 +152,13 @@ const Test = ({ id }) => {
         });
 
         const correctAnswer = document.getElementById(
-          `question-${question.page}-"isCorrectAnswer-true`
+          `question-${question.page}-isCorrectAnswer-true`
         );
 
         const wrongAnswer = document.getElementById(
-          `question-${question.page}-"isCorrectAnswer-false`
+          `question-${question.page}-isCorrectAnswer-false`
         );
+
         if (isCorrectAnswer) {
           score = score + question.score;
           correctAnswer.hidden = false;
@@ -147,11 +169,11 @@ const Test = ({ id }) => {
         }
       } else {
         const correctAnswer = document.getElementById(
-          `question-${question.page}-"isCorrectAnswer-true`
+          `question-${question.page}-isCorrectAnswer-true`
         );
 
         const wrongAnswer = document.getElementById(
-          `question-${question.page}-"isCorrectAnswer-false`
+          `question-${question.page}-isCorrectAnswer-false`
         );
         wrongAnswer.hidden = false;
         correctAnswer.hidden = true;
@@ -260,14 +282,14 @@ const Test = ({ id }) => {
         <>
           {time > 0 && (
             <div className="mb-8 mt-2">
-              <div className="fixed inset-x-0 sm:scale-100 scale-75 dark:bg-gray-700  mx-auto w-60 px-3 py-2 button text-lg bg-white z-50">
+              <div className="fixed inset-x-0 sm:scale-100 scale-75 dark:bg-gray-700 bg-yellow-100  mx-auto w-60 px-3 py-2 button text-lg  z-50">
                 남은시간 {secondToTime(time)}
               </div>
               <br />
             </div>
           )}
           <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-scroll  max-h-96  right-0 w-96 m-5 mb-8  ">
-            <div className="flex flex-wrap  ">
+            <div className="flex flex-wrap">
               {findQuestionsByExamIdData.questions.map((question, index) => {
                 return (
                   <a
@@ -284,9 +306,21 @@ const Test = ({ id }) => {
                           .filter((e) => e.page === question.page)
                           .map((e, index) => {
                             if (index === 0) {
-                              return <span>{e.no}</span>;
+                              return (
+                                <span
+                                  id={`question-${question.page}-no-${e.no}`}
+                                >
+                                  {e.no}
+                                </span>
+                              );
                             } else {
-                              return <span>,{e.no}</span>;
+                              return (
+                                <span
+                                  id={`question-${question.page}-no-${e.no}`}
+                                >
+                                  ,{e.no}
+                                </span>
+                              );
                             }
                           })}
                       </tbody>
@@ -306,7 +340,7 @@ const Test = ({ id }) => {
                   <a id={`question-page-${question.page}`} />
                   <div className="h-20"></div>
                   <div
-                    id={`question-${question.page}-"isCorrectAnswer-true`}
+                    id={`question-${question.page}-isCorrectAnswer-true`}
                     hidden={true}
                     className="mb-10"
                   >
@@ -316,7 +350,7 @@ const Test = ({ id }) => {
                     />
                   </div>
                   <div
-                    id={`question-${question.page}-"isCorrectAnswer-false`}
+                    id={`question-${question.page}-isCorrectAnswer-false`}
                     hidden={true}
                     className="mb-8"
                   >
