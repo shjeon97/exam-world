@@ -59,6 +59,16 @@
             "date": 1670742087356,
             "name": "/Users/shjeon/Desktop/workspace/exam-world/backend/log/error/2022-12-11.error.log",
             "hash": "8358c9f09dcb7222752450db5d09353eea038da83d9f4f9a86a1e6051fb4d18a"
+        },
+        {
+            "date": 1670835821912,
+            "name": "/Users/shjeon/Desktop/workspace/exam-world/backend/log/error/2022-12-12.error.log",
+            "hash": "49a8069164f4f9638ab6bed57d5b74cc8d89a82a0cee844580931d788b717e8b"
+        },
+        {
+            "date": 1670976158306,
+            "name": "/Users/shjeon/Desktop/workspace/exam-world/backend/log/error/2022-12-14.error.log",
+            "hash": "63236040884991b18fbf946799b8ccb05ca2920be881b991efd60eb42ad4af29"
         }
     ],
     "hashType": "sha256"
