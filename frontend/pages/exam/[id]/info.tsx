@@ -282,7 +282,7 @@ export default function ExamInfo({ id }: { id: number }) {
                               <div
                                 onClick={() => handleChangePage(question.page)}
                                 className={classNames(`button`, {
-                                  "bg-gray-900 text-white dark:bg-gray-300 dark:text-gray-900":
+                                  "bg-yellow-600 text-white dark:bg-gray-300 dark:text-gray-900":
                                     question.page === page,
                                 })}
                                 key={`exam-${id}-info-${index}`}
@@ -309,7 +309,7 @@ export default function ExamInfo({ id }: { id: number }) {
                   {page === findQuestionsByExamIdData?.questions.length && (
                     <div
                       onClick={() => handleDeleteExamPage()}
-                      className="button"
+                      className="button bg-red-600 border-red-500 text-white hover:bg-red-500"
                     >
                       삭제
                     </div>
@@ -367,7 +367,7 @@ export default function ExamInfo({ id }: { id: number }) {
                       </div>
                       {multipleChoiceNumber.length > 0 && (
                         <>
-                          <div className="flex flex-col-reverse">
+                          <div className="flex flex-col">
                             {multipleChoiceNumber.map((id, index) => {
                               return (
                                 <>

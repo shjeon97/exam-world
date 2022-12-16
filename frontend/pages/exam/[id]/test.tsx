@@ -53,6 +53,22 @@ const Test = ({ id }) => {
     [`questions`, { examId: id }],
     () => apiFindQuestionsByExamId(+id)
   );
+  // 새로고침 막기 변수
+  const preventClose = (e: BeforeUnloadEvent) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
+
+  // 브라우저에 렌더링 시 한 번만 실행하는 코드
+  useEffect(() => {
+    (() => {
+      window.addEventListener("beforeunload", preventClose);
+    })();
+
+    return () => {
+      window.removeEventListener("beforeunload", preventClose);
+    };
+  }, []);
 
   useEffect(() => {
     if (findExamByIdData?.exam?.time > 0) {
@@ -288,7 +304,7 @@ const Test = ({ id }) => {
               <br />
             </div>
           )}
-          <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-scroll  max-h-96  right-0 w-96 m-5 mb-8  ">
+          <div className="  hidden lg:block fixed border-2 border-yellow-900 dark:border-slate-400 rounded overflow-auto  max-h-96  right-0 w-96 m-5 mb-8  ">
             <div className="flex flex-wrap">
               {findQuestionsByExamIdData.questions.map((question, index) => {
                 return (
@@ -330,113 +346,116 @@ const Test = ({ id }) => {
               })}
             </div>
           </div>
-          <div className=" flex-wrap justify-center items-center  ">
-            {findQuestionsByExamIdData.questions.map((question, index) => {
-              return (
-                <div
-                  key={index}
-                  className="h-auto  p-2  lg:w-3/5 lg:max-w-3xl  w-full rounded"
-                >
-                  <a id={`question-page-${question.page}`} />
-                  <div className="h-20"></div>
+          <div className=" grid grid-cols-12">
+            <div className=" col-start-1 lg:col-start-2 xl:col-start-3 2xl:col-start-4  col-end-13 lg:col-end-12">
+              {findQuestionsByExamIdData.questions.map((question, index) => {
+                return (
                   <div
-                    id={`question-${question.page}-isCorrectAnswer-true`}
-                    hidden={true}
-                    className="mb-10"
+                    key={index}
+                    className="h-auto  p-2  lg:w-3/5 lg:max-w-3xl  w-full rounded"
                   >
-                    <FontAwesomeIcon
-                      className="absolute top-auto text-8xl opacity-80 text-red-700"
-                      icon={faCheck}
-                    />
-                  </div>
-                  <div
-                    id={`question-${question.page}-isCorrectAnswer-false`}
-                    hidden={true}
-                    className="mb-8"
-                  >
-                    <FontAwesomeIcon
-                      className="absolute text-8xl  opacity-80 text-red-700"
-                      icon={faXmark}
-                    />
-                  </div>
-                  <div className={classNames(`text-lg`)}>
-                    {question.page}번 문제{" "}
-                    {question.score > 0 && `(${question.score}점)`}
-                  </div>
-                  <br />
-                  <div className=" border border-yellow-900 dark:border-gray-300 rounded overflow-auto  ">
+                    <a id={`question-page-${question.page}`} />
+                    <div className="h-20"></div>
                     <div
-                      suppressContentEditableWarning={true}
-                      contentEditable="true"
-                      translate="no"
-                      tabIndex={0}
-                      className="ProseMirror m-5 focus:outline-none hover:cursor-default"
+                      id={`question-${question.page}-isCorrectAnswer-true`}
+                      hidden={true}
+                      className="mb-10"
                     >
-                      <div
-                        spellCheck={false}
-                        dangerouslySetInnerHTML={{ __html: question.text }}
+                      <FontAwesomeIcon
+                        className="absolute top-auto text-8xl opacity-80 text-red-700"
+                        icon={faCheck}
                       />
                     </div>
+                    <div
+                      id={`question-${question.page}-isCorrectAnswer-false`}
+                      hidden={true}
+                      className="mb-8"
+                    >
+                      <FontAwesomeIcon
+                        className="absolute text-8xl  opacity-80 text-red-700"
+                        icon={faXmark}
+                      />
+                    </div>
+                    <div className={classNames(`text-lg`)}>
+                      {question.page}번 문제{" "}
+                      {question.score > 0 && `(${question.score}점)`}
+                    </div>
+                    <br />
+                    <div className=" border border-yellow-900 dark:border-gray-300 rounded overflow-auto  ">
+                      <div
+                        suppressContentEditableWarning={true}
+                        contentEditable="true"
+                        translate="no"
+                        tabIndex={0}
+                        className="ProseMirror m-5 focus:outline-none hover:cursor-default"
+                      >
+                        <div
+                          spellCheck={false}
+                          dangerouslySetInnerHTML={{ __html: question.text }}
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    {findMultipleChoicesByExamIdData.multipleChoices
+                      .filter((e) => e.page === question.page)
+                      .map((multipleChoice, index) => {
+                        return (
+                          <span
+                            key={index}
+                            className={classNames(
+                              `p-1 hover:cursor-pointer hover:underline hover:text-blue-500`,
+                              {
+                                "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
+                                  multipleChoiceIsCheckedArray.find(
+                                    (e) =>
+                                      e.privateKey ===
+                                      `page-${multipleChoice.page}-no-${multipleChoice.no}`
+                                  ),
+                              }
+                            )}
+                          >
+                            <div className="flex mb-4 items-center text-md">
+                              <input
+                                onClick={() =>
+                                  onClickMultipleChoice(
+                                    multipleChoice.page,
+                                    multipleChoice.no
+                                  )
+                                }
+                                name={`checkbox-${multipleChoice.page}`}
+                                id={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
+                                type="checkbox"
+                                className={`w-6 h-6 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 focus:ring-2 ${
+                                  findMultipleChoicesByExamIdData.multipleChoices.filter(
+                                    (e) =>
+                                      e.page === question.page &&
+                                      e.isCorrectAnswer === true
+                                  ).length > 1 && "rounded-full"
+                                }`}
+                              />
+                              <span
+                                id={`text-${multipleChoice.page}-${multipleChoice.no}`}
+                                onClick={() =>
+                                  onClickMultipleChoice(
+                                    multipleChoice.page,
+                                    multipleChoice.no
+                                  )
+                                }
+                                className="ml-2"
+                              >
+                                {" "}
+                                {multipleChoice.text}
+                              </span>
+                            </div>
+                          </span>
+                        );
+                      })}
                   </div>
-                  <br />
-                  {findMultipleChoicesByExamIdData.multipleChoices
-                    .filter((e) => e.page === question.page)
-                    .map((multipleChoice, index) => {
-                      return (
-                        <span
-                          key={index}
-                          className={classNames(
-                            `p-1 hover:cursor-pointer hover:underline hover:text-blue-500`,
-                            {
-                              "text-blue-700 text-base hover:text-blue-700  hover:no-underline":
-                                multipleChoiceIsCheckedArray.find(
-                                  (e) =>
-                                    e.privateKey ===
-                                    `page-${multipleChoice.page}-no-${multipleChoice.no}`
-                                ),
-                            }
-                          )}
-                        >
-                          <div className="flex mb-4 items-center text-md">
-                            <input
-                              onClick={() =>
-                                onClickMultipleChoice(
-                                  multipleChoice.page,
-                                  multipleChoice.no
-                                )
-                              }
-                              name={`checkbox-${multipleChoice.page}`}
-                              id={`checkbox-${multipleChoice.page}-${multipleChoice.no}`}
-                              type="checkbox"
-                              className={`w-6 h-6 text-blue-600  bg-gray-100  border-gray-300 focus:ring-blue-500 focus:ring-2 ${
-                                findMultipleChoicesByExamIdData.multipleChoices.filter(
-                                  (e) =>
-                                    e.page === question.page &&
-                                    e.isCorrectAnswer === true
-                                ).length > 1 && "rounded-full"
-                              }`}
-                            />
-                            <span
-                              id={`text-${multipleChoice.page}-${multipleChoice.no}`}
-                              onClick={() =>
-                                onClickMultipleChoice(
-                                  multipleChoice.page,
-                                  multipleChoice.no
-                                )
-                              }
-                              className="ml-2"
-                            >
-                              {" "}
-                              {multipleChoice.text}
-                            </span>
-                          </div>
-                        </span>
-                      );
-                    })}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
+
           <div onClick={() => endTest()} className="button">
             시험종료
           </div>
