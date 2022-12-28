@@ -50,7 +50,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   try {
-    await app.listen(process.env.PORT, () =>
+    await app.listen(process.env.PORT, '0.0.0.0', () =>
       console.log(
         `Running on Port ${process.env.PORT} ${process.env.NODE_ENV}`,
       ),

@@ -24,23 +24,23 @@ jobs:
       - run: npm install --force
         working-directory: backend
 
-      - name: Create .env.test file
-        run: |
-          echo "DB_HOST=${{ secrets.BACKEND_DB_HOST_TEST }}" >> .env.test
-          echo "DB_PORT=${{ secrets.BACKEND_DB_PORT_TEST }}" >> .env.test
-          echo "DB_USERNAME=${{ secrets.BACKEND_DB_USERNAME_TEST }}" >> .env.test
-          echo "DB_PASSWORD=${{ secrets.BACKEND_DB_PASSWORD_TEST }}" >> .env.test
-          echo "DB_NAME=${{ secrets.BACKEND_DB_NAME_TEST }}" >> .env.test
-          echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
-          echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
-          echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
-          echo "GMAIL_SMTP_NAME=${{ secrets.BACKEND_GMAIL_SMTP_NAME_TEST }}" >> .env.test
-          echo "GMAIL_SMTP_KEY=${{ secrets.BACKEND_GMAIL_SMTP_KEY_TEST }}" >> .env.test
-        working-directory: backend
+      # - name: Create .env.test file
+      #   run: |
+      #     echo "DB_HOST=${{ secrets.BACKEND_DB_HOST_TEST }}" >> .env.test
+      #     echo "DB_PORT=${{ secrets.BACKEND_DB_PORT_TEST }}" >> .env.test
+      #     echo "DB_USERNAME=${{ secrets.BACKEND_DB_USERNAME_TEST }}" >> .env.test
+      #     echo "DB_PASSWORD=${{ secrets.BACKEND_DB_PASSWORD_TEST }}" >> .env.test
+      #     echo "DB_NAME=${{ secrets.BACKEND_DB_NAME_TEST }}" >> .env.test
+      #     echo "PRIVATE_KEY=${{ secrets.BACKEND_PRIVATE_KEY_TEST }}" >> .env.test
+      #     echo "PORT=${{ secrets.BACKEND_PORT_TEST }}" >> .env.test
+      #     echo "SERVER_ADDRESS=${{ secrets.BACKEND_SERVER_ADDRESS_TEST }}" >> .env.test
+      #     echo "GMAIL_SMTP_NAME=${{ secrets.BACKEND_GMAIL_SMTP_NAME_TEST }}" >> .env.test
+      #     echo "GMAIL_SMTP_KEY=${{ secrets.BACKEND_GMAIL_SMTP_KEY_TEST }}" >> .env.test
+      #   working-directory: backend
 
-      - name: backend e2e test
-        run: npm run test:e2e
-        working-directory: backend
+      # - name: backend e2e test
+      #   run: npm run test:e2e
+      #   working-directory: backend
 
       - name: exam-world pull
         run: |
