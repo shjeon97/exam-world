@@ -111,7 +111,7 @@ export default function Home() {
             </div>
             <select
               {...register("type")}
-              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-yellow-600 "
+              className="form-input text-sm w-32 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-yellow-600 "
             >
               <option value="title">제목</option>
               <option value="description">부가설명</option>
