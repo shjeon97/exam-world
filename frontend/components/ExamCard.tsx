@@ -8,6 +8,7 @@ import { LinkButton } from "./buttons/LinkButton";
 
 interface ILinkCardProp {
   userId: number;
+  userNickName: string;
   title: string;
   description?: string;
   id: number;
@@ -15,6 +16,7 @@ interface ILinkCardProp {
 
 export const ExamCard: React.FC<ILinkCardProp> = ({
   userId,
+  userNickName,
   id,
   title,
   description,
@@ -70,13 +72,17 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
         </div>
       </div>
 
+      <div className="text-sm m-2">작성자 : {userNickName}</div>
       <div className="flex m-2 gap-1">
-        <div className="text-xs w-16 text-center">
+        <div className="text-xs text-center">
           <LinkButton name="시험시작" link={`/exam/${id}/test`} />
+        </div>
+        <div className="text-xs  text-center">
+          <LinkButton name="댓글" link={`/exam/${id}/comment`} />
         </div>
         {!meIsLoading && meData?.id === userId && (
           <>
-            <div className="text-xs w-12 text-center">
+            <div className="text-xs  text-center">
               <LinkButton name="정보" link={`/exam/${id}/info`} />
             </div>
             <div

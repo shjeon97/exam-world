@@ -22,6 +22,7 @@ import { EmailModule } from './email/email.module';
 import { NestModule } from '@nestjs/common';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
+import { ExamCommentModule } from './exam-comment/exam-comment.module';
 
 @Module({
   imports: [
@@ -91,6 +92,7 @@ import { LoggerMiddleware } from './common/middleware/logger.middleware';
     CrawlingModule,
     VerificationModule,
     EmailModule,
+    ExamCommentModule,
   ],
   controllers: [],
   providers: [],

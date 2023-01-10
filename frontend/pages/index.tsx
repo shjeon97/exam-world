@@ -146,6 +146,7 @@ export default function Home() {
               <div key={`exam_index_${key}`}>
                 <ExamCard
                   userId={exam.userId}
+                  userNickName={exam.user.nickname}
                   title={exam.title}
                   description={exam.description}
                   id={exam.id}
