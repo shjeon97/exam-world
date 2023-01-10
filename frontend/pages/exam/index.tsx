@@ -130,6 +130,7 @@ export default function Index() {
               <div key={`exam_index_${key}`}>
                 <ExamCard
                   userId={exam.user.id}
+                  userNickName={exam.user.nickname}
                   description={exam.description}
                   title={exam.title}
                   id={exam.id}

@@ -287,7 +287,7 @@ const Test = ({ id }) => {
   return (
     <>
       <Head>
-        <title className=" text-gray-800">시험 {WEB_TITLE}</title>
+        <title>시험 {WEB_TITLE}</title>
       </Head>
       {!findExamByIdIsLoading &&
       findExamByIdData.ok &&
