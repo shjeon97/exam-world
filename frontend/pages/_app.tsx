@@ -7,6 +7,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { useRouter } from "next/router";
 import { NavigationBar } from "../components/layouts/NavigationBar";
 import { ThemeProvider } from "next-themes";
+
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }: AppProps) {
