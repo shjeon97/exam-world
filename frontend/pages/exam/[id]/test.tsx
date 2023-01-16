@@ -1,4 +1,9 @@
-import { faCheck, faXmark } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faCircleDot,
+  faGenderless,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import classNames from "classnames";
 import { GetServerSideProps } from "next";
@@ -298,7 +303,7 @@ const Test = ({ id }) => {
         <>
           {time > 0 && (
             <div className="mb-8 mt-2">
-              <div className="fixed inset-x-0 sm:scale-100 scale-75 dark:bg-gray-700 bg-yellow-100  mx-auto w-60 px-3 py-2 button text-lg  z-50">
+              <div className="fixed inset-x-0 sm:scale-100 scale-75 dark:bg-gray-700 bg-yellow-100  mx-auto w-60 px-3 py-2 button hover:bg-yellow-100 hover:text-yellow-900 dark:hover:text-white hover:cursor-default text-lg  z-50 ">
                 남은시간 {secondToTime(time)}
               </div>
               <br />
@@ -359,11 +364,11 @@ const Test = ({ id }) => {
                     <div
                       id={`question-${question.page}-isCorrectAnswer-true`}
                       hidden={true}
-                      className="mb-10"
+                      className="mb-12"
                     >
                       <FontAwesomeIcon
-                        className="absolute top-auto text-8xl opacity-80 text-red-700"
-                        icon={faCheck}
+                        className="absolute top-auto text-9xl opacity-80 text-red-700"
+                        icon={faGenderless}
                       />
                     </div>
                     <div
@@ -430,7 +435,9 @@ const Test = ({ id }) => {
                                     (e) =>
                                       e.page === question.page &&
                                       e.isCorrectAnswer === true
-                                  ).length > 1 && "rounded-full"
+                                  ).length > 1
+                                    ? ""
+                                    : "rounded-full"
                                 }`}
                               />
                               <span
