@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "LINESeedKR-Bd";
-  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2")
-    format("woff2");
-  font-weight: 700;
+  font-family: "Pretendard-Regular";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
+  font-weight: 400;
   font-style: normal;
 }
+
 html,
 body {
-  font-family: LINESeedKR-Bd, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
+  font-family: Pretendard-Regular, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans,
     Droid Sans, Helvetica Neue, sans-serif;
 }
 

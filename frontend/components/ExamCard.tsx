@@ -12,6 +12,7 @@ interface ILinkCardProp {
   title: string;
   description?: string;
   id: number;
+  time?: number;
 }
 
 export const ExamCard: React.FC<ILinkCardProp> = ({
@@ -20,6 +21,7 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
   id,
   title,
   description,
+  time,
 }) => {
   const [isHidden, setIsHidden] = useState(false);
   const { isLoading: meIsLoading, data: meData } = useQuery<IUserInput>(
@@ -61,13 +63,17 @@ export const ExamCard: React.FC<ILinkCardProp> = ({
     <div
       className={`${
         isHidden && "hidden"
-      } p-1 border-2 border-yellow-600 grid grid-rows-1 grid-col-10 dark:border-gray-400 w-72 h-44 rounded `}
+      } p-1 border-2 border-yellow-600 grid grid-rows-1 grid-col-10 dark:border-gray-400 w-72 h-auto rounded `}
     >
       <div>
         <div className="flex flex-col pt-3 pl-3 ">
-          <h5 className="text-md font-bold text-gray-800 dark:text-gray-100">
-            {title}
-          </h5>
+          <div className="flex flex-col">
+            <span className="text-md font-bold text-gray-800 dark:text-gray-100">
+              {title}
+            </span>
+            {time > 0 && <span className="text-sm">제한시간 : {time}초</span>}
+          </div>
+
           <p className="mt-2 text-sm text-gray-500 ">{description} </p>
         </div>
       </div>
