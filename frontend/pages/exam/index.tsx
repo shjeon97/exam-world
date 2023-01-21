@@ -1,17 +1,17 @@
 import Head from "next/head";
 import { useMutation } from "react-query";
 import { apiSearchExamsByMe } from "../../api/axios";
-import { IExam, IFormSearchInput, IPaginationOutput } from "../../common/type";
+import { IExam, IPaginationOutput } from "../../common/type";
 import { ExamCard } from "../../components/ExamCard";
 import { LinkButton } from "../../components/buttons/LinkButton";
 import { Page, PageSize, WEB_TITLE } from "../../constant";
 import { GrAdd } from "react-icons/gr";
 import { useEffect, useState } from "react";
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll";
-import { flushSync } from "react-dom";
-import { useForm } from "react-hook-form";
+
 import { useMe } from "../../hooks/useMe";
 import { PageLoading } from "../../components/PageLoading";
+import { ExamSearchForm } from "../../components/forms/exam/ExamSearchForm";
 
 export default function Index() {
   const [page, setPage] = useState<number>(Page);
@@ -50,28 +50,6 @@ export default function Index() {
     }
   }, [infiniteScroll]);
 
-  const { register, handleSubmit, getValues } = useForm<IFormSearchInput>({
-    mode: "onChange",
-  });
-
-  const onSearchSubmit = () => {
-    if (!searchExamByMeMutation.isLoading) {
-      const { type, value } = getValues();
-      setType(type);
-      setValue(value);
-
-      flushSync(() => {
-        setExams(null);
-      });
-      searchExamByMeMutation.mutate({
-        page: 1,
-        "page-size": pageSize,
-        type,
-        value,
-      });
-    }
-  };
-
   if (isLoading) {
     return <PageLoading text="Loading" />;
   }
@@ -81,45 +59,16 @@ export default function Index() {
       <Head>
         <title className=" text-gray-800"> 내가 만든 시험 {WEB_TITLE}</title>
       </Head>
-      <div className=" items-center justify-center flex lg:text-lg text-md ">
-        <form
-          className=" mt-4 flex flex-wrap gap-1"
-          onSubmit={handleSubmit(onSearchSubmit)}
-        >
-          <div className="flex">
-            <div className="button focus:outline-none rounded-r-none border-r-0 mr-0 ">
-              검색대상
-            </div>
-            <select
-              {...register("type")}
-              className="form-input text-sm w-28 h-11 mx-0 dark:border-gray-400 justify-center border-2 border-yellow-600 "
-            >
-              <option value="title">제목</option>
-              <option value="description">부가설명</option>
-            </select>
-          </div>
-          <div className="flex">
-            <input
-              {...register("value")}
-              className=" form-input h-11 border-2 border-yellow-600 dark:border-gray-400 rounded-r-none "
-              placeholder="검색값을 입력하세요."
-              defaultValue={value}
-            />
-            <button className="button border-l-0 rounded-l-none mx-0 w-20">
-              {searchExamByMeMutation.isLoading ? "로딩" : "검색"}
-            </button>
-          </div>
-
-          <div
-            onClick={() => {
-              window.location.reload();
-            }}
-            className="button"
-          >
-            전체
-          </div>
-        </form>
-      </div>
+      {!searchExamByMeMutation.isLoading && (
+        <ExamSearchForm
+          mutation={searchExamByMeMutation}
+          setExams={setExams}
+          setType={setType}
+          type={type}
+          setValue={setValue}
+          value={value}
+        />
+      )}
       <div className="flex flex-row m-4 ">
         <LinkButton name={<GrAdd />} link="/exam/create" />
       </div>
