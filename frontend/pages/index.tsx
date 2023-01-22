@@ -36,7 +36,6 @@ export default function Home() {
       sort: sort ? sort : null,
     });
   }, [page]);
-  console.log(type, value, sort);
 
   const infiniteScroll = useInfiniteScroll(!searchExamMutation.isLoading);
 

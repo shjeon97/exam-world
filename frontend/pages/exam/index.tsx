@@ -73,7 +73,8 @@ export default function Index() {
         <LinkButton name={<GrAdd />} link="/exam/create" />
       </div>
       <div className="flex flex-wrap m-4 gap-2 ">
-        {exams &&
+        {!searchExamByMeMutation.isLoading &&
+          exams &&
           exams.map((exam, key) => {
             return (
               <div key={`exam_index_${key}`}>
