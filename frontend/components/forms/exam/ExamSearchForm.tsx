@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React from "react";
 import { flushSync } from "react-dom";
 import { useForm } from "react-hook-form";
 import { IFormSearchInput } from "../../../common/type";
@@ -42,6 +42,21 @@ export const ExamSearchForm: React.FC<IExamSearchFormProp> = ({
         "page-size": PageSize,
         type,
         value,
+        ...(sort && { sort }),
+      });
+    }
+  };
+
+  const onResetSubmit = () => {
+    if (!mutation.isLoading) {
+      flushSync(() => {
+        setExams(null);
+        setType(null);
+        setValue(null);
+      });
+      mutation.mutate({
+        page: 1,
+        "page-size": PageSize,
         ...(sort && { sort }),
       });
     }
@@ -120,7 +135,7 @@ export const ExamSearchForm: React.FC<IExamSearchFormProp> = ({
 
         <div
           onClick={() => {
-            window.location.reload();
+            onResetSubmit();
           }}
           className="button"
         >
