@@ -23,6 +23,10 @@ export interface IPaginationInput {
   sort?: string;
 }
 
+export interface ISearchExamCommentInput extends IPaginationInput {
+  id: number;
+}
+
 export interface IFormSearchInput {
   type: string;
   value: string;
@@ -51,6 +55,13 @@ export interface IExam extends ICoreEntity {
   title?: string;
   time: number;
   minimumPassScore: number;
+}
+export interface IExamComment extends ICoreEntity {
+  examId: number;
+  userId: number;
+  user?: IUser;
+  text: string;
+  like: number;
 }
 
 export interface IQuestion {

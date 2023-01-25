@@ -34,6 +34,10 @@ import {
 import { SearchExamOutput } from 'src/exam/dto/search-exam.dto';
 import { User } from 'src/entity/user.entity';
 import { ExamService } from './exam.service';
+import {
+  SearchExamCommentInput,
+  SearchExamCommentOutput,
+} from './dto/search-exam-comment.dto';
 
 @Controller('exam')
 export class ExamController {
@@ -73,6 +77,16 @@ export class ExamController {
     @Query() searchExamInput: PaginationInput,
   ): Promise<SearchExamOutput> {
     return this.examService.searchExam(searchExamInput);
+  }
+
+  @ApiOperation({ summary: '시험 관련 댓글 목록' })
+  @ApiResponse({ type: SearchExamOutput })
+  @Get(':id/comment/search')
+  async searchExamComment(
+    @Param() { id }: SearchExamCommentInput,
+    @Query() paginationInput: PaginationInput,
+  ): Promise<SearchExamCommentOutput> {
+    return this.examService.searchExamComment(paginationInput, id);
   }
 
   @ApiOperation({ summary: 'examId 갖고있는 모든 question 가져오기' })

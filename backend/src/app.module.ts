@@ -23,6 +23,7 @@ import { NestModule } from '@nestjs/common';
 import { MiddlewareConsumer } from '@nestjs/common';
 import { LoggerMiddleware } from './common/middleware/logger.middleware';
 import { ExamCommentModule } from './exam-comment/exam-comment.module';
+import { ExamComment } from './entity/exam-comment.entity';
 
 @Module({
   imports: [
@@ -69,7 +70,15 @@ import { ExamCommentModule } from './exam-comment/exam-comment.module';
       // hot load 사용시 선언
       keepConnectionAlive: true,
       // 사용할 entity들 선언
-      entities: [User, Qna, Exam, Question, MultipleChoice, Verification],
+      entities: [
+        User,
+        Qna,
+        Exam,
+        Question,
+        MultipleChoice,
+        Verification,
+        ExamComment,
+      ],
     }),
     // 메일 속성 정의
     MailerModule.forRoot({
