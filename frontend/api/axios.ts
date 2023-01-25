@@ -13,6 +13,7 @@ import {
   IUploadImageInput,
   IDeleteMultipleChoicesInput as IDeleteMultipleChoicesByExamIdAndPageInput,
   IPaginationInput,
+  ISearchExamCommentInput,
 } from "../common/type";
 
 axios.defaults.baseURL = `${process.env.NEXT_PUBLIC_SEVER_BASE_URL}/api`;
@@ -202,6 +203,39 @@ export const apiSearchExam = async ({
           : `exam/search?page-size=${pageSize}&page=${page}&sort=${sort}`
       }`
     )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiSearchExamComment = async ({
+  "page-size": pageSize,
+  page,
+  sort,
+  id,
+}: ISearchExamCommentInput) => {
+  return axios
+    .get(
+      `${`exam/${id}/comment/search?page-size=${pageSize}&page=${page}&sort=${sort}`}`
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const apiCreateExamComment = async ({ examId, userId, text }) => {
+  return axios
+    .post(`${`exam-comment`}`, {
+      examId,
+      userId,
+      text,
+    })
     .then((res) => {
       return res.data;
     })

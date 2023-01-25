@@ -12,6 +12,8 @@ import { MultipleChoice } from 'src/entity/multiple-choice.entity';
 import { Question } from 'src/entity/question.entity';
 import { User, UserRole } from 'src/entity/user.entity';
 import { ILike, Repository } from 'typeorm';
+import { ExamComment } from 'src/entity/exam-comment.entity';
+import { SearchExamCommentOutput } from './dto/search-exam-comment.dto';
 
 @Injectable()
 export class ExamService {
@@ -22,6 +24,8 @@ export class ExamService {
     private readonly question: Repository<Question>,
     @InjectRepository(MultipleChoice)
     private readonly multipleChoice: Repository<MultipleChoice>,
+    @InjectRepository(ExamComment)
+    private readonly examComment: Repository<ExamComment>,
   ) {}
 
   async createExam(
@@ -180,6 +184,37 @@ export class ExamService {
       return {
         ok: false,
         error: '시험정보 가져오기 실패',
+      };
+    }
+  }
+
+  async searchExamComment(
+    { page, 'page-size': pageSize, sort }: PaginationInput,
+    id: number,
+  ): Promise<SearchExamCommentOutput> {
+    try {
+      const [examComments, totalResult] = await this.examComment.findAndCount({
+        where: { exam: { id } },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        order: {
+          id: 'DESC',
+          ...(sort && { [sort]: 'DESC' }),
+        },
+        relations: ['user'],
+      });
+
+      return {
+        ok: true,
+        result: examComments,
+        totalPage: Math.ceil(totalResult / pageSize),
+        totalResult,
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        ok: false,
+        error: '시험관련 댓글 정보 가져오기 실패',
       };
     }
   }
