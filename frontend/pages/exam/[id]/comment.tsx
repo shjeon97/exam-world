@@ -54,7 +54,6 @@ export default function ExamComment({ id }) {
       setPage(page + 1);
     }
   }, [infiniteScroll]);
-  console.log(comments);
 
   return (
     <div className=" min-h-screen">
@@ -65,11 +64,19 @@ export default function ExamComment({ id }) {
         <div className="w-10/12 mx-auto md:w-5/12 md:max-w-3xl ">
           <CreateExamCommentForm examId={id} />
           {comments.length > 0 && (
-            <div className="mt-10 p-2 border-2 rounded-md border-gray-500">
+            <>
               {comments.map((comment) => {
-                return <div className="">{comment.text}</div>;
+                return (
+                  <div className="my-2 p-3 border-2 rounded-md border-gray-500">
+                    <div className="flex flex-row">
+                      <div className="p-2 border-2 ">추천 {comment.like}</div>
+                      <div className="">이름 / 생성일</div>
+                    </div>
+                    <div>{comment.text}</div>
+                  </div>
+                );
               })}
-            </div>
+            </>
           )}
           <div className="button" onClick={() => setPage(page + 1)}>
             더보기

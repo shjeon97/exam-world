@@ -29,6 +29,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Swal from "sweetalert2";
 import Youtube from "@tiptap/extension-youtube";
+import { useMutation } from "react-query";
+import { apiUploadImage } from "../api/axios";
+import { IUploadImageOutput } from "../common/type";
 
 const MenuBar = ({ editor }: any) => {
   if (!editor) {
@@ -71,6 +74,15 @@ const MenuBar = ({ editor }: any) => {
     };
   }
 
+  const uploadImageMeMutation = useMutation(apiUploadImage, {
+    onSuccess: async (data: IUploadImageOutput) => {
+      if (data.ok) {
+        console.log(data.fileURL);
+        editor.chain().focus().setImage({ src: data.fileURL }).run();
+      }
+    },
+  });
+
   const handleUploadImage = () => {
     Swal.fire({
       title: "Select image",
@@ -90,7 +102,8 @@ const MenuBar = ({ editor }: any) => {
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
-        getBase64(result.value);
+        // getBase64(result.value);
+        uploadImageMeMutation.mutate({ file: result.value });
       }
     });
   };
