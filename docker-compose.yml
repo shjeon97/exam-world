@@ -20,7 +20,7 @@ services:
     image: shjeon97/exam-world-backend:1.0.0
     container_name: exam-world-backend
     volumes:
-      - /main/static:/public/upload:ro
+      - /main/public/exam-world/upload:/public/upload
     env_file:
       - ./backend/.env.prod
     ports:
