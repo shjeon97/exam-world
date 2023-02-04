@@ -37,7 +37,6 @@ export class Exam extends CoreEntity {
   @Column({ default: 0 })
   @IsNumber()
   view: number;
-  d;
   @ApiProperty({
     example: '제한시간',
     description: '1000',
