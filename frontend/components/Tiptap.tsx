@@ -74,14 +74,14 @@ const MenuBar = ({ editor }: any) => {
     };
   }
 
-  const uploadImageMeMutation = useMutation(apiUploadImage, {
-    onSuccess: async (data: IUploadImageOutput) => {
-      if (data.ok) {
-        console.log(data.fileURL);
-        editor.chain().focus().setImage({ src: data.fileURL }).run();
-      }
-    },
-  });
+  // const uploadImageMeMutation = useMutation(apiUploadImage, {
+  //   onSuccess: async (data: IUploadImageOutput) => {
+  //     if (data.ok) {
+  //       console.log(data.fileURL);
+  //       editor.chain().focus().setImage({ src: data.fileURL }).run();
+  //     }
+  //   },
+  // });
 
   const handleUploadImage = () => {
     Swal.fire({
@@ -102,8 +102,8 @@ const MenuBar = ({ editor }: any) => {
       cancelButtonText: "취소",
     }).then((result) => {
       if (result.isConfirmed) {
-        // getBase64(result.value);
-        uploadImageMeMutation.mutate({ file: result.value });
+        getBase64(result.value);
+        // uploadImageMeMutation.mutate({ file: result.value });
       }
     });
   };
