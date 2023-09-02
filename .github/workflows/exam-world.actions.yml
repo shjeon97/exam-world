@@ -45,12 +45,12 @@ jobs:
       - name: exam-world pull
         run: |
           git pull origin master
-        working-directory: ../../../../server/exam-world
+        working-directory: ../../../../../server/exam-world
 
       - name: exam-world docker restart
         run: |
           docker compose up --build -d
-        working-directory: ../../../../server/exam-world
+        working-directory: ../../../../../server/exam-world
 
       - name: exam-world docker old image delete
         run: |
